@@ -1,0 +1,105 @@
+<!--pages/holiday/holiday.wxml-->
+<view class="holiday-container">
+  <!-- 固定顶部：分类 Tab + 搜索栏 -->
+  <view class="fixed-header">
+    <!-- 分类 Tab -->
+    <view class="tab-bar">
+      <scroll-view class="tab-scroll" scroll-x enable-flex>
+        <view
+          class="tab-item {{currentTab === index ? 'active' : ''}}"
+          wx:for="{{tabList}}"
+          wx:key="key"
+          bindtap="onTabChange"
+          data-index="{{index}}"
+        >
+          <text class="tab-text">{{item.name}}</text>
+          <view class="tab-indicator" wx:if="{{currentTab === index}}"></view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 搜索栏 - 二十四节气 tab 不显示搜索 -->
+    <view class="search-bar" wx:if="{{currentTab !== 2}}">
+      <view class="search-input">
+        <text class="search-icon">🔍</text>
+        <input class="search-text" placeholder="搜索节日名称" placeholder-class="search-placeholder" bindinput="onSearchInput" value="{{searchKeyword}}" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 节日列表 -->
+  <view class="holiday-list-wrapper" wx:if="{{currentTab !== 2}}">
+    <view class="holiday-list" wx:if="{{holidayList.length > 0}}">
+      <view class="holiday-item" wx:for="{{holidayList}}" wx:key="id">
+      <view class="holiday-main">
+        <view class="holiday-icon" style="background: {{item.style.gradient}}">
+          <text class="icon">{{item.style.icon}}</text>
+        </view>
+        <view class="holiday-info">
+          <view class="holiday-header">
+            <text class="holiday-name">{{item.name}}</text>
+            <block wx:if="{{item.is_official === 1}}">
+              <view class="official-badge">法定</view>
+            </block>
+          </view>
+          <text class="holiday-date-full">{{item.date_display}}</text>
+        </view>
+        <view class="holiday-days">
+          <text class="days-number">{{item.days_left}}</text>
+          <text class="days-unit">天</text>
+        </view>
+      </view>
+      <view class="holiday-footer" wx:if="{{item.vacation_dates && item.vacation_dates.length > 0}}">
+        <text class="vacation-label">假期</text>
+        <text class="vacation-dates">{{item.vacation_dates_formatted}}</text>
+      </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 二十四节气 - 4x6 网格布局 -->
+  <view class="term-list-wrapper" wx:if="{{currentTab === 2}}">
+    <!-- 年份切换按钮 -->
+    <view class="year-nav">
+      <view class="year-btn" bindtap="onPrevYear">
+        <text class="arrow">◀</text>
+      </view>
+      <view class="year-display">
+        <text class="year-text">{{termYear}}年</text>
+      </view>
+      <view class="year-btn" bindtap="onNextYear">
+        <text class="arrow">▶</text>
+      </view>
+    </view>
+
+    <!-- 节气列表 -->
+    <view class="term-list" wx:if="{{termList.length > 0}}">
+      <view class="term-item" wx:for="{{termList}}" wx:key="index">
+        <view class="term-bg" style="background: {{item.style.gradient}}"></view>
+        <view class="term-content">
+          <view class="term-icon">{{item.style.icon}}</view>
+          <view class="term-name">{{item.name}}</view>
+          <view class="term-date">{{item.short_date}}</view>
+          <view class="term-weekday">{{item.weekday}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{holidayList.length === 0 && !loading && currentTab !== 2}}">
+    <text class="empty-icon">🔍</text>
+    <text class="empty-text">暂无搜索结果</text>
+  </view>
+
+  <!-- 节气空状态 -->
+  <view class="empty-state" wx:if="{{termList.length === 0 && !loading && currentTab === 2}}">
+    <text class="empty-icon">📅</text>
+    <text class="empty-text">暂无节气数据</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

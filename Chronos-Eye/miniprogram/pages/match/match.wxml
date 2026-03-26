@@ -1,0 +1,129 @@
+<view class="container">
+  <!-- 顶部标题 -->
+  <view class="header-bar">
+    <text class="header-title">星座配对</text>
+    <text class="header-subtitle">看看你们是否性格相合</text>
+  </view>
+
+  <!-- 模式切换 -->
+  <view class="mode-switch">
+    <view class="mode-item {{mode === 'double' ? 'active' : ''}}" bindtap="switchMode" data-mode="double">
+      <text class="mode-icon">💕</text>
+      <text class="mode-text">双人配对</text>
+    </view>
+    <view class="mode-item {{mode === 'single' ? 'active' : ''}}" bindtap="switchMode" data-mode="single">
+      <text class="mode-icon">🔮</text>
+      <text class="mode-text">查询配对</text>
+    </view>
+  </view>
+
+  <!-- 双人配对模式 -->
+  <view class="match-section" wx:if="{{mode === 'double'}}">
+    <!-- 星座选择器 1 -->
+    <view class="sign-selector" bindtap="openSelector1">
+      <view class="selector-label">我的星座</view>
+      <view class="selector-value">
+        <text class="sign-symbol">{{sign1Data.symbol}}</text>
+        <text class="sign-name">{{sign1Data.name}}</text>
+      </view>
+      <text class="arrow">›</text>
+    </view>
+
+    <!-- VS 图标 -->
+    <view class="vs-divider">
+      <text class="vs-text">VS</text>
+    </view>
+
+    <!-- 星座选择器 2 -->
+    <view class="sign-selector" bindtap="openSelector2">
+      <view class="selector-label">对方星座</view>
+      <view class="selector-value">
+        <text class="sign-symbol">{{sign2Data.symbol}}</text>
+        <text class="sign-name">{{sign2Data.name}}</text>
+      </view>
+      <text class="arrow">›</text>
+    </view>
+
+    <!-- 开始配对按钮 -->
+    <view class="match-btn" bindtap="startMatch">
+      <text>开始配对</text>
+    </view>
+  </view>
+
+  <!-- 单人查询模式 -->
+  <view class="match-section" wx:if="{{mode === 'single'}}">
+    <!-- 星座选择器 -->
+    <view class="sign-selector" bindtap="openSelector1">
+      <view class="selector-label">选择星座</view>
+      <view class="selector-value">
+        <text class="sign-symbol">{{sign1Data.symbol}}</text>
+        <text class="sign-name">{{sign1Data.name}}</text>
+      </view>
+      <text class="arrow">›</text>
+    </view>
+
+    <!-- 查询按钮 -->
+    <view class="match-btn" bindtap="queryAllMatches">
+      <text>查看与所有星座的配对</text>
+    </view>
+  </view>
+
+  <!-- 配对结果 -->
+  <view class="result-section" wx:if="{{matchResult}}">
+    <view class="result-card">
+      <view class="result-title">{{matchResult.title}}</view>
+
+      <!-- 评分 -->
+      <view class="result-grade">
+        <view class="grade-item">
+          <text class="grade-label">友情</text>
+          <text class="grade-stars">{{matchResult.grade['友情']}}</text>
+        </view>
+        <view class="grade-item">
+          <text class="grade-label">爱情</text>
+          <text class="grade-stars">{{matchResult.grade['爱情']}}</text>
+        </view>
+        <view class="grade-item">
+          <text class="grade-label">婚姻</text>
+          <text class="grade-stars">{{matchResult.grade['婚姻']}}</text>
+        </view>
+        <view class="grade-item">
+          <text class="grade-label">亲情</text>
+          <text class="grade-stars">{{matchResult.grade['亲情']}}</text>
+        </view>
+      </view>
+
+      <!-- 配对详情 -->
+      <view class="result-content">
+        <text class="content-text">{{matchResult.content}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 所有配对列表（单人模式） -->
+  <view class="list-section" wx:if="{{mode === 'single' && matchList.length > 0}}">
+    <view class="list-title">与所有星座的配对</view>
+    <view class="match-list">
+      <view class="match-list-item" wx:for="{{matchList}}" wx:key="sign2" bindtap="viewMatchDetail" data-item="{{item}}">
+        <view class="list-item-header">
+          <text class="list-item-title">{{item.sign2_name}}</text>
+          <text class="list-item-grade">{{item.grade_summary}}</text>
+        </view>
+        <text class="list-item-content">{{item.content_preview}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 星座选择器弹窗 -->
+  <view class="selector-modal {{showSelector ? 'show' : ''}}" bindtap="closeSelector">
+    <view class="selector-content" catchtap="doNothing">
+      <view class="selector-title">选择星座</view>
+      <view class="selector-grid">
+        <view class="selector-item" wx:for="{{constellations}}" wx:key="en" bindtap="selectSign" data-sign="{{item}}">
+          <text class="selector-symbol">{{item.symbol}}</text>
+          <text class="selector-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,506 @@
+/* 容器 */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding-bottom: 40rpx;
+}
+
+/* 顶部日期栏 */
+.header-bar {
+  padding: 20rpx 24rpx;
+  text-align: center;
+}
+
+.header-date {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+/* 星座主卡片 */
+.constellation-main-card {
+  margin: 0 24rpx 24rpx;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.98) 100%);
+  border-radius: 24rpx;
+  padding: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 星座头部信息 */
+.sign-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.08);
+}
+
+.sign-symbol {
+  font-size: 72rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.sign-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #1a1a2e;
+  margin-bottom: 6rpx;
+}
+
+.sign-date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.sign-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #667eea;
+  font-size: 22rpx;
+}
+
+.sign-more .arrow {
+  font-size: 32rpx;
+  margin-top: 4rpx;
+}
+
+/* 日期切换标签 */
+.date-tabs {
+  display: flex;
+  justify-content: space-around;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.08);
+}
+
+.tab-item {
+  font-size: 26rpx;
+  color: #999;
+  padding: 10rpx 20rpx;
+  border-radius: 20rpx;
+  background: rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+.tab-item.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.3);
+}
+
+/* 心情星语 */
+.motto-section {
+  padding: 24rpx 0;
+  text-align: center;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.08);
+}
+
+.section-title-star {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
+}
+
+.section-title-star .star-icon {
+  font-size: 28rpx;
+  color: #f5af19;
+  margin: 0 12rpx;
+}
+
+.section-title-star .title-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.motto-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* 综合分数 */
+.score-section {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.08);
+}
+
+.score-circle {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+  box-shadow: 0 8rpx 24rpx rgba(245, 175, 25, 0.4);
+}
+
+.score-number {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 20rpx;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 4rpx;
+}
+
+.score-desc {
+  flex: 1;
+  font-size: 26rpx;
+  color: #555;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* 幸运信息行 */
+.lucky-info-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.08);
+}
+
+.lucky-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lucky-label {
+  font-size: 22rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.lucky-value {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #667eea;
+}
+
+/* 查看更多按钮 */
+.view-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0;
+  color: #667eea;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.view-more-btn .down-arrow {
+  font-size: 32rpx;
+  margin-left: 8rpx;
+  transition: transform 0.3s ease;
+}
+
+/* 热门推荐 */
+.recommend-section {
+  margin: 0 24rpx 24rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24rpx;
+  padding: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-title-moon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+
+.section-title-moon .moon-icon {
+  font-size: 28rpx;
+  color: #667eea;
+  margin: 0 12rpx;
+}
+
+.section-title-moon .title-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx;
+}
+
+.recommend-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recommend-icon {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+  margin-bottom: 12rpx;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+.recommend-text {
+  font-size: 22rpx;
+  color: #333;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* 颜色选择区域 */
+.color-section {
+  margin: 0 24rpx 24rpx;
+}
+
+.color-banner {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.98) 100%);
+  border-radius: 24rpx;
+  padding: 40rpx 24rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.color-banner-text {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 值日星球 */
+.planet-section {
+  margin: 0 24rpx 24rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24rpx;
+  padding: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.planet-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0;
+}
+
+.planet-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 12rpx;
+}
+
+.planet-desc {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 今日重要时刻 */
+.timeline-section {
+  margin: 0 24rpx 24rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24rpx;
+  padding: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.timeline-list {
+  padding: 16rpx 0;
+}
+
+.timeline-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-time {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 6rpx;
+}
+
+.event-name {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.timeline-suggest {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.suggest-label {
+  font-size: 22rpx;
+  color: #999;
+  margin-bottom: 6rpx;
+}
+
+.suggest-text {
+  font-size: 24rpx;
+  color: #333;
+}
+
+.wish-link {
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 26rpx;
+  color: #667eea;
+  font-weight: 500;
+}
+
+/* 精品推荐 */
+.ads-section {
+  margin: 0 24rpx 24rpx;
+}
+
+.ads-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.ad-item {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 120rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ad-1 {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.08) 100%);
+  border: 1rpx solid rgba(255, 193, 7, 0.3);
+}
+
+.ad-2 {
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.1) 0%, rgba(156, 39, 176, 0.08) 100%);
+  border: 1rpx solid rgba(233, 30, 99, 0.3);
+}
+
+.ad-3 {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(56, 142, 60, 0.08) 100%);
+  border: 1rpx solid rgba(76, 175, 80, 0.3);
+}
+
+.ad-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.ad-subtitle {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.ad-btn {
+  position: absolute;
+  right: 24rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 22rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+/* 底部星座选择器 */
+.constellation-selector {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 24rpx;
+  box-shadow: 0 -8rpx 32rpx rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.selector-title {
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.selector-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16rpx;
+}
+
+.selector-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12rpx 8rpx;
+  border-radius: 16rpx;
+  transition: all 0.2s ease;
+}
+
+.selector-item.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.selector-symbol {
+  font-size: 40rpx;
+  margin-bottom: 6rpx;
+}
+
+.selector-name {
+  font-size: 20rpx;
+  color: #666;
+}
+
+.selector-item.selected .selector-name {
+  color: #fff;
+}

@@ -1,0 +1,358 @@
+/*pages/holiday/holiday.wxss*/
+.holiday-container {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+/* 固定顶部：分类 Tab + 搜索栏 */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: #f5f5f5;
+}
+
+/* 分类 Tab */
+.tab-bar {
+  background: #fff;
+  padding: 0 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.tab-scroll {
+  white-space: nowrap;
+}
+
+.tab-item {
+  display: inline-block;
+  padding: 24rpx 32rpx;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.tab-text {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.tab-item.active .tab-text {
+  color: #667eea;
+  font-weight: bold;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2rpx;
+}
+
+/* 搜索栏 */
+.search-bar {
+  background: #fff;
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 24rpx;
+  padding: 16rpx 24rpx;
+}
+
+.search-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.search-text {
+  flex: 1;
+  font-size: 28rpx;
+  height: 48rpx;
+}
+
+.search-placeholder {
+  color: #999;
+}
+
+/* 节日列表 */
+.holiday-list-wrapper {
+  padding-top: 220rpx; /* 固定顶部高度：Tab 约 80rpx + 搜索栏约 80rpx + 额外空间 */
+  padding-bottom: 30rpx;
+}
+
+.holiday-list {
+  padding: 0 30rpx;
+}
+
+.holiday-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.holiday-item:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.holiday-main {
+  display: flex;
+  align-items: center;
+}
+
+.holiday-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.holiday-icon .icon {
+  font-size: 40rpx;
+}
+
+.holiday-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.holiday-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.holiday-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.official-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  margin-left: 12rpx;
+}
+
+.holiday-date-full {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.holiday-days {
+  text-align: center;
+  min-width: 80rpx;
+  margin-left: 20rpx;
+  padding: 12rpx 16rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12rpx;
+}
+
+.days-number {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1;
+}
+
+.days-unit {
+  display: block;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 4rpx;
+}
+
+.holiday-footer {
+  display: flex;
+  align-items: center;
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.vacation-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-right: 12rpx;
+}
+
+.vacation-dates {
+  font-size: 24rpx;
+  color: #666;
+  background: #f8f9fa;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 30rpx;
+}
+
+.empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 二十四节气 - 4x6 网格布局 */
+.term-list-wrapper {
+  padding: 88rpx 10rpx 40rpx;
+}
+
+/* 年份切换按钮 */
+.year-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 20rpx;
+  margin-bottom: 0;
+  margin-top: 0;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  gap: 30rpx;
+}
+
+.year-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60rpx;
+  height: 60rpx;
+  background: transparent;
+  border-radius: 10rpx;
+  transition: all 0.2s ease;
+  border: 2rpx solid #667eea;
+}
+
+.year-btn:active {
+  transform: scale(0.9);
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.year-btn .arrow {
+  font-size: 28rpx;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.year-display {
+  min-width: 180rpx;
+  text-align: center;
+}
+
+.year-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.term-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10rpx;
+}
+
+.term-item {
+  position: relative;
+  background: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+  min-height: 160rpx;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.term-item:active {
+  transform: scale(0.96);
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.06);
+}
+
+.term-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5rpx;
+}
+
+.term-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12rpx 8rpx;
+}
+
+.term-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.term-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+  white-space: nowrap;
+}
+
+.term-date {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.3;
+  text-align: center;
+  white-space: nowrap;
+  margin-bottom: 4rpx;
+}
+
+.term-weekday {
+  font-size: 20rpx;
+  color: #999;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+}

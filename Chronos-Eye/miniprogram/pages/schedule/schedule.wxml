@@ -1,0 +1,41 @@
+<view class="container">
+  <!-- 统计卡片 -->
+  <view class="stats-card">
+    <view class="stats-item">
+      <text class="stats-value">{{stats.total}}</text>
+      <text class="stats-label">总日程</text>
+    </view>
+    <view class="stats-divider"></view>
+    <view class="stats-item">
+      <text class="stats-value">{{stats.completed}}</text>
+      <text class="stats-label">已完成</text>
+    </view>
+    <view class="stats-divider"></view>
+    <view class="stats-item">
+      <text class="stats-value">{{stats.rate}}%</text>
+      <text class="stats-label">完成率</text>
+    </view>
+  </view>
+
+  <!-- 日程列表 -->
+  <view class="schedule-list">
+    <view class="list-header">
+      <text class="list-title">今日日程</text>
+      <view class="add-btn" bindtap="addSchedule">+</view>
+    </view>
+
+    <block wx:for="{{schedules}}" wx:key="id">
+      <view class="schedule-item {{item.completed ? 'completed' : ''}}" bindtap="toggleStatus" data-id="{{item.id}}">
+        <view class="schedule-dot" style="background-color: {{item.color}}"></view>
+        <view class="schedule-content">
+          <text class="schedule-title">{{item.title}}</text>
+          <text class="schedule-time">{{item.time}}</text>
+        </view>
+        <view class="schedule-priority">
+          <text class="priority-tag priority-{{item.priority}}">{{item.priorityText}}</text>
+        </view>
+        <view class="schedule-checkbox {{item.completed ? 'checked' : ''}}">✓</view>
+      </view>
+    </block>
+  </view>
+</view>

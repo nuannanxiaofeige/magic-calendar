@@ -1,0 +1,36 @@
+<view class="container">
+  <!-- 头部日期 -->
+  <view class="header">
+    <view class="date-text">{{currentDate}}</view>
+    <view class="lunar-text">{{lunarDate}}</view>
+  </view>
+
+  <!-- 历史事件列表 -->
+  <view class="event-list">
+    <view wx:if="{{events.length > 0}}">
+      <view wx:for="{{events}}" wx:key="id" class="event-card">
+        <view class="event-header">
+          <text class="event-year">{{item.year}}年</text>
+          <text class="event-category">{{getCategoryName(item.category)}}</text>
+        </view>
+        <view class="event-title">{{item.title}}</view>
+        <view class="event-desc">{{item.description}}</view>
+      </view>
+    </view>
+
+    <!-- 加载中 -->
+    <view wx:if="{{events.length === 0 && !loadError}}" class="loading-state">
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{events.length === 0 && loadError}}" class="empty-state">
+      <text class="empty-text">{{loadError}}</text>
+    </view>
+
+    <!-- 无数据 -->
+    <view wx:if="{{events.length === 0 && total === 0 && !loadError}}" class="empty-state">
+      <text class="empty-text">暂无历史事件</text>
+    </view>
+  </view>
+</view>

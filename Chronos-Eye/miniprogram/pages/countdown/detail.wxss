@@ -1,0 +1,177 @@
+.detail-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #667eea 0%, #667eea 35%, #f5f5f5 35%);
+}
+
+.detail-loading,
+.detail-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 头部区域 */
+.detail-header {
+  background: transparent;
+  padding: 60rpx 30rpx 40rpx;
+  text-align: center;
+}
+
+.detail-holiday-name {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 30rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+.detail-countdown {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 10rpx;
+}
+
+.detail-days-number {
+  font-size: 96rpx;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+}
+
+.detail-days-unit {
+  font-size: 32rpx;
+  color: #fff;
+  margin-left: 8rpx;
+}
+
+.detail-countdown-label {
+  display: block;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.95);
+  margin-top: 8rpx;
+}
+
+/* 详细内容区域 */
+.detail-content {
+  padding: 0 30rpx 30rpx;
+  margin-top: -40rpx;
+}
+
+.detail-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.detail-card-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #f5f5f5;
+  position: relative;
+}
+
+.detail-card-title::after {
+  content: '';
+  position: absolute;
+  bottom: -2rpx;
+  left: 0;
+  width: 60rpx;
+  height: 2rpx;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.detail-row.detail-full {
+  flex-direction: column;
+}
+
+.detail-row-label {
+  font-size: 26rpx;
+  color: #888;
+  min-width: 140rpx;
+  margin-bottom: 10rpx;
+  font-weight: 500;
+}
+
+.detail-row:not(.detail-full) .detail-label {
+  flex-shrink: 0;
+}
+
+.detail-row-value {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.detail-row-value.detail-text {
+  font-size: 26rpx;
+  color: #555;
+  font-weight: normal;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* 状态标签 */
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  padding: 20rpx 0;
+}
+
+.detail-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 24rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.detail-tag-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.detail-tag-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: #fff;
+}
+
+.detail-tag-warning {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+}
+
+/* 底部占位 */
+.detail-bottom-spacer {
+  height: 40rpx;
+}

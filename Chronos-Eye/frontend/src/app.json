@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/countdown/countdown",
+    "pages/countdown/detail",
+    "pages/schedule/schedule",
+    "pages/almanac/almanac"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#667eea",
+    "navigationBarTitleText": "时光之眼",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/home.png",
+        "selectedIconPath": "assets/home-active.png"
+      },
+      {
+        "pagePath": "pages/countdown/countdown",
+        "text": "倒计时",
+        "iconPath": "assets/countdown.png",
+        "selectedIconPath": "assets/countdown-active.png"
+      },
+      {
+        "pagePath": "pages/schedule/schedule",
+        "text": "日程",
+        "iconPath": "assets/schedule.png",
+        "selectedIconPath": "assets/schedule-active.png"
+      },
+      {
+        "pagePath": "pages/almanac/almanac",
+        "text": "黄历",
+        "iconPath": "assets/almanac.png",
+        "selectedIconPath": "assets/almanac-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,50 @@
+<view class="container">
+  <!-- 题目区域 -->
+  <view class="question-section">
+    <view class="difficulty-tag" wx:if="{{currentQuestion}}">
+      <text class="difficulty-text">{{difficultyText}}</text>
+    </view>
+    <view class="question-text">{{currentQuestion.question || '加载中...'}}</view>
+  </view>
+
+  <!-- 选项区域 -->
+  <view class="options-section" wx:if="{{currentQuestion}}">
+    <view
+      class="option-item {{optionStatus[index]}}"
+      wx:for="{{currentQuestion.options}}"
+      wx:key="*this"
+      bindtap="selectOption"
+      data-index="{{index}}"
+    >
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 答题结果反馈 -->
+  <view class="feedback-section {{answerResult === 'correct' ? 'correct' : 'wrong'}}" wx:if="{{showFeedback}}">
+    <text class="feedback-icon">{{answerResult === 'correct' ? '✓' : '✗'}}</text>
+    <text class="feedback-text">{{feedbackText}}</text>
+  </view>
+
+  <!-- 成语解释 -->
+  <view class="explanation-section" wx:if="{{showExplanation}}">
+    <view class="explanation-title">成语解释</view>
+    <view class="explanation-content">{{currentQuestion.explan}}</view>
+  </view>
+
+  <!-- 下一题按钮 -->
+  <view class="next-section" wx:if="{{showNextButton}}">
+    <button class="next-btn" bindtap="nextQuestion">下一题</button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-section" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 错误提示 -->
+  <view class="error-section" wx:if="{{error}}">
+    <text class="error-text">{{error}}</text>
+    <button class="retry-btn" bindtap="loadQuestion">重试</button>
+  </view>
+</view>

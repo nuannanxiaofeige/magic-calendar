@@ -1,0 +1,149 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 40rpx;
+}
+
+.stats-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 30rpx;
+  padding: 30rpx;
+  border-radius: 16rpx;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.stats-item {
+  text-align: center;
+}
+
+.stats-value {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.stats-label {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 8rpx;
+}
+
+.stats-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.schedule-list {
+  padding: 0 30rpx;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.list-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.add-btn {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 24rpx 20rpx;
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.schedule-item.completed {
+  opacity: 0.6;
+}
+
+.schedule-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+}
+
+.schedule-content {
+  flex: 1;
+}
+
+.schedule-title {
+  display: block;
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.schedule-time {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.schedule-priority {
+  margin-right: 16rpx;
+}
+
+.priority-tag {
+  padding: 6rpx 12rpx;
+  border-radius: 20rpx;
+  font-size: 20rpx;
+}
+
+.priority-high {
+  background: #fee;
+  color: #e74c3c;
+}
+
+.priority-normal {
+  background: #eef2ff;
+  color: #667eea;
+}
+
+.priority-low {
+  background: #e8f5e9;
+  color: #2ecc71;
+}
+
+.schedule-checkbox {
+  width: 40rpx;
+  height: 40rpx;
+  border: 2rpx solid #ddd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-size: 24rpx;
+}
+
+.schedule-checkbox.checked {
+  background: #2ecc71;
+  border-color: #2ecc71;
+  color: #fff;
+}

@@ -1,0 +1,60 @@
+.countdown-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.countdown-card-hover {
+  transform: scale(0.98);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.countdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.holiday-name {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+}
+
+.holiday-date {
+  font-size: 24px;
+  color: #999;
+}
+
+.countdown-body {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  padding: 30px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+}
+
+.days-count {
+  font-size: 72px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.days-label {
+  font-size: 32px;
+  color: #fff;
+  margin-left: 10px;
+}
+
+.countdown-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.countdown-text {
+  font-size: 24px;
+  color: #666;
+}

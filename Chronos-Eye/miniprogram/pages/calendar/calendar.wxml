@@ -1,0 +1,73 @@
+<view class="container">
+  <!-- 头部月份选择 -->
+  <view class="header">
+    <view class="month-picker">
+      <view class="arrow-btn" bindtap="prevMonth">
+        <text class="arrow">‹</text>
+      </view>
+      <text class="month-text">{{currentYear}}年{{currentMonth}}月</text>
+      <view class="arrow-btn" bindtap="nextMonth">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+    <text class="lunar-text">{{lunarYear}}年{{lunarMonthText}}月</text>
+  </view>
+
+  <!-- 星期标题 -->
+  <view class="weekdays">
+    <view class="weekday" wx:for="{{weekdays}}" wx:key="*this">{{item}}</view>
+  </view>
+
+  <!-- 日历网格 -->
+  <view class="calendar">
+    <view
+      class="day-cell {{item.isToday ? 'today' : ''}} {{item.isSelected ? 'selected' : ''}} {{item.isRestDay ? 'rest-day' : ''}} {{item.isNextMonth ? 'next-month' : ''}} {{item.isPrevMonth ? 'prev-month' : ''}}"
+      wx:for="{{days}}"
+      wx:key="fullDate"
+      bindtap="onDayTap"
+      data-date="{{item.fullDate}}"
+    >
+      <text class="day-number {{item.isNextMonth ? 'next-month-day' : ''}} {{item.isPrevMonth ? 'prev-month-day' : ''}}">{{item.day}}</text>
+      <!-- 显示文本：节日/节气/农历 -->
+      <text class="day-text {{item.displayType}} {{item.isNextMonth ? 'next-month-text' : ''}} {{item.isPrevMonth ? 'prev-month-text' : ''}}">{{item.displayText}}</text>
+      <view class="day-mark" wx:if="{{item.hasEvent}}">
+        <text class="mark-dot"></text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 选中日期详情 -->
+  <view class="selected-date-info" wx:if="{{selectedDateInfo}}">
+    <view class="info-header">
+      <text class="info-title">{{selectedDateInfo.solar}}</text>
+      <text class="info-lunar">{{selectedDateInfo.lunar}}</text>
+    </view>
+    <view class="info-content">
+      <view class="info-section">
+        <text class="section-label">宜</text>
+        <text class="section-value yi">{{selectedDateInfo.yi}}</text>
+      </view>
+      <view class="info-section">
+        <text class="section-label">忌</text>
+        <text class="section-value ji">{{selectedDateInfo.ji}}</text>
+      </view>
+    </view>
+    <view class="info-events" wx:if="{{selectedDateInfo.events && selectedDateInfo.events.length > 0}}">
+      <text class="events-title">历史上的今天</text>
+      <view class="event-item" wx:for="{{selectedDateInfo.events}}" wx:key="id" wx:for-item="event">
+        <text class="event-year">{{event.year}}年</text>
+        <text class="event-title">{{event.title}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 节假日标记 -->
+  <view class="festivals-section" wx:if="{{festivals.length > 0}}">
+    <text class="section-title">近期节日</text>
+    <view class="festival-item" wx:for="{{festivals}}" wx:key="id">
+      <text class="festival-icon">{{item.icon}}</text>
+      <text class="festival-name">{{item.name}}</text>
+      <text class="festival-days">还有{{item.daysLeft}}天</text>
+    </view>
+  </view>
+</view>

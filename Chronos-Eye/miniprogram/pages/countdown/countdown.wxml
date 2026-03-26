@@ -1,0 +1,35 @@
+<view class="container">
+  <view class="header">
+    <text class="title">我的倒计时</text>
+    <text class="subtitle">记录每一个重要时刻</text>
+  </view>
+
+  <view class="countdown-list">
+    <block wx:for="{{countdowns}}" wx:key="id">
+      <view class="countdown-card">
+        <view class="card-header">
+          <text class="holiday-name">{{item.name}}</text>
+          <text class="holiday-date">{{item.date}}</text>
+        </view>
+        <view class="card-body">
+          <text class="days-count">{{item.days_left}}</text>
+          <text class="days-label">天</text>
+        </view>
+        <view class="card-footer">
+          <text class="card-text">距离{{item.name}}还有</text>
+          <text class="delete-btn" bindtap="deleteCountdown" data-id="{{item.id}}">删除</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view wx:if="{{countdowns.length === 0}}" class="empty-state">
+      <text class="empty-text">暂无倒计时</text>
+      <text class="empty-subtext">点击右上角 + 添加</text>
+    </view>
+  </view>
+
+  <view class="add-button" bindtap="addCountdown">
+    + 添加倒计时
+  </view>
+</view>

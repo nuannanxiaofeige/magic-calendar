@@ -1,0 +1,208 @@
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="nav-header">
+    <view class="nav-content">
+      <text class="nav-icon">⛽</text>
+      <text class="nav-title">油价查询</text>
+    </view>
+    <view class="nav-actions" bindtap="refreshData">
+      <text class="refresh-icon {{loading ? 'rotating' : ''}}">🔄</text>
+    </view>
+  </view>
+
+  <!-- 省份选择卡片 -->
+  <view class="province-card">
+    <view class="province-header">
+      <text class="province-label">当前地区</text>
+      <text class="update-tag">实时更新</text>
+    </view>
+    <picker bindchange="onProvinceChange" value="{{provinceIndex}}" range="{{provinces}}" range-key="name">
+      <view class="province-picker">
+        <text class="province-name">{{provinces[provinceIndex].name}}</text>
+        <text class="province-more">切换省份 ›</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 油价主展示区 -->
+  <view class="price-main-card">
+    <view class="price-header">
+      <text class="price-title">今日油价</text>
+      <text class="price-date">{{updateTime}}</text>
+    </view>
+
+    <!-- 油价网格 -->
+    <view class="price-grid">
+      <!-- 92 号汽油 -->
+      <view class="price-grid-item {{priceChange['92'] ? (priceChange['92'].indexOf('+') >= 0 ? 'up' : 'down') : ''}}">
+        <view class="price-grid-type">92 号</view>
+        <view class="price-grid-value">￥{{priceData['92'] || '--'}}</view>
+        <view class="price-grid-change" wx:if="{{priceChange['92']}}">
+          <text class="change-icon">{{priceChange['92'].indexOf('+') >= 0 ? '↑' : '↓'}}</text>
+          <text>{{priceChange['92']}}</text>
+        </view>
+      </view>
+
+      <!-- 95 号汽油 -->
+      <view class="price-grid-item {{priceChange['95'] ? (priceChange['95'].indexOf('+') >= 0 ? 'up' : 'down') : ''}}">
+        <view class="price-grid-type">95 号</view>
+        <view class="price-grid-value">￥{{priceData['95'] || '--'}}</view>
+        <view class="price-grid-change" wx:if="{{priceChange['95']}}">
+          <text class="change-icon">{{priceChange['95'].indexOf('+') >= 0 ? '↑' : '↓'}}</text>
+          <text>{{priceChange['95']}}</text>
+        </view>
+      </view>
+
+      <!-- 98 号汽油 -->
+      <view class="price-grid-item {{priceChange['98'] ? (priceChange['98'].indexOf('+') >= 0 ? 'up' : 'down') : ''}}">
+        <view class="price-grid-type">98 号</view>
+        <view class="price-grid-value">￥{{priceData['98'] || '--'}}</view>
+        <view class="price-grid-change" wx:if="{{priceChange['98']}}">
+          <text class="change-icon">{{priceChange['98'].indexOf('+') >= 0 ? '↑' : '↓'}}</text>
+          <text>{{priceChange['98']}}</text>
+        </view>
+      </view>
+
+      <!-- 0 号柴油 -->
+      <view class="price-grid-item {{priceChange['0'] ? (priceChange['0'].indexOf('+') >= 0 ? 'up' : 'down') : ''}}">
+        <view class="price-grid-type">0 号</view>
+        <view class="price-grid-value">￥{{priceData['0'] || '--'}}</view>
+        <view class="price-grid-change" wx:if="{{priceChange['0']}}">
+          <text class="change-icon">{{priceChange['0'].indexOf('+') >= 0 ? '↑' : '↓'}}</text>
+          <text>{{priceChange['0']}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 89 号汽油（如有数据） -->
+    <view class="price-extra" wx:if="{{priceData['89']}}">
+      <view class="price-extra-item">
+        <text class="extra-type">89 号汽油</text>
+        <view class="extra-value">
+          <text class="extra-price">￥{{priceData['89']}}</text>
+          <text class="extra-change" wx:if="{{priceChange['89']}}">{{priceChange['89']}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 国际油价 -->
+  <view class="section-card" wx:if="{{internationalData.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">📊 国际原油</text>
+      <text class="section-more" bindtap="showMoreInternational">更多 ›</text>
+    </view>
+    <scroll-view class="international-scroll" scroll-x="{{true}}">
+      <view class="international-list">
+        <view class="international-item" wx:for="{{internationalData}}" wx:key="oil_name">
+          <view class="intl-name">{{item.oil_name}}</view>
+          <view class="intl-price">{{item.price}}</view>
+          <view class="intl-change {{item.change && item.change.indexOf('-') < 0 ? 'up' : 'down'}}">
+            {{item.change}}
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 调价窗口提示 -->
+  <view class="tips-card">
+    <view class="tips-icon">💡</view>
+    <view class="tips-content">
+      <text class="tips-title">下次调价窗口</text>
+      <text class="tips-desc">预计 10 个工作日后调整</text>
+    </view>
+  </view>
+
+  <!-- 油价调整历史 -->
+  <view class="section-card">
+    <view class="section-header">
+      <text class="section-title">📅 调价记录</text>
+      <text class="section-more" bindtap="showMoreHistory">全部 ›</text>
+    </view>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{historyData}}" wx:key="adjust_date">
+        <view class="history-date">{{item.adjust_date}}</view>
+        <view class="history-info">
+          <view class="history-row">
+            <text class="history-label">汽油：</text>
+            <text class="history-value {{item.gasoline_change >= 0 ? 'up' : 'down'}}">
+              {{item.gasoline_change >= 0 ? '+' : ''}}{{item.gasoline_change}}元/吨
+            </text>
+          </view>
+          <view class="history-row">
+            <text class="history-label">柴油：</text>
+            <text class="history-value {{item.diesel_change >= 0 ? 'up' : 'down'}}">
+              {{item.diesel_change >= 0 ? '+' : ''}}{{item.diesel_change}}元/吨
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部说明 -->
+  <view class="footer-tips">
+    <text class="tip-line">• 数据来源：国家发改委及各地油价调整公告</text>
+    <text class="tip-line">• 价格仅供参考，实际以加油站为准</text>
+    <text class="tip-line">• 油价每 10 个工作日调整一次</text>
+  </view>
+
+  <!-- 加载更多提示 -->
+  <view class="loading-more" wx:if="{{loadingMore}}">
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- 国际油价详情弹窗 -->
+<view class="modal-mask" wx:if="{{showIntlModal}}" bindtap="hideIntlModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">国际原油价格</text>
+      <text class="modal-close" bindtap="hideIntlModal">✕</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y="{{true}}">
+      <view class="intl-detail-list">
+        <view class="intl-detail-item" wx:for="{{internationalData}}" wx:key="oil_name">
+          <view class="detail-name">{{item.oil_name}}</view>
+          <view class="detail-info">
+            <view class="detail-price">{{item.price}}</view>
+            <view class="detail-change {{item.change && item.change.indexOf('-') < 0 ? 'up' : 'down'}}">{{item.change}}</view>
+          </view>
+          <view class="detail-ext" wx:if="{{item.change_percent}}">{{item.change_percent}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
+<!-- 调价历史详情弹窗 -->
+<view class="modal-mask" wx:if="{{showHistoryModal}}" bindtap="hideHistoryModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">油价调整历史</text>
+      <text class="modal-close" bindtap="hideHistoryModal">✕</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y="{{true}}">
+      <view class="history-detail-list">
+        <view class="history-detail-item" wx:for="{{historyData}}" wx:key="adjust_date">
+          <view class="detail-date">{{item.adjust_date}}</view>
+          <view class="detail-rows">
+            <view class="detail-row">
+              <text class="row-label">汽油价格</text>
+              <text class="row-value {{item.gasoline_change >= 0 ? 'up' : 'down'}}">
+                {{item.gasoline_price}}元/吨 ({{item.gasoline_change >= 0 ? '+' : ''}}{{item.gasoline_change}})
+              </text>
+            </view>
+            <view class="detail-row">
+              <text class="row-label">柴油价格</text>
+              <text class="row-value {{item.diesel_change >= 0 ? 'up' : 'down'}}">
+                {{item.diesel_price}}元/吨 ({{item.diesel_change >= 0 ? '+' : ''}}{{item.diesel_change}})
+              </text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

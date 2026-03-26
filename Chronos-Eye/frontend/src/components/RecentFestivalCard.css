@@ -1,0 +1,77 @@
+.recent-festival-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.recent-festival-card-hover {
+  transform: scale(0.98);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+}
+
+.festival-main {
+  display: flex;
+  align-items: center;
+}
+
+.festival-icon {
+  font-size: 40px;
+  margin-right: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.festival-info {
+  flex: 1;
+}
+
+.festival-name {
+  display: block;
+  font-size: 30px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.festival-date {
+  display: block;
+  font-size: 24px;
+  color: #999;
+}
+
+.festival-countdown {
+  text-align: center;
+  min-width: 60px;
+}
+
+.countdown-number {
+  display: block;
+  font-size: 40px;
+  font-weight: bold;
+  color: #667eea;
+  line-height: 1;
+}
+
+.countdown-label {
+  display: block;
+  font-size: 20px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.official-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 20px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+}

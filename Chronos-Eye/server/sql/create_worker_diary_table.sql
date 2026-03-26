@@ -1,0 +1,10 @@
+-- 创建打工者日记表
+CREATE TABLE IF NOT EXISTS `worker_diary` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键 ID',
+  `content` TEXT NOT NULL COMMENT '打工者日记内容',
+  `source` VARCHAR(50) DEFAULT 'manual' COMMENT '数据来源',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+
+  INDEX `idx_created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='打工者日记表';

@@ -1,0 +1,104 @@
+// Jenkinsfile for Chronos-Eye 项目
+// 自动化部署 Pipeline
+
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'NodeJS-18'
+    }
+
+    environment {
+        SERVER_IP = '47.102.152.82'
+        SERVER_USER = 'root'
+        SERVER_DIR = '/root/chronos-eye/server'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo '📦 检出代码...'
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo '📥 安装依赖...'
+                dir('server') {
+                    sh 'npm install --production'
+                }
+            }
+        }
+
+        stage('Deploy to Server') {
+            steps {
+                echo '🚀 部署到服务器...'
+                sshagent(['server-deploy-key']) {
+                    sh '''
+                        echo "上传代码到服务器 ${SERVER_IP}..."
+
+                        # 上传代码
+                        scp -r server/* ${SERVER_USER}@${SERVER_IP}:${SERVER_DIR}/
+
+                        # 执行远程部署命令
+                        ssh ${SERVER_USER}@${SERVER_IP} << 'ENDSSH'
+                        cd /root/chronos-eye/server
+
+                        # 创建 .env 文件
+                        cat > .env << 'EOF'
+PORT=3000
+DB_TYPE=mysql
+DB_HOST=47.102.152.82
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=_kIjZ9iVb@nt
+DB_NAME=chronos_eye
+JWT_SECRET=chronos-eye-jwt-secret-2026
+JWT_EXPIRES_IN=7d
+NODE_ENV=production
+TIANAPI_KEY=30b92001a007855fe7ea7328e8754e2a
+EOF
+
+                        # 安装依赖
+                        npm install --production
+
+                        # 重启服务
+                        pm2 restart chronos-eye 2>/dev/null || pm2 start src/index.js --name chronos-eye
+                        pm2 save
+
+                        echo "部署完成！"
+                        pm2 status
+                        ENDSSH
+                    '''
+                }
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                echo '✅ 验证部署...'
+                sh '''
+                    if curl -s --connect-timeout 5 http://47.102.152.82:3000/api/ > /dev/null; then
+                        echo "API 验证成功！"
+                    else
+                        echo "API 验证失败，但部署已完成"
+                    fi
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            echo '📊 构建完成'
+            cleanWs()
+        }
+        success {
+            echo '✅ 部署成功！'
+        }
+        failure {
+            echo '❌ 部署失败，请检查日志'
+        }
+    }
+}

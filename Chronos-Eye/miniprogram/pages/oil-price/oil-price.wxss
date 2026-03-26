@@ -1,0 +1,625 @@
+/* ==================== 容器 ==================== */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-bottom: 40rpx;
+}
+
+/* ==================== 顶部导航栏 ==================== */
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 32rpx;
+  background: rgba(255, 255, 255, 0.98);
+  margin: 16rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.nav-icon {
+  font-size: 40rpx;
+}
+
+.nav-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-actions {
+  padding: 12rpx;
+}
+
+.refresh-icon {
+  font-size: 36rpx;
+  display: inline-block;
+}
+
+.refresh-icon.rotating {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==================== 省份选择卡片 ==================== */
+.province-card {
+  background: rgba(255, 255, 255, 0.98);
+  margin: 16rpx;
+  padding: 28rpx 32rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+
+.province-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.province-label {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.update-tag {
+  font-size: 22rpx;
+  color: #52c41a;
+  background: #f6ffed;
+  border: 1rpx solid #b7eb8f;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.province-picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-radius: 16rpx;
+}
+
+.province-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.province-more {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* ==================== 油价主展示区 ==================== */
+.price-main-card {
+  background: rgba(255, 255, 255, 0.98);
+  margin: 16rpx;
+  padding: 32rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+
+.price-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28rpx;
+}
+
+.price-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.price-date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 油价网格布局 */
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+}
+
+.price-grid-item {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.price-grid-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6rpx;
+}
+
+.price-grid-item.up::before {
+  background: linear-gradient(90deg, #ff4d4f 0%, #ff7875 100%);
+}
+
+.price-grid-item.down::before {
+  background: linear-gradient(90deg, #52c41a 0%, #73d13d 100%);
+}
+
+.price-grid-type {
+  font-size: 26rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.price-grid-value {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.price-grid-value::before {
+  content: '￥';
+  font-size: 28rpx;
+  margin-right: 4rpx;
+}
+
+.price-grid-change {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.price-grid-item.up .price-grid-change {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.price-grid-item.down .price-grid-change {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.change-icon {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* 89 号汽油额外展示 */
+.price-extra {
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.price-extra-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.extra-type {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.extra-value {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.extra-price {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.extra-price::before {
+  content: '￥';
+  font-size: 24rpx;
+}
+
+.extra-change {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.extra-change.up {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.extra-change.down {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+/* ==================== 通用区块卡片 ==================== */
+.section-card {
+  background: rgba(255, 255, 255, 0.98);
+  margin: 16rpx;
+  padding: 28rpx 32rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-more {
+  font-size: 26rpx;
+  color: #667eea;
+}
+
+/* 国际油价横向滚动 */
+.international-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.international-list {
+  display: inline-flex;
+  gap: 20rpx;
+}
+
+.international-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  padding: 24rpx 32rpx;
+  border-radius: 16rpx;
+  gap: 12rpx;
+  min-width: 200rpx;
+}
+
+.intl-name {
+  font-size: 26rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.intl-price {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.intl-change {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.intl-change.up {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.intl-change.down {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+/* ==================== 调价窗口提示卡片 ==================== */
+.tips-card {
+  background: linear-gradient(135deg, #fff7e6 0%, #fff0e6 100%);
+  border: 1rpx solid #ffd591;
+  margin: 16rpx;
+  padding: 24rpx 32rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.tips-icon {
+  font-size: 40rpx;
+}
+
+.tips-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.tips-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.tips-desc {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* ==================== 调价历史记录 ==================== */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  padding: 20rpx 24rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.history-date {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.history-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.history-value {
+  font-size: 26rpx;
+  font-weight: 500;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.history-value.up {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.history-value.down {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+/* ==================== 底部说明 ==================== */
+.footer-tips {
+  background: rgba(255, 255, 255, 0.9);
+  margin: 16rpx;
+  padding: 24rpx 32rpx;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.tip-line {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* ==================== 加载更多 ==================== */
+.loading-more {
+  text-align: center;
+  padding: 32rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 26rpx;
+}
+
+/* ==================== 弹窗样式 ==================== */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 90%;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  padding: 8rpx;
+  line-height: 1;
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24rpx 32rpx;
+}
+
+/* 国际油价详情列表 */
+.intl-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.intl-detail-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  gap: 16rpx;
+}
+
+.detail-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  min-width: 150rpx;
+}
+
+.detail-info {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.detail-price {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.detail-price::before {
+  content: '￥';
+  font-size: 24rpx;
+}
+
+.detail-change {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-weight: 500;
+}
+
+.detail-change.up {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.detail-change.down {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.detail-ext {
+  font-size: 24rpx;
+  color: #999;
+  width: 100%;
+}
+
+/* 调价历史详情列表 */
+.history-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.history-detail-item {
+  padding: 24rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.detail-date {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+  padding-bottom: 12rpx;
+  border-bottom: 1rpx solid #e9ecef;
+}
+
+.detail-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.row-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.row-value {
+  font-size: 26rpx;
+  font-weight: 500;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.row-value.up {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.row-value.down {
+  background: #f6ffed;
+  color: #52c41a;
+}

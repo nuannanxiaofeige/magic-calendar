@@ -1,0 +1,146 @@
+.almanac-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-bottom: 40px;
+}
+
+.almanac-header {
+  text-align: center;
+  padding: 60px 30px 40px;
+  color: #fff;
+}
+
+.date-text {
+  display: block;
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.lunar-text {
+  display: block;
+  font-size: 28px;
+  opacity: 0.9;
+}
+
+.ganzhi-section {
+  background: rgba(255, 255, 255, 0.95);
+  margin: 0 30px 20px;
+  padding: 30px;
+  border-radius: 16px;
+}
+
+.ganzhi-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.ganzhi-item:first-child {
+  border-bottom: 1px solid #eee;
+}
+
+.ganzhi-label {
+  font-size: 28px;
+  color: #666;
+}
+
+.ganzhi-value {
+  font-size: 28px;
+  color: #333;
+  font-weight: 500;
+}
+
+.yiji-section {
+  background: rgba(255, 255, 255, 0.95);
+  margin: 0 30px 20px;
+  padding: 30px;
+  border-radius: 16px;
+}
+
+.yi-item,
+.ji-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.yi-label {
+  width: 60px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.ji-label {
+  width: 60px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #3498db;
+}
+
+.yi-ji-value {
+  flex: 1;
+  font-size: 28px;
+  color: #333;
+}
+
+.detail-section {
+  background: rgba(255, 255, 255, 0.95);
+  margin: 0 30px 20px;
+  padding: 30px;
+  border-radius: 16px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 28px;
+  color: #666;
+}
+
+.detail-value {
+  font-size: 28px;
+  color: #333;
+}
+
+.rating-section {
+  background: rgba(255, 255, 255, 0.95);
+  margin: 0 30px;
+  padding: 40px 30px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.rating-label {
+  display: block;
+  font-size: 28px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.star {
+  font-size: 48px;
+  color: #ddd;
+}
+
+.star.active {
+  color: #f1c40f;
+}

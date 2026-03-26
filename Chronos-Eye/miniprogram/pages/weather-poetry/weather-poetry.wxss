@@ -1,0 +1,184 @@
+.container {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+/* 天气选择器 */
+.weather-selector {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 30rpx;
+}
+
+.selector-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.weather-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.weather-btn {
+  flex: 0 0 calc(25% - 12rpx);
+  padding: 20rpx 10rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.weather-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.4);
+}
+
+/* 诗句展示区 */
+.poetry-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  margin-bottom: 30rpx;
+  min-height: 300rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.poetry-card {
+  text-align: center;
+}
+
+.poetry-content {
+  margin-bottom: 30rpx;
+}
+
+.poetry-text {
+  font-size: 36rpx;
+  line-height: 1.8;
+  color: #333;
+  font-weight: 500;
+  display: block;
+}
+
+.poetry-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.poetry-author,
+.poetry-source {
+  font-size: 26rpx;
+  color: #888;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 操作按钮 */
+.action-section {
+  margin-bottom: 30rpx;
+}
+
+.get-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 48rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.4);
+}
+
+.get-btn::after {
+  border: none;
+}
+
+.get-btn:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+/* 历史记录 */
+.history-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 24rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+  padding-bottom: 16rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.clear-btn {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.history-item {
+  padding: 20rpx;
+  background: #f9f9f9;
+  border-radius: 12rpx;
+  border-left: 4rpx solid #667eea;
+}
+
+.history-content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.history-meta {
+  font-size: 24rpx;
+  color: #999;
+}

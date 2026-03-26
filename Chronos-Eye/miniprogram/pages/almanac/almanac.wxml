@@ -1,0 +1,192 @@
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="nav-bar">
+    <view class="nav-title">黄历</view>
+    <view class="nav-share" bindtap="onShare">📤</view>
+  </view>
+
+  <!-- 日期区域 -->
+  <view class="date-section">
+    <picker mode="date" value="{{selectedDate}}" bindchange="onDateChange">
+      <view class="solar-date">
+        {{currentDate}} <text class="arrow">▼</text>
+      </view>
+    </picker>
+    <view class="lunar-date">
+      <text class="lunar-icon">🐰</text>
+      <text class="lunar-main">{{lunarDateText}}</text>
+      <text class="lunar-icon">🐰</text>
+    </view>
+    <view class="ganzhi-info">
+      {{ganzhiText}} {{weekday}} 第{{weekNum}}周
+    </view>
+
+    <!-- 新增：天文台节气信息 -->
+    <view class="term-info" wx:if="{{termInfo.current}}">
+      <view class="term-badge">
+        <text class="term-icon">🌿</text>
+        <text class="term-name">当前节气：{{termInfo.current.name}}</text>
+      </view>
+      <view class="term-next" wx:if="{{termInfo.next}}">
+        <text class="term-label">距离{{termInfo.next.name}}还有</text>
+        <text class="term-days">{{termInfo.next.daysLeft}}天</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 宜忌区域 -->
+  <view class="yiji-card">
+    <view class="yiji-row">
+      <view class="yiji-main">
+        <view class="yi-row">
+          <view class="yi-ji-label yi-label">宜</view>
+          <view class="yi-ji-tags">
+            <block wx:for="{{yiList}}" wx:key="*this">
+              <view class="tag yi-tag">{{item}}</view>
+            </block>
+          </view>
+        </view>
+        <view class="ji-row">
+          <view class="yi-ji-label ji-label">忌</view>
+          <view class="yi-ji-tags">
+            <block wx:for="{{jiList}}" wx:key="*this">
+              <view class="tag ji-tag">{{item}}</view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 详细信息卡片 -->
+  <view class="detail-card">
+    <view class="huangdi-era">黄帝纪元{{huangdiYear}}年</view>
+
+    <!-- 分隔线 -->
+    <view class="divider-line"></view>
+
+    <!-- 新增：纳音五行 -->
+    <view class="info-section">
+      <view class="section-title">📍 纳音五行</view>
+      <view class="info-row info-row-4">
+        <view class="info-item">
+          <view class="info-label">年柱</view>
+          <view class="info-value">{{naYin.year}}</view>
+        </view>
+        <view class="info-item">
+          <view class="info-label">月柱</view>
+          <view class="info-value">{{naYin.month}}</view>
+        </view>
+        <view class="info-item">
+          <view class="info-label">日柱</view>
+          <view class="info-value">{{naYin.day}}</view>
+        </view>
+        <view class="info-item">
+          <view class="info-label">时柱</view>
+          <view class="info-value">{{naYin.hour}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 分隔线 -->
+    <view class="divider-line"></view>
+
+    <!-- 第一行：五行、值神、冲煞、星宿 -->
+    <view class="info-row info-row-4">
+      <view class="info-item">
+        <view class="info-label">五行</view>
+        <view class="info-value">{{wuxing}}</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">值神</view>
+        <view class="info-value">{{zhishen}}</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">冲煞</view>
+        <view class="info-value">{{chongsha}}</view>
+      </view>
+      <view class="info-item">
+        <view class="info-label">星宿</view>
+        <view class="info-value">{{xingxiu}}</view>
+      </view>
+    </view>
+
+    <!-- 第二行：财神、罗盘、福神 -->
+    <view class="info-row info-row-3">
+      <view class="info-item small" wx:if="{{caishen}}">
+        <view class="info-label-gold">财神</view>
+        <view class="info-value">{{caishen}}</view>
+      </view>
+      <view class="info-item center-luo">
+        <view class="luopan">
+          <view class="luopan-center">
+            <text class="luo-text">吉神</text>
+            <text class="luo-sub">罗盘</text>
+          </view>
+        </view>
+      </view>
+      <view class="info-item small" wx:if="{{fushen}}">
+        <view class="info-label-gold">福神</view>
+        <view class="info-value">{{fushen}}</view>
+      </view>
+    </view>
+
+    <!-- 第三行：喜神、阳贵 -->
+    <view class="info-row info-row-2">
+      <view class="info-item small" wx:if="{{xishen}}">
+        <view class="info-label-gold">喜神</view>
+        <view class="info-value">{{xishen}}</view>
+      </view>
+      <view class="info-item small" wx:if="{{yanggui}}">
+        <view class="info-label-gold">阳贵</view>
+        <view class="info-value">{{yanggui}}</view>
+      </view>
+    </view>
+
+    <!-- 第四行：胎神、建除十二神 -->
+    <view class="info-row info-row-2">
+      <view class="info-item small" wx:if="{{taishen}}">
+        <view class="info-label-red">今日胎神</view>
+        <view class="info-value">{{taishen}}</view>
+      </view>
+      <view class="info-item small" wx:if="{{jianchu}}">
+        <view class="info-label-red">建除十二神</view>
+        <view class="info-value">{{jianchu}}</view>
+      </view>
+    </view>
+
+    <!-- 第五行：吉神宜趋、彭祖百忌、凶神宜忌 -->
+    <view class="info-row info-row-bottom" wx:if="{{jishen || pengzu || xiongshen}}">
+      <view class="info-item" wx:if="{{jishen}}">
+        <view class="info-label-red">吉神宜趋</view>
+        <view class="info-value multi-line">{{jishen}}</view>
+      </view>
+      <view class="info-item" wx:if="{{pengzu}}">
+        <view class="info-label-red">彭祖百忌</view>
+        <view class="info-value multi-line">{{pengzu}}</view>
+      </view>
+      <view class="info-item" wx:if="{{xiongshen}}">
+        <view class="info-label-red">凶神宜忌</view>
+        <view class="info-value multi-line">{{xiongshen}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 新增：十二时辰吉凶卡片 -->
+  <view class="shichen-card">
+    <view class="card-header">
+      <text class="card-title">🕐 十二时辰吉凶</text>
+      <text class="card-subtitle">子午流注</text>
+    </view>
+    <view class="shichen-grid">
+      <view class="shichen-item" wx:for="{{shiChenList}}" wx:key="name">
+        <view class="shichen-main {{item.jixiong === '吉' ? 'ji' : (item.jixiong === '凶' ? 'xiong' : 'ping')}}">
+          <text class="shichen-name">{{item.name}}</text>
+          <text class="shichen-ganzhi">{{item.ganzhi}}</text>
+        </view>
+        <view class="shichen-time">{{item.time}}</view>
+        <view class="shichen-suit">{{item.suit}}</view>
+      </view>
+    </view>
+  </view>
+</view>

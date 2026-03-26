@@ -1,0 +1,189 @@
+<view class="container">
+  <!-- 顶部日期栏 -->
+  <view class="header-bar">
+    <text class="header-date">{{currentDate}}</text>
+  </view>
+
+  <!-- 星座主卡片 -->
+  <view class="constellation-main-card">
+    <!-- 星座信息和名称 -->
+    <view class="sign-header">
+      <view class="sign-symbol">{{selectedSignData.symbol}}</view>
+      <view class="sign-info">
+        <text class="sign-name">{{selectedSignData.name}}</text>
+        <text class="sign-date">{{selectedSignData.date}}</text>
+      </view>
+      <view class="sign-more" bindtap="viewMore">
+        <text>查看更多</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 日期切换标签 -->
+    <view class="date-tabs">
+      <view class="tab-item {{currentTab === 'today' ? 'active' : ''}}" bindtap="switchTab" data-tab="today">今日</view>
+      <view class="tab-item {{currentTab === 'tomorrow' ? 'active' : ''}}" bindtap="switchTab" data-tab="tomorrow">明日</view>
+      <view class="tab-item {{currentTab === 'week' ? 'active' : ''}}" bindtap="switchTab" data-tab="week">本周</view>
+      <view class="tab-item {{currentTab === 'month' ? 'active' : ''}}" bindtap="switchTab" data-tab="month">月度</view>
+      <view class="tab-item {{currentTab === 'year' ? 'active' : ''}}" bindtap="switchTab" data-tab="year">年度</view>
+    </view>
+
+    <!-- 心情星语 -->
+    <view class="motto-section">
+      <view class="section-title-star">
+        <text class="star-icon">✦</text>
+        <text class="title-text">心情星语</text>
+        <text class="star-icon">✦</text>
+      </view>
+      <text class="motto-text">{{fortune.motto || '见春天不见故人，敬山水不敬过往'}}</text>
+    </view>
+
+    <!-- 综合分数和描述 -->
+    <view class="score-section">
+      <view class="score-circle">
+        <text class="score-number">{{fortune.totalScore || 80}}</text>
+        <text class="score-label">综合分数</text>
+      </view>
+      <text class="score-desc">{{fortune.description || '今天旺盛的精力会驱使着你排除万难，有效地控制事情的走势。'}}</text>
+    </view>
+
+    <!-- 幸运信息 -->
+    <view class="lucky-info-row">
+      <view class="lucky-item">
+        <text class="lucky-label">幸运数字</text>
+        <text class="lucky-value">{{fortune.luckyNumber || 29}}</text>
+      </view>
+      <view class="lucky-item">
+        <text class="lucky-label">幸运颜色</text>
+        <text class="lucky-value">{{fortune.luckyColor || '熟褐'}}</text>
+      </view>
+      <view class="lucky-item">
+        <text class="lucky-label">速配星座</text>
+        <text class="lucky-value">{{fortune.matchSign || '双子座'}}</text>
+      </view>
+    </view>
+
+    <!-- 查看更多按钮 -->
+    <view class="view-more-btn" bindtap="toggleMore">
+      <text>查看更多</text>
+      <text class="down-arrow">{{showMore ? '›' : '‹'}}</text>
+    </view>
+  </view>
+
+  <!-- 热门推荐 -->
+  <view class="recommend-section">
+    <view class="section-title-moon">
+      <text class="moon-icon">☾</text>
+      <text class="title-text">热门推荐</text>
+      <text class="moon-icon">☽</text>
+    </view>
+    <view class="recommend-grid">
+      <view class="recommend-item" bindtap="goToMonthFortune">
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">🔮</view>
+        <text class="recommend-text">3 月运程</text>
+      </view>
+      <view class="recommend-item" bindtap="goToLoveMatch">
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">💕</view>
+        <text class="recommend-text">良缘匹配</text>
+      </view>
+      <view class="recommend-item" bindtap="goToFortuneBag">
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #f5af19 0%, #f12711 100%)">🧧</view>
+        <text class="recommend-text">好运福袋</text>
+      </view>
+      <view class="recommend-item" bindtap="goToQuarterCareer">
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%)">📊</view>
+        <text class="recommend-text">季度事业运</text>
+      </view>
+      <view class="recommend-item" bindtap="goToYearFortune2026">
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)">📅</view>
+        <text class="recommend-text">2026 运程</text>
+      </view>
+      <view class="recommend-item" bindtap="goToWealthUp">
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #f12711 0%, #f5af19 100%)">💰</view>
+        <text class="recommend-text">财气提升</text>
+      </view>
+      <view class="recommend-item" bindtap="goToFateCareer">
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%)">☯️</view>
+        <text class="recommend-text">命盘事业</text>
+      </view>
+      <view class="recommend-item" bindtap="goToWealthSecret">
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%)">🗝️</view>
+        <text class="recommend-text">偏财运</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 选择今日心情色彩 -->
+  <view class="color-section">
+    <view class="section-title-moon">
+      <text class="moon-icon">☾</text>
+      <text class="title-text">选择今日心情色彩</text>
+      <text class="moon-icon">☽</text>
+    </view>
+    <view class="color-banner" bindtap="selectColor">
+      <text class="color-banner-text">给心情加一点色彩</text>
+    </view>
+  </view>
+
+  <!-- 值日星球 -->
+  <view class="planet-section">
+    <view class="section-title-moon">
+      <text class="moon-icon">☾</text>
+      <text class="title-text">值日星球</text>
+      <text class="moon-icon">☽</text>
+    </view>
+    <view class="planet-content">
+      <text class="planet-name">{{fortune.rulingPlanet || '火星'}}</text>
+      <text class="planet-desc">{{fortune.rulingPlanetDesc || '行动力与决断力的象征'}}</text>
+    </view>
+  </view>
+
+  <!-- 今日重要时刻 -->
+  <view class="timeline-section">
+    <view class="section-title-moon">
+      <text class="moon-icon">☾</text>
+      <text class="title-text">今日重要时刻</text>
+      <text class="moon-icon">☽</text>
+    </view>
+    <view class="timeline-list">
+      <view class="timeline-item" wx:for="{{fortune.astroEvents}}" wx:key="time">
+        <view class="timeline-time">
+          <text class="time-text">{{item.time}}</text>
+          <text class="event-name">{{item.event}}</text>
+        </view>
+        <view class="timeline-suggest">
+          <text class="suggest-label">建议</text>
+          <text class="suggest-text">{{item.suggest}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="wish-link" bindtap="goToWish">
+      专属星座许愿，愿心想事成，立即前往&gt;&gt;
+    </view>
+  </view>
+
+  <!-- 精品推荐 -->
+  <view class="ads-section">
+    <view class="section-title-moon">
+      <text class="moon-icon">☾</text>
+      <text class="title-text">精品推荐</text>
+      <text class="moon-icon">☽</text>
+    </view>
+    <view class="ads-list">
+      <view class="ad-item ad-1" bindtap="goToPrayer">
+        <text class="ad-title">点亮心灯，祈福许愿</text>
+        <text class="ad-subtitle">催旺财运</text>
+      </view>
+      <view class="ad-item ad-2" bindtap="goToWealth">
+        <text class="ad-title">何以解忧，唯有暴富</text>
+        <text class="ad-subtitle">财运早知道，财富倍倍增</text>
+        <text class="ad-btn">立即查看</text>
+      </view>
+      <view class="ad-item ad-3" bindtap="goToYear2026">
+        <text class="ad-title">2026 整年运程</text>
+        <text class="ad-subtitle">运筹帷幄！财富倍增！</text>
+        <text class="ad-btn">立即查看</text>
+      </view>
+    </view>
+  </view>
+</view>

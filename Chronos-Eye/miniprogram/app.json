@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/countdown/countdown",
+    "pages/countdown/detail",
+    "pages/schedule/schedule",
+    "pages/almanac/almanac",
+    "pages/history/history",
+    "pages/mine/mine",
+    "pages/holiday/holiday",
+    "pages/calendar/calendar",
+    "pages/date-calc/date-calc",
+    "pages/constellation/constellation",
+    "pages/match/match",
+    "pages/oil-price/oil-price",
+    "pages/idiom-quiz/idiom-quiz",
+    "pages/weather-poetry/weather-poetry"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#667eea",
+    "navigationBarTitleText": "时光之眼",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/countdown/countdown",
+        "text": "倒计时"
+      },
+      {
+        "pagePath": "pages/almanac/almanac",
+        "text": "黄历"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

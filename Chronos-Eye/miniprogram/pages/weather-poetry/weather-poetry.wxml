@@ -1,0 +1,62 @@
+<view class="container">
+  <!-- 天气类型选择 -->
+  <view class="weather-selector">
+    <view class="selector-title">选择天气类型</view>
+    <view class="weather-grid">
+      <view
+        class="weather-btn {{selectedType === item.type ? 'active' : ''}}"
+        wx:for="{{weatherTypes}}"
+        wx:key="type"
+        bindtap="selectWeatherType"
+        data-type="{{item.type}}"
+      >
+        {{item.icon}} {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 诗句展示区域 -->
+  <view class="poetry-section">
+    <view class="poetry-card" wx:if="{{currentPoetry}}">
+      <view class="poetry-content">
+        <text class="poetry-text">{{currentPoetry.content}}</text>
+      </view>
+      <view class="poetry-meta">
+        <text class="poetry-author">—— {{currentPoetry.author}}</text>
+        <text class="poetry-source">《{{currentPoetry.source}}》</text>
+      </view>
+    </view>
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">📜</text>
+      <text class="empty-text">点击获取诗句</text>
+    </view>
+  </view>
+
+  <!-- 获取按钮 -->
+  <view class="action-section">
+    <button class="get-btn" bindtap="getPoetry">
+      <text wx:if="{{!loading}}">📖 {{selectedTypeName ? '获取' + selectedTypeName + '诗句' : '获取诗句'}}</text>
+      <text wx:else>加载中...</text>
+    </button>
+  </view>
+
+  <!-- 历史诗句 -->
+  <view class="history-section" wx:if="{{poetryHistory.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">浏览记录</text>
+      <text class="clear-btn" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="history-list">
+      <view
+        class="history-item"
+        wx:for="{{poetryHistory}}"
+        wx:key="id"
+        bindtap="viewPoetry"
+        data-index="{{index}}"
+      >
+        <text class="history-content">{{item.content}}</text>
+        <text class="history-meta">—— {{item.author}}《{{item.source}}》</text>
+      </view>
+    </view>
+  </view>
+</view>

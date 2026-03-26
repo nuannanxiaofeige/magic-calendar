@@ -1,0 +1,70 @@
+<view class="container">
+  <!-- 选项卡切换 -->
+  <view class="tabs">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-tab="0">天数计算</view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-tab="1">日期推算</view>
+  </view>
+
+  <!-- 天数计算 -->
+  <view class="tab-content" wx:if="{{currentTab === 0}}">
+    <view class="card">
+      <view class="card-title">计算两个日期之间的天数</view>
+      <view class="form-row">
+        <text class="label">开始日期</text>
+        <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+          <view class="picker">{{startDate || '请选择'}}</view>
+        </picker>
+      </view>
+      <view class="form-row">
+        <text class="label">结束日期</text>
+        <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+          <view class="picker">{{endDate || '请选择'}}</view>
+        </picker>
+      </view>
+      <view class="result-box" wx:if="{{daysResult !== null}}">
+        <text class="result-label">相差天数</text>
+        <text class="result-number">{{daysResult}}</text>
+        <text class="result-desc" wx:if="{{daysResult >= 0}}">
+          {{startDate}} 到 {{endDate}} 共 {{daysResult}} 天
+        </text>
+      </view>
+      <button class="calc-btn" bindtap="calcDays">计算</button>
+    </view>
+
+    <!-- 快捷选择 -->
+    <view class="quick-select">
+      <view class="quick-title">快捷计算</view>
+      <view class="quick-list">
+        <view class="quick-item" bindtap="quickCalc" data-days="100">100 天</view>
+        <view class="quick-item" bindtap="quickCalc" data-days="200">200 天</view>
+        <view class="quick-item" bindtap="quickCalc" data-days="365">一年</view>
+        <view class="quick-item" bindtap="quickCalc" data-days="-100">倒推 100 天</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 日期推算 -->
+  <view class="tab-content" wx:if="{{currentTab === 1}}">
+    <view class="card">
+      <view class="card-title">从指定日期推算若干天后的日期</view>
+      <view class="form-row">
+        <text class="label">起始日期</text>
+        <picker mode="date" value="{{baseDate}}" bindchange="onBaseDateChange">
+          <view class="picker">{{baseDate || '请选择'}}</view>
+        </picker>
+      </view>
+      <view class="form-row">
+        <text class="label">推算天数</text>
+        <input class="input" type="number" value="{{calcDays}}" placeholder="输入天数，正数往后推，负数往前推" bindinput="onCalcDaysInput"/>
+      </view>
+      <view class="result-box" wx:if="{{dateResult}}">
+        <text class="result-label">推算结果</text>
+        <text class="result-number">{{dateResult}}</text>
+        <text class="result-desc">
+          {{baseDate}} {{calcDays >= 0 ? '往后' : '往前'}}推 {{Math.abs(calcDays)}} 天
+        </text>
+      </view>
+      <button class="calc-btn" bindtap="calcDate">计算</button>
+    </view>
+  </view>
+</view>
