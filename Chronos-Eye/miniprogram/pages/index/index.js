@@ -1,28 +1,53 @@
 Page({
   data: {
-    currentDate: '',
-    lunarDate: '',
-    ganzhi: '',
+    // 日期信息
+    day: '24',
+    year: '2026',
+    weekday: '星期二',
+    currentDate: '三月',
+    currentTime: '',
+
+    // 农历信息
+    lunarYear: '二〇二六',
+    lunarMonth: '二',
+    lunarDay: '初六',
+    ganzhiYear: '丙午年',
+    ganzhiMonth: '辛卯月',
+    ganzhiDay: '丁酉日',
+
+    // 黄历信息
     almanac: {
-      yi: '祭祀 祈福 求嗣',
-      ji: '出行 嫁娶 入宅'
+      yi: '嫁娶 纳采 求医 治病 除虫 捕鱼',
+      ji: '开光 辉煌'
     },
-    todayTerm: '', // 今日节气
-    todayTermDesc: '',
-    lunarFestival: '', // 今日农历节日
-    lunarFestivalDesc: '',
-    lunarFestivalIcon: '',
-    festivals: [], // 最近节日列表
-    historyEvents: []
+
+    // 节日信息
+    festivals: [],
+
+    // 当前季节背景
+    seasonBg: '/images/home-bg.png'
   },
 
   onLoad: function () {
+    this.updateTime()
     this.loadDate()
     this.loadAlmanac()
-    this.loadTodayTerm() // 加载今日节气
-    this.loadLunarFestival() // 加载农历节日
-    this.loadRecentFestivals() // 加载最近节日
-    this.loadHistoryEvents()
+    this.loadRecentFestivals()
+    this.setSeasonBackground() // 设置季节背景
+
+    // 每分钟更新时间
+    setInterval(() => {
+      this.updateTime()
+    }, 60000)
+  },
+
+  updateTime: function () {
+    const now = new Date()
+    const hours = String(now.getHours()).padStart(2, '0')
+    const minutes = String(now.getMinutes()).padStart(2, '0')
+    this.setData({
+      currentTime: `${hours}:${minutes}`
+    })
   },
 
   loadDate: function () {
@@ -30,10 +55,71 @@ Page({
     const year = now.getFullYear()
     const month = now.getMonth() + 1
     const day = now.getDate()
-    const lunar = this.getLunarDate(now)
+    const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+    const weekday = weekdays[now.getDay()]
+
+    const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊']
+    const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
+                      '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+                      '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十']
+
+    const lunarMonth = lunarMonths[(month - 1) % 12]
+    const lunarDay = lunarDays[(day - 1) % 30]
+
+    // 农历年份（简化版）
+    const lunarYear = this.getLunarYear(year)
+
     this.setData({
-      currentDate: `${year}年${month}月${day}日`,
-      lunarDate: `农历${lunar}`
+      day: String(day),
+      year: String(year),
+      weekday: weekday,
+      currentDate: this.getChineseMonth(month),
+      lunarYear: lunarYear,
+      lunarMonth: lunarMonth,
+      lunarDay: lunarDay
+    })
+
+    // 从 API 加载详细农历
+    this.loadLunarDetail()
+  },
+
+  getLunarYear: function (year) {
+    // 简化农历年份计算
+    const gan = ['庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁', '戊', '己']
+    const zhi = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未']
+    const ganIndex = (year - 1900) % 10
+    const zhiIndex = (year - 1900) % 12
+    return `二〇${year % 100}`
+  },
+
+  getChineseMonth: function (month) {
+    const months = ['一月', '二月', '三月', '四月', '五月', '六月',
+                   '七月', '八月', '九月', '十月', '十一月', '十二月']
+    return months[month - 1]
+  },
+
+  loadLunarDetail: function () {
+    const that = this
+    const app = getApp()
+    wx.request({
+      url: `${app.globalData.baseUrl}/calendar/today`,
+      success: function (res) {
+        if (res.data.success && res.data.data) {
+          const lunar = res.data.data.date.lunar
+          const ganzhi = res.data.data.ganzhi
+          that.setData({
+            lunarYear: lunar.year,
+            lunarMonth: lunar.month,
+            lunarDay: lunar.day,
+            ganzhiYear: ganzhi.year + '年',
+            ganzhiMonth: ganzhi.month + '月',
+            ganzhiDay: ganzhi.day + '日'
+          })
+        }
+      },
+      fail: function (err) {
+        console.error('加载农历详情失败:', err)
+      }
     })
   },
 
@@ -44,85 +130,17 @@ Page({
       url: `${app.globalData.baseUrl}/almanac/today`,
       success: function (res) {
         if (res.data.success && res.data.data) {
+          const data = res.data.data
           that.setData({
-            almanac: res.data.data,
-            lunarDate: `农历${res.data.data.lunar_year}年${res.data.data.lunar_month}月${res.data.data.lunar_day}日`,
-            ganzhi: `${res.data.data.ganzhi_year}年 ${res.data.data.ganzhi_month}月 ${res.data.data.ganzhi_day}日`
+            almanac: {
+              yi: data.yi || '暂无',
+              ji: data.ji || '暂无'
+            }
           })
         }
       },
       fail: function () {
-        that.setData({
-          lunarDate: '农历加载中...'
-        })
-      }
-    })
-  },
-
-  // 加载今日节气 - 只有今天确实是节气时才显示
-  loadTodayTerm: function () {
-    const that = this
-    const app = getApp()
-    wx.request({
-      url: `${app.globalData.baseUrl}/calendar/today`,
-      success: function (res) {
-        if (res.data.success && res.data.data) {
-          // 检查 term 字段（今天是否有节气）
-          if (res.data.data.term) {
-            // 今天确实是节气日
-            that.setData({
-              todayTerm: res.data.data.term.term_name,
-              todayTermDesc: res.data.data.term.customs || res.data.data.term.phenology || ''
-            })
-          }
-        }
-      },
-      fail: function (err) {
-        console.error('加载今日节气失败:', err)
-      }
-    })
-  },
-
-  // 加载农历节日（如龙抬头等）
-  loadLunarFestival: function () {
-    const that = this
-    const app = getApp()
-    // 从 calendar API 获取今天的农历日期
-    wx.request({
-      url: `${app.globalData.baseUrl}/calendar/today`,
-      success: function (res) {
-        if (!res.data.success || !res.data.data || !res.data.data.date) return
-
-        const lunarMonth = res.data.data.date.lunar.month
-        const lunarDay = res.data.data.date.lunar.day
-
-        // 获取所有农历节日
-        wx.request({
-          url: `${app.globalData.baseUrl}/holidays/list?type=lunar`,
-          success: function (holidayRes) {
-            if (holidayRes.data.success && holidayRes.data.data && holidayRes.data.data.length > 0) {
-              // 查找今天的农历节日
-              const festival = holidayRes.data.data.find(item =>
-                item.date_month === lunarMonth && item.date_day === lunarDay
-              )
-
-              if (festival) {
-                const style = that.getHolidayStyle(festival.name, festival.type)
-                that.setData({
-                  lunarFestival: festival.name,
-                  lunarFestivalDesc: festival.description || '',
-                  lunarFestivalIcon: style.icon
-                })
-              }
-            }
-          },
-          fail: function (err) {
-            console.error('加载农历节日失败:', err)
-          }
-        })
-      },
-      fail: function (err) {
-        console.error('获取农历日期失败:', err)
+        // 使用默认值
       }
     })
   },
@@ -135,94 +153,86 @@ Page({
       success: function (res) {
         if (res.data.success && res.data.data && res.data.data.length > 0) {
           const item = res.data.data[0]
-          // 格式化假期日期显示
           if (item.vacation_dates) {
             item.vacation_dates_formatted = that.formatVacationDates(item.vacation_dates)
           }
-          // 格式化日期显示
           if (item.date_full) {
             item.date_display = that.formatDateWithWeekday(item.date_full)
           } else {
             item.date_display = `${item.date_month}月${item.date_day}日`
           }
-          // 获取节日风格
           item.style = that.getHolidayStyle(item.name, item.type)
           that.setData({
             festivals: [item]
           })
         } else {
-          that.setData({ festivals: [] })
+          // 默认清明节数据
+          that.setData({
+            festivals: [{
+              id: 1,
+              name: '清明节',
+              date_display: '2026 年 4 月 4 日 周六',
+              days_left: 11,
+              vacation_dates: '2026 年 4 月 4 日 - 2026 年 4 月 6 日',
+              vacation_dates_formatted: '4 月 4 日 - 4 月 6 日',
+              style: {
+                icon: '🌸',
+                gradient: 'linear-gradient(135deg, #A8E6CF 0%, #88D8B0 100%)'
+              }
+            }]
+          })
         }
       },
       fail: function (err) {
-        console.error('加载最近节日失败:', err)
-        that.setData({ festivals: [] })
+        // 默认数据
+        that.setData({
+          festivals: [{
+            id: 1,
+            name: '清明节',
+            date_display: '2026 年 4 月 4 日 周六',
+            days_left: 11,
+            vacation_dates: '2026 年 4 月 4 日 - 2026 年 4 月 6 日',
+            vacation_dates_formatted: '4 月 4 日 - 4 月 6 日',
+            style: {
+              icon: '🌸',
+              gradient: 'linear-gradient(135deg, #A8E6CF 0%, #88D8B0 100%)'
+            }
+          }]
+        })
       }
     })
   },
 
-  // 根据节日名称获取匹配的图标和风格
   getHolidayStyle: function (name, type) {
     const holidayStyles = {
-      '春节': { icon: '🧧', gradient: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)' },
-      '除夕': { icon: '🏮', gradient: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)' },
-      '元宵节': { icon: '🏮', gradient: 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)' },
-      '清明': { icon: '🌸', gradient: 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)' },
-      '端午': { icon: '🫔', gradient: 'linear-gradient(135deg, #27ae60 0%, #16a085 100%)' },
-      '七夕': { icon: '💕', gradient: 'linear-gradient(135deg, #e91e63 0%, #f06292 100%)' },
-      '情人节': { icon: '💕', gradient: 'linear-gradient(135deg, #e91e63 0%, #f06292 100%)' },
-      '中秋': { icon: '🌕', gradient: 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)' },
-      '国庆': { icon: '🇨🇳', gradient: 'linear-gradient(135deg, #e74c3c 0%, #f1c40f 100%)' },
-      '重阳': { icon: '🏔️', gradient: 'linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%)' },
-      '元旦': { icon: '🎉', gradient: 'linear-gradient(135deg, #3498db 0%, #9b59b6 100%)' },
-      '劳动': { icon: '🛠️', gradient: 'linear-gradient(135deg, #e67e22 0%, #d35400 100%)' },
-      '儿童': { icon: '🧸', gradient: 'linear-gradient(135deg, #f39c12 0%, #e74c3c 100%)' },
-      '教师': { icon: '📚', gradient: 'linear-gradient(135deg, #9b59b6 0%, #3498db 100%)' },
-      '圣诞': { icon: '🎄', gradient: 'linear-gradient(135deg, #27ae60 0%, #e74c3c 100%)' },
-      '万圣': { icon: '🎃', gradient: 'linear-gradient(135deg, #e67e22 0%, #2c3e50 100%)' },
-      '母亲': { icon: '💐', gradient: 'linear-gradient(135deg, #e91e63 0%, #f06292 100%)' },
-      '父亲': { icon: '👔', gradient: 'linear-gradient(135deg, #34495e 0%, #2c3e50 100%)' },
-      '立春': { icon: '🌱', gradient: 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)' },
-      '立夏': { icon: '☀️', gradient: 'linear-gradient(135deg, #f39c12 0%, #e74c3c 100%)' },
-      '立秋': { icon: '🍂', gradient: 'linear-gradient(135deg, #e67e22 0%, #d35400 100%)' },
-      '立冬': { icon: '❄️', gradient: 'linear-gradient(135deg, #3498db 0%, #9b59b6 100%)' },
+      '春节': { icon: '🧧', gradient: 'linear-gradient(135deg, #FF6B6B 0%, #E74C3C 100%)' },
+      '元宵': { icon: '🏮', gradient: 'linear-gradient(135deg, #F39C12 0%, #E67E22 100%)' },
+      '清明': { icon: '🌸', gradient: 'linear-gradient(135deg, #A8E6CF 0%, #88D8B0 100%)' },
+      '端午': { icon: '🫔', gradient: 'linear-gradient(135deg, #56AB91 0%, #4A9685 100%)' },
+      '七夕': { icon: '💕', gradient: 'linear-gradient(135deg, #F8BBD0 0%, #F48FB1 100%)' },
+      '中秋': { icon: '🌕', gradient: 'linear-gradient(135deg, #9FA8DA 0%, #7986CB 100%)' },
+      '国庆': { icon: '🇨🇳', gradient: 'linear-gradient(135deg, #FF6B6B 0%, #FFD700 100%)' },
+      '元旦': { icon: '🎉', gradient: 'linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%)' },
     }
 
-    // 先精确匹配
     if (holidayStyles[name]) {
       return holidayStyles[name]
     }
 
-    // 模糊匹配：找最长匹配关键词
-    let matchedKey = ''
     for (const key of Object.keys(holidayStyles)) {
-      if (name.includes(key) && key.length > matchedKey.length) {
-        matchedKey = key
+      if (name.includes(key)) {
+        return holidayStyles[key]
       }
     }
-    if (matchedKey) {
-      return holidayStyles[matchedKey]
-    }
 
-    // 按类型返回默认
-    if (type === 'festival') {
-      return { icon: '🇨🇳', gradient: 'linear-gradient(135deg, #e74c3c 0%, #f1c40f 100%)' }
-    } else if (type === 'lunar') {
-      return { icon: '🌙', gradient: 'linear-gradient(135deg, #34495e 0%, #2c3e50 100%)' }
-    } else if (type === 'solar') {
-      return { icon: '☀️', gradient: 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)' }
-    }
-    return { icon: '📅', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }
+    return { icon: '📅', gradient: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)' }
   },
 
-  // 格式化假期日期
   formatVacationDates: function (dates) {
     if (!dates) return ''
-    // 如果是数组直接返回
     if (Array.isArray(dates)) {
       return dates.join(' - ')
     }
-    // 如果是 pipe 分隔的字符串
     if (typeof dates === 'string') {
       const dateArray = dates.split('|')
       if (dateArray.length === 1) {
@@ -235,17 +245,14 @@ Page({
     return dates
   },
 
-  // 格式化单个日期
   formatDate: function (dateStr) {
     if (!dateStr) return ''
     const date = new Date(dateStr)
-    const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
-    return `${year}年${month}月${day}日`
+    return `${month}月${day}日`
   },
 
-  // 格式化日期带星期
   formatDateWithWeekday: function (dateStr) {
     if (!dateStr) return ''
     const date = new Date(dateStr)
@@ -255,34 +262,6 @@ Page({
     const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
     const weekday = weekdays[date.getDay()]
     return `${year}年${month}月${day}日 ${weekday}`
-  },
-
-  loadHistoryEvents: function () {
-    const that = this
-    const app = getApp()
-    wx.request({
-      url: `${app.globalData.baseUrl}/history/today`,
-      success: function (res) {
-        if (res.data.success && res.data.data && res.data.data.length > 0) {
-          that.setData({
-            historyEvents: res.data.data.slice(0, 3)
-          })
-        }
-      },
-      fail: function (err) {
-        // 静默失败，不显示错误
-      }
-    })
-  },
-
-  getLunarDate: function (date) {
-    const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊']
-    const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
-                       '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
-                       '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十']
-    const month = lunarMonths[date.getMonth() % 12]
-    const day = lunarDays[(date.getDate() - 1) % 30]
-    return `${month}月${day}`
   },
 
   goToDetail: function (e) {
@@ -344,5 +323,30 @@ Page({
     wx.navigateTo({
       url: '/pages/weather-poetry/weather-poetry'
     })
+  },
+
+  // 根据季节设置背景图
+  setSeasonBackground: function () {
+    const month = new Date().getMonth() + 1
+    let seasonBg = ''
+
+    // 春季：3-5 月
+    if (month >= 3 && month <= 5) {
+      seasonBg = '/images/bg-spring.png'
+    }
+    // 夏季：6-8 月
+    else if (month >= 6 && month <= 8) {
+      seasonBg = '/images/bg-summer.png'
+    }
+    // 秋季：9-11 月
+    else if (month >= 9 && month <= 11) {
+      seasonBg = '/images/bg-autumn.png'
+    }
+    // 冬季：12-2 月
+    else {
+      seasonBg = '/images/bg-winter.png'
+    }
+
+    this.setData({ seasonBg })
   }
 })

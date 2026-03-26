@@ -1,127 +1,109 @@
-<view class="container">
-  <!-- 头部综合信息卡片 -->
-  <view class="header-card" bindtap="goToCalendar">
-    <!-- 日期区域 -->
-    <view class="date-section">
-      <text class="solar-date">{{currentDate}}</text>
-      <text class="lunar-date">{{lunarDate}}</text>
-      <text class="ganzhi-date" wx:if="{{ganzhi}}">{{ganzhi}}</text>
+<view class="container" style="background-image: url('{{seasonBg}}');">
+  <!-- 顶部日历卡片 -->
+  <view class="calendar-card">
+    <view class="card-header">
+      <view class="header-left">
+        <text class="time-icon">🕐</text>
+        <text class="weekday">{{weekday}}</text>
+      </view>
+      <text class="header-center">三月</text>
+      <text class="header-right">{{currentTime}}</text>
     </view>
 
-    <!-- 黄历宜忌 - 横向布局 -->
-    <view class="almanac-row">
-      <view class="almanac-item almanac-yi">
-        <text class="almanac-label">宜</text>
-        <text class="almanac-content">{{almanac.yi}}</text>
-      </view>
-      <view class="almanac-item almanac-ji">
-        <text class="almanac-label">忌</text>
-        <text class="almanac-content">{{almanac.ji}}</text>
-      </view>
+    <view class="card-main">
+      <text class="big-day">{{day}}</text>
+      <text class="year">{{year}}年</text>
     </view>
 
-    <!-- 分隔线 -->
-    <view class="divider"></view>
+    <view class="card-lunar">
+      <text class="lunar-text">农历{{lunarYear}}年{{lunarMonth}}月{{lunarDay}}</text>
+      <text class="ganzhi-text">{{ganzhiYear}} {{ganzhiMonth}} {{ganzhiDay}}</text>
+    </view>
 
-    <!-- 今日节气/农历节日 - 并排布局 -->
-    <view class="today-info" wx:if="{{todayTerm || lunarFestival}}">
-      <!-- 节气 -->
-      <view class="today-item term-item" wx:if="{{todayTerm}}">
-        <view class="today-icon">🌿</view>
-        <view class="today-content">
-          <text class="today-name">{{todayTerm}}</text>
-          <text class="today-subtitle" wx:if="{{todayTermDesc}}">{{todayTermDesc}}</text>
-        </view>
+    <!-- 宜忌 -->
+    <view class="yi-ji-section">
+      <view class="yi-row">
+        <view class="yi-square yi">宜</view>
+        <view class="yi-content">{{almanac.yi}}</view>
       </view>
-      <!-- 农历节日 -->
-      <view class="today-item lunar-item" wx:if="{{lunarFestival}}">
-        <view class="today-icon">{{lunarFestivalIcon}}</view>
-        <view class="today-content">
-          <text class="today-name">{{lunarFestival}}</text>
-          <text class="today-subtitle" wx:if="{{lunarFestivalDesc}}">{{lunarFestivalDesc}}</text>
-        </view>
+      <view class="yi-row">
+        <view class="yi-square ji">忌</view>
+        <view class="yi-content">{{almanac.ji}}</view>
       </view>
     </view>
   </view>
 
-  <!-- 最近节日 - 只显示一个 -->
-  <view class="next-festival-section">
-    <view class="section-header">
-      <text class="section-title">最近节日</text>
-      <text class="section-more" bindtap="goToHolidayList">更多 ></text>
+  <!-- 最近节日 -->
+  <view class="festival-section">
+    <view class="section-title-bar">
+      <view class="title-left">
+        <view class="title-icon"></view>
+        <text class="title-text">最近节日</text>
+      </view>
+      <text class="more-link" bindtap="goToHolidayList">更多 ></text>
     </view>
+
     <view class="festival-card" wx:if="{{festivals.length > 0}}" bindtap="goToDetail" data-id="{{festivals[0].id}}">
+      <view class="festival-left">
+        <view class="festival-icon-bg" style="background: {{festivals[0].style.gradient}}">
+          <text class="festival-emoji">{{festivals[0].style.icon}}</text>
+        </view>
+      </view>
       <view class="festival-main">
-        <view class="festival-icon" style="background: {{festivals[0].style.gradient}}">{{festivals[0].style.icon}}</view>
-        <view class="festival-info">
-          <text class="festival-name">{{festivals[0].name}}</text>
-          <text class="festival-date">{{festivals[0].date_display}}</text>
-        </view>
-        <view class="festival-countdown">
-          <text class="countdown-number">{{festivals[0].days_left}}</text>
-          <text class="countdown-label">{{festivals[0].days_left === 0 ? '今天' : '天'}}</text>
+        <text class="festival-name">{{festivals[0].name}}</text>
+        <text class="festival-date">{{festivals[0].date_display}}</text>
+        <view class="vacation-tag" wx:if="{{festivals[0].vacation_dates}}">
+          <text class="vacation-text">假期：{{festivals[0].vacation_dates_formatted}}</text>
         </view>
       </view>
-      <view class="festival-footer" wx:if="{{festivals[0].is_official === 1 || festivals[0].vacation_dates}}">
-        <block wx:if="{{festivals[0].is_official === 1}}">
-          <view class="official-tag">{{festivals[0].style.gradient.includes('#e74c3c') || festivals[0].style.gradient.includes('#f1c40f') ? '🇨🇳' : '法定'}}</view>
-        </block>
-        <block wx:if="{{festivals[0].vacation_dates}}">
-          <text class="vacation-days">假期：{{festivals[0].vacation_dates_formatted}}</text>
-        </block>
+      <view class="festival-countdown" wx:if="{{festivals[0].days_left >= 0}}">
+        <text class="countdown-num">{{festivals[0].days_left}}</text>
+        <text class="countdown-unit">天</text>
       </view>
     </view>
   </view>
 
-  <!-- 历史上的今天 -->
-  <view class="history-section" wx:if="{{historyEvents.length > 0}}">
-    <view class="section-header">
-      <text class="section-title">历史上的今天</text>
-      <text class="section-more" bindtap="goToHistory">更多 ></text>
+  <!-- 实用工具 -->
+  <view class="tools-section">
+    <view class="section-title-bar">
+      <view class="title-left">
+        <view class="title-icon"></view>
+        <text class="title-text">实用工具</text>
+      </view>
     </view>
-    <view class="history-list">
-      <block wx:for="{{historyEvents}}" wx:key="id">
-        <view class="history-item" bindtap="goToHistory">
-          <text class="history-year">{{item.year}}年</text>
-          <text class="history-title">{{item.title}}</text>
-        </view>
-      </block>
+
+    <view class="tools-grid">
+      <view class="tool-item" bindtap="goToHistory">
+        <view class="tool-icon" style="background: #FFE5B8">📜</view>
+        <text class="tool-text">历史上的今天</text>
+      </view>
+      <view class="tool-item" bindtap="goToHolidayList">
+        <view class="tool-icon" style="background: #FFF3E0">🎊</view>
+        <text class="tool-text">节日大全</text>
+      </view>
+      <view class="tool-item" bindtap="goToConstellation">
+        <view class="tool-icon" style="background: #FFF9C4">✨</view>
+        <text class="tool-text">星座运势</text>
+      </view>
+      <view class="tool-item" bindtap="goToOilPrice">
+        <view class="tool-icon" style="background: #FFCDD2">⛽</view>
+        <text class="tool-text">油价查询</text>
+      </view>
+      <view class="tool-item" bindtap="goToMatch">
+        <view class="tool-icon" style="background: #F8BBD0">💕</view>
+        <text class="tool-text">星座配对</text>
+      </view>
+      <view class="tool-item" bindtap="goToDateCalc">
+        <view class="tool-icon" style="background: #E3F2FD">📅</view>
+        <text class="tool-text">日期计算</text>
+      </view>
+      <view class="tool-item" bindtap="goToIdiomQuiz">
+        <view class="tool-icon" style="background: #F3E5F5">📝</view>
+        <text class="tool-text">成语查询</text>
+      </view>
     </view>
   </view>
 
-  <!-- 快捷功能入口 -->
-  <view class="quick-access">
-    <view class="access-item" bindtap="goToHistory">
-      <view class="access-icon">📜</view>
-      <text class="access-text">历史上的今天</text>
-    </view>
-    <view class="access-item" bindtap="goToHolidayList">
-      <view class="access-icon">🎊</view>
-      <text class="access-text">节日大全</text>
-    </view>
-    <view class="access-item" bindtap="goToConstellation">
-      <view class="access-icon">✨</view>
-      <text class="access-text">星座运势</text>
-    </view>
-    <view class="access-item" bindtap="goToOilPrice">
-      <view class="access-icon">⛽</view>
-      <text class="access-text">油价查询</text>
-    </view>
-  </view>
-
-  <!-- 第二行快捷入口 -->
-  <view class="quick-access quick-access-row2">
-    <view class="access-item" bindtap="goToMatch">
-      <view class="access-icon">💕</view>
-      <text class="access-text">星座配对</text>
-    </view>
-    <view class="access-item" bindtap="goToDateCalc">
-      <view class="access-icon">🔢</view>
-      <text class="access-text">日期计算</text>
-    </view>
-    <view class="access-item" bindtap="goToIdiomQuiz">
-      <view class="access-icon">📝</view>
-      <text class="access-text">成语填词</text>
-    </view>
-  </view>
+  <!-- 占位，避免被底部遮挡 -->
+  <view style="height: 100rpx;"></view>
 </view>
