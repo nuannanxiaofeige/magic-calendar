@@ -77,8 +77,9 @@ getHolidayGradient: function (name, type) {
 
 loadHolidayDetail: async function (id) {
     const that = this
+    const app = getApp()
     wx.request({
-      url: `http://localhost:3000/api/holidays/${id}`,
+      url: `${app.globalData.baseUrl}/holidays/${id}`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           const holiday = res.data.data

@@ -13,8 +13,9 @@ Page({
 
   loadCountdowns: function () {
     const that = this
+    const app = getApp()
     wx.request({
-      url: 'http://localhost:3000/api/holidays/countdown/list?user_id=1',
+      url: `${app.globalData.baseUrl}/holidays/countdown/list?user_id=1`,
       success: function (res) {
         if (res.data.success && res.data.data && res.data.data.length > 0) {
           that.setData({ countdowns: res.data.data })
@@ -45,6 +46,7 @@ Page({
 
   showDatePicker: function () {
     const that = this
+    const app = getApp()
     wx.showModal({
       title: '添加倒计时',
       editable: true,
@@ -53,7 +55,7 @@ Page({
         if (res.confirm && res.content) {
           that.showDatePick(function (selectedDate) {
             wx.request({
-              url: 'http://localhost:3000/api/holidays/countdown/add',
+              url: `${app.globalData.baseUrl}/holidays/countdown/add`,
               method: 'POST',
               header: { 'content-type': 'application/json' },
               data: {
@@ -112,8 +114,9 @@ Page({
 
   showHolidaySelector: function () {
     const that = this
+    const app = getApp()
     wx.request({
-      url: 'http://localhost:3000/api/holidays',
+      url: `${app.globalData.baseUrl}/holidays`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           const holidays = res.data.data
@@ -123,7 +126,7 @@ Page({
             success: function (res) {
               const selected = holidays[res.tapIndex]
               wx.request({
-                url: 'http://localhost:3000/api/holidays/countdown/add',
+                url: `${app.globalData.baseUrl}/holidays/countdown/add`,
                 method: 'POST',
                 header: { 'content-type': 'application/json' },
                 data: {
@@ -148,13 +151,14 @@ Page({
   deleteCountdown: function (e) {
     const id = e.currentTarget.dataset.id
     const that = this
+    const app = getApp()
     wx.showModal({
       title: '确认删除',
       content: '确定要删除这个倒计时吗？',
       success: function (res) {
         if (res.confirm) {
           wx.request({
-            url: `http://localhost:3000/api/holidays/countdown/${id}`,
+            url: `${app.globalData.baseUrl}/holidays/countdown/${id}`,
             method: 'DELETE',
             success: function () {
               wx.showToast({ title: '删除成功', icon: 'success' })

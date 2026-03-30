@@ -1,6 +1,6 @@
 <view class="container" style="background-image: url('{{seasonBg}}');">
   <!-- 顶部日历卡片 -->
-  <view class="calendar-card">
+  <view class="calendar-card" bindtap="goToCalendar">
     <view class="card-header">
       <view class="header-left">
         <text class="time-icon">🕐</text>

@@ -5,10 +5,12 @@ Page({
       completed: 0,
       rate: 0
     },
-    schedules: []
+    schedules: [],
+    baseUrl: ''
   },
 
   onLoad: function () {
+    this.setData({ baseUrl: getApp().globalData.baseUrl })
     this.loadStats()
     this.loadSchedules()
   },
@@ -23,7 +25,7 @@ Page({
     const month = now.getMonth() + 1
     const that = this
     wx.request({
-      url: `http://localhost:3000/api/schedules/stats/${year}/${month}`,
+      url: `this.data.baseUrl/schedules/stats/${year}/${month}`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           that.setData({
@@ -41,7 +43,7 @@ Page({
   loadSchedules: function () {
     const that = this
     wx.request({
-      url: 'http://localhost:3000/api/schedules?user_id=1',
+      url: 'this.data.baseUrl/schedules?user_id=1',
       success: function (res) {
         if (res.data.success && res.data.data.length > 0) {
           const schedules = res.data.data.map(item => ({
@@ -70,7 +72,7 @@ Page({
       const newStatus = !schedules[index].completed ? 'completed' : 'pending'
       const that = this
       wx.request({
-        url: `http://localhost:3000/api/schedules/${id}`,
+        url: `this.data.baseUrl/schedules/${id}`,
         method: 'PUT',
         header: { 'content-type': 'application/json' },
         data: { status: newStatus },
@@ -114,7 +116,7 @@ Page({
           that.showPrioritySelect(function (priority, color) {
             that.showDatePick(function (selectedDate) {
               wx.request({
-                url: 'http://localhost:3000/api/schedules',
+                url: 'this.data.baseUrl/schedules',
                 method: 'POST',
                 header: { 'content-type': 'application/json' },
                 data: {
@@ -190,7 +192,7 @@ Page({
       end: '2027-12-31',
       success: function (res) {
         wx.request({
-          url: `http://localhost:3000/api/schedules?user_id=1&start_date=${res.dateValue}&end_date=${res.dateValue}`,
+          url: `this.data.baseUrl/schedules?user_id=1&start_date=${res.dateValue}&end_date=${res.dateValue}`,
           success: function (res) {
             if (res.data.success && res.data.data.length > 0) {
               const schedules = res.data.data.map(item => ({
@@ -218,7 +220,7 @@ Page({
       success: function (res) {
         if (res.confirm) {
           wx.request({
-            url: `http://localhost:3000/api/schedules/${id}`,
+            url: `this.data.baseUrl/schedules/${id}`,
             method: 'DELETE',
             success: function () {
               wx.showToast({ title: '删除成功', icon: 'success' })

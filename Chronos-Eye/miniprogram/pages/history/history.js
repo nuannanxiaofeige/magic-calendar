@@ -33,15 +33,19 @@ Page({
     const now = new Date()
     const month = now.getMonth() + 1
     const day = now.getDate()
+    const app = getApp()
     this.setData({ loadError: null })
     // 调用列表接口
     wx.request({
-      url: 'http://localhost:3000/api/history/today/list',
+      url: `${app.globalData.baseUrl}/history/today`,
       success: function (res) {
         if (res.data.success) {
+          // history/today 返回的是单个对象，需要包装成数组
+          const data = res.data.data
+          const events = data ? [data] : []
           that.setData({
-            events: res.data.data || [],
-            total: res.data.total || 0
+            events: events,
+            total: res.data.total || (data ? 1 : 0)
           })
         } else {
           that.setData({ loadError: '加载失败' })

@@ -15,14 +15,16 @@ Page({
     // 二十四节气年份
     termYear: new Date().getFullYear(),
     minYear: new Date().getFullYear() - 10,
-    maxYear: new Date().getFullYear() + 10
+    maxYear: new Date().getFullYear() + 10,
+    baseUrl: ''
   },
 
   onLoad: function (options) {
     const currentYear = new Date().getFullYear()
     this.setData({
       minYear: currentYear - 10,
-      maxYear: currentYear + 10
+      maxYear: currentYear + 10,
+      baseUrl: getApp().globalData.baseUrl
     })
     this.loadAllHolidays()
   },
@@ -106,7 +108,7 @@ Page({
     const promises = categories.map(cat => {
       return new Promise((resolve, reject) => {
         wx.request({
-          url: `http://localhost:3000/api/holidays/list?category=${cat}`,
+          url: `${this.data.baseUrl}/holidays/list?category=${cat}`,
           success: function (res) {
             resolve(res.data.data || [])
           },
@@ -181,7 +183,7 @@ Page({
     const year = that.data.termYear
 
     wx.request({
-      url: `http://localhost:3000/api/calendar/terms?year=${year}`,
+      url: `${this.data.baseUrl}/calendar/terms?year=${year}`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           const terms = res.data.data.map(item => {
@@ -215,7 +217,7 @@ Page({
   loadAllHolidays: function () {
     const that = this
     wx.request({
-      url: 'http://localhost:3000/api/holidays/list',
+      url: `${this.data.baseUrl}/holidays/list`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           const holidays = res.data.data.map(item => {
