@@ -275,7 +275,7 @@ Page({
       // 需要从网络获取
       hasNetworkRequest = true
       wx.request({
-        url: `this.data.baseUrl/almanac/month/${y}/${m}`,
+        url: `${this.data.baseUrl}/almanac/month/${y}/${m}`,
         success: function (res) {
           console.log(`API 返回 ${y}年${m}月 数据:`, res.data.data.length, '条记录')
           if (res.data.success && res.data.data && Array.isArray(res.data.data)) {
@@ -367,7 +367,7 @@ Page({
     this.prefetching = `${nextYear}-${nextMonth}`
 
     wx.request({
-      url: `this.data.baseUrl/almanac/month/${nextYear}/${nextMonth}`,
+      url: `${this.data.baseUrl}/almanac/month/${nextYear}/${nextMonth}`,
       success: function (res) {
         if (res.data.success && res.data.data && Array.isArray(res.data.data)) {
           res.data.data.forEach(item => {
@@ -639,7 +639,7 @@ Page({
     const date = this.formatDate(currentYear, currentMonth, 1)
 
     wx.request({
-      url: `this.data.baseUrl/almanac/month/${currentYear}/${currentMonth}`,
+      url: `${this.data.baseUrl}/almanac/month/${currentYear}/${currentMonth}`,
       success: function (res) {
         if (res.data.success && res.data.data && res.data.data.length > 0) {
           const firstDayAlmanac = res.data.data[0]
@@ -657,7 +657,7 @@ Page({
   loadDateAlmanac: function (date) {
     const that = this
     wx.request({
-      url: `this.data.baseUrl/almanac/${date}`,
+      url: `${this.data.baseUrl}/almanac/${date}`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           const almanac = res.data.data
@@ -707,7 +707,7 @@ Page({
   loadHistoryEvents: function (date) {
     const that = this
     wx.request({
-      url: `this.data.baseUrl/history/today/list?date=${date}`,
+      url: `${this.data.baseUrl}/history/today/list?date=${date}`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           that.setData(prev => ({
@@ -866,7 +866,7 @@ Page({
     }
 
     wx.request({
-      url: `this.data.baseUrl/almanac/${date}`,
+      url: `${this.data.baseUrl}/almanac/${date}`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊']

@@ -1,0 +1,45 @@
+<view class="container">
+  <!-- 顶部 Tab -->
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 'tiangou' ? 'active' : ''}}" bindtap="switchTab" data-tab="tiangou">
+      <text class="tab-icon">💔</text>
+      <text class="tab-text">舔狗日记</text>
+    </view>
+    <view class="tab-item {{currentTab === 'worker' ? 'active' : ''}}" bindtap="switchTab" data-tab="worker">
+      <text class="tab-icon">💼</text>
+      <text class="tab-text">打工者日记</text>
+    </view>
+  </view>
+
+  <!-- 舔狗日记内容 -->
+  <view class="content-card" wx:if="{{currentTab === 'tiangou'}}">
+    <view class="card-icon">💔</view>
+    <view class="card-title">舔狗日记</view>
+    <view class="card-date">{{year}}年{{month}}月{{day}}日</view>
+    <view class="card-content">
+      <text class="content-text">{{tiangouContent}}</text>
+    </view>
+    <view class="card-footer">
+      <view class="copy-btn" bindtap="copyContent">
+        <text class="copy-icon">📋</text>
+        <text class="copy-text">复制内容</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 打工者日记内容 -->
+  <view class="content-card" wx:if="{{currentTab === 'worker'}}">
+    <view class="card-icon">{{noWorkday ? '😴' : '💼'}}</view>
+    <view class="card-title">打工者日记</view>
+    <view class="card-date">{{year}}年{{month}}月{{day}}日</view>
+    <view class="card-content {{noWorkday ? 'rest-content' : ''}}">
+      <text class="content-text">{{noWorkday ? '今天好好休息吧~' : workerContent}}</text>
+    </view>
+    <view class="card-footer" wx:if="{{!noWorkday}}">
+      <view class="copy-btn" bindtap="copyContent">
+        <text class="copy-icon">📋</text>
+        <text class="copy-text">复制内容</text>
+      </view>
+    </view>
+  </view>
+</view>

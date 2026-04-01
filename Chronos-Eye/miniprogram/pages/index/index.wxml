@@ -6,7 +6,7 @@
         <text class="time-icon">🕐</text>
         <text class="weekday">{{weekday}}</text>
       </view>
-      <text class="header-center">三月</text>
+      <text class="header-center">{{currentDate}}</text>
       <text class="header-right">{{currentTime}}</text>
     </view>
 
@@ -61,6 +61,31 @@
         <text class="countdown-unit">天</text>
       </view>
     </view>
+  </view>
+
+  <!-- 每日心情轮播 -->
+  <view class="mood-section" wx:if="{{moodSwiper.length > 0}}" bindtap="goToMood">
+    <view class="section-title-bar">
+      <view class="title-left">
+        <view class="title-icon"></view>
+        <text class="title-text">每日心情</text>
+      </view>
+      <text class="more-link">点击查看 ></text>
+    </view>
+
+    <swiper class="mood-swiper" indicator-dots="{{moodSwiper.length > 1}}" autoplay circular interval="4000" indicator-active-color="#C67D58" bindchange="onMoodSwiperChange">
+      <swiper-item wx:for="{{moodSwiper}}" wx:key="index" class="mood-swiper-item">
+        <view class="mood-card mood-card-{{item.type}}">
+          <view class="mood-header">
+            <text class="mood-icon">{{item.icon}}</text>
+            <text class="mood-title">{{item.title}}</text>
+          </view>
+          <view class="mood-content">
+            <text class="mood-text">{{item.content}}</text>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
   </view>
 
   <!-- 实用工具 -->

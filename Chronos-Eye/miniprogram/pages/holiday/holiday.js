@@ -34,6 +34,14 @@ Page({
     this.loadAllHolidays()
   },
 
+  // 点击节日进入详情页
+  onHolidayTap: function (e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/countdown/detail?id=${id}`
+    })
+  },
+
   // 切换 Tab
   onTabChange: function (e) {
     const index = e.currentTarget.dataset.index
