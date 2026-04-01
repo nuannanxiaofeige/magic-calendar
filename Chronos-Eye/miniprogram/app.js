@@ -1,6 +1,6 @@
 App({
   onLaunch: function () {
-    console.log('时光之眼小程序启动')
+    console.log('魔法日历小程序启动')
   },
   globalData: {
     userInfo: null,

@@ -19,7 +19,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FDFBF7",
-    "navigationBarTitleText": "时光之眼",
+    "navigationBarTitleText": "魔法日历",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
