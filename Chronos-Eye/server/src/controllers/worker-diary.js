@@ -32,7 +32,8 @@ async function isWorkday(dateStr) {
 }
 
 /**
- * 获取打工者日记（仅工作日返回）
+ * 获取打工者日记（仅工作日返回，使用缓存机制）
+ * 每天 24:00 随机选一条（非工作日不选），当日固定不变
  */
 async function getWorkerDiary(req, res) {
   try {
@@ -51,16 +52,48 @@ async function getWorkerDiary(req, res) {
       })
     }
 
-    // 使用日期种子获取随机一条
-    const dateObj = dayjs(targetDate)
-    const seed = dateObj.year() * 10000 + dateObj.month() * 100 + dateObj.date()
+    // 先从缓存表查找当日是否已有精选
+    const cached = await query(
+      'SELECT worker_diary_id FROM daily_diary_cache WHERE date = ?',
+      [targetDate]
+    )
 
-    const diary = await query(`
-      SELECT id, content, created_at
-      FROM worker_diary
-      ORDER BY RAND(${seed})
-      LIMIT 1
-    `)
+    let diary
+
+    if (cached && cached.length > 0 && cached[0].worker_diary_id) {
+      // 缓存命中，直接返回对应日记
+      const cachedDiary = await query(
+        'SELECT id, content, created_at FROM worker_diary WHERE id = ?',
+        [cached[0].worker_diary_id]
+      )
+      diary = cachedDiary
+    } else {
+      // 缓存未命中，随机选一条并写入缓存
+      const [randomDiary] = await query(`
+        SELECT id, content, created_at
+        FROM worker_diary
+        ORDER BY RAND()
+        LIMIT 1
+      `)
+
+      if (!randomDiary) {
+        return res.json({
+          success: true,
+          data: null,
+          message: '暂无打工日记',
+          isWorkday: true
+        })
+      }
+
+      // 写入或更新缓存
+      await query(`
+        INSERT INTO daily_diary_cache (date, worker_diary_id, created_at)
+        VALUES (?, ?, NOW())
+        ON DUPLICATE KEY UPDATE worker_diary_id = VALUES(worker_diary_id), updated_at = NOW()
+      `, [targetDate, randomDiary.id])
+
+      diary = [randomDiary]
+    }
 
     if (!diary || diary.length === 0) {
       return res.json({

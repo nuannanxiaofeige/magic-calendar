@@ -635,6 +635,28 @@ function startOilPriceScheduler() {
   }, firstDelay)
 }
 
+/**
+ * 清理指定天数前的每日日记缓存
+ * @param {number} keepDays - 保留的天数，默认 30 天
+ */
+async function cleanupOldDiaryCache(keepDays = 30) {
+  try {
+    const { query } = require('../config/database')
+    console.log(`[清理任务] 开始清理 ${keepDays} 天前的每日日记缓存...`)
+
+    const result = await query(`
+      DELETE FROM daily_diary_cache
+      WHERE date < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+    `, [keepDays])
+
+    console.log(`[清理任务] 已删除 ${result.affectedRows} 条每日日记缓存`)
+    return { success: true, deleted: result.affectedRows }
+  } catch (error) {
+    console.error('[清理任务] 清理每日日记缓存失败:', error)
+    throw error
+  }
+}
+
 module.exports = {
   startScheduler,
   manualSync,
@@ -643,5 +665,6 @@ module.exports = {
   checkAndSyncConstellation,
   syncOilPriceData,
   cleanupOldOilPriceData,
+  cleanupOldDiaryCache,
   startOilPriceScheduler
 }
