@@ -278,18 +278,22 @@
 .mood-swiper-item {
   display: flex;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mood-card {
   border-radius: 24rpx;
   padding: 24rpx;
-  height: 160rpx;
+  height: 200rpx;
+  width: 100%;
   background-size: cover;
   background-position: center;
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .mood-card-tiangou {
@@ -337,7 +341,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
