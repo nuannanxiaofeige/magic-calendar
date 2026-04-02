@@ -98,18 +98,6 @@ Page({
     }
   },
 
-  // 手动刷新
-  refreshData: function () {
-    wx.showLoading({ title: '刷新中...' })
-    this.loadData().then(() => {
-      wx.hideLoading()
-      wx.showToast({
-        title: '刷新成功',
-        icon: 'success'
-      })
-    })
-  },
-
   // 省份切换
   onProvinceChange: function (e) {
     const index = e.detail.value
@@ -139,6 +127,7 @@ Page({
             // 解析价格和涨幅数据
             const priceData = {}
             const priceChange = {}
+            const priceTrend = {}  // 新增：涨速趋势 (up/down)
 
             // 处理 92/95/98/0 号油
             const types = ['89', '92', '95', '98', '0']
@@ -154,17 +143,22 @@ Page({
                 priceData[type] = String(data[priceKey2])
               }
 
-              if (data[changeKey]) {
+              if (data[changeKey] !== undefined && data[changeKey] !== null) {
+                const changeValue = parseFloat(data[changeKey])
                 priceChange[type] = String(data[changeKey])
+                // 根据数值的正负判断涨跌
+                priceTrend[type] = changeValue >= 0 ? 'up' : 'down'
               }
             }
 
             console.log('解析后的价格数据:', priceData)
             console.log('解析后的涨幅数据:', priceChange)
+            console.log('解析后的涨跌趋势:', priceTrend)
 
             this.setData({
               priceData,
               priceChange,
+              priceTrend,
               updateTime: data.update_time ? this.formatDate(new Date(data.update_time)) : this.formatDate(new Date())
             })
           }
