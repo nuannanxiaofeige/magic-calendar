@@ -414,6 +414,7 @@ Page({
         days[idx].displayText = display.text
         days[idx].displayType = display.type
         days[idx].isFestival = (display.type === 'festival')
+        days[idx].isOfficial = lunar.is_official === 1
       } else {
         // 使用简单农历计算
         const simple = this.simpleLunarCalc(prevYear, prevMonth, day)
@@ -421,6 +422,7 @@ Page({
         days[idx].displayText = display.text
         days[idx].displayType = display.type
         days[idx].isFestival = (display.type === 'festival')
+        days[idx].isOfficial = false
       }
       days[idx].needLunar = false
     }
@@ -438,6 +440,7 @@ Page({
         days[idx].displayText = display.text
         days[idx].displayType = display.type
         days[idx].isFestival = (display.type === 'festival')
+        days[idx].isOfficial = lunar.is_official === 1
       } else {
         // 使用简单农历计算
         const simple = this.simpleLunarCalc(year, month, day)
@@ -445,6 +448,7 @@ Page({
         days[idx].displayText = display.text
         days[idx].displayType = display.type
         days[idx].isFestival = (display.type === 'festival')
+        days[idx].isOfficial = false
       }
       days[idx].isToday = isToday
       days[idx].needLunar = false
@@ -467,6 +471,7 @@ Page({
         days[idx].displayText = display.text
         days[idx].displayType = display.type
         days[idx].isFestival = (display.type === 'festival')
+        days[idx].isOfficial = lunar.is_official === 1
       } else {
         // 使用简单农历计算
         const simple = this.simpleLunarCalc(nextYear, nextMonth, day)
@@ -474,6 +479,7 @@ Page({
         days[idx].displayText = display.text
         days[idx].displayType = display.type
         days[idx].isFestival = (display.type === 'festival')
+        days[idx].isOfficial = false
       }
       days[idx].needLunar = false
     }

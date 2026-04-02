@@ -1,7 +1,7 @@
 /* 容器 */
 .container {
   padding: 20rpx 30rpx 60rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   min-height: 100vh;
 }
 
@@ -46,7 +46,7 @@
 
 .mode-item.active {
   background: #fff;
-  color: #667eea;
+  color: #C67D58;
 }
 
 .mode-icon {
@@ -115,8 +115,8 @@
 .vs-text {
   font-size: 32rpx;
   font-weight: bold;
-  color: #667eea;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #C67D58;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -128,7 +128,7 @@
   align-items: center;
   justify-content: center;
   height: 88rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   border-radius: 44rpx;
   color: #fff;
   font-size: 32rpx;
@@ -245,7 +245,7 @@
 
 .list-item-grade {
   font-size: 26rpx;
-  color: #667eea;
+  color: #C67D58;
 }
 
 .list-item-content {

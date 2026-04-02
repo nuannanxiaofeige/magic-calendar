@@ -5,7 +5,7 @@
 }
 
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   padding: 60rpx 30rpx 80rpx;
   text-align: center;
 }
@@ -58,7 +58,7 @@
   align-items: baseline;
   justify-content: center;
   padding: 30rpx 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   border-radius: 12rpx;
 }
 
@@ -118,7 +118,7 @@
   bottom: 80rpx;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   color: #fff;
   padding: 20rpx 60rpx;
   border-radius: 50rpx;

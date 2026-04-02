@@ -7,7 +7,7 @@
 
 /* 头部 */
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 20rpx;
@@ -86,7 +86,7 @@
 }
 
 .day-cell.today {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
 }
 
 .day-cell.today .day-number,
@@ -96,7 +96,7 @@
 
 .day-cell.selected {
   background: rgba(102, 126, 234, 0.2);
-  border: 2rpx solid #667eea;
+  border: 2rpx solid #C67D58;
 }
 
 .day-cell.rest-day {
@@ -105,6 +105,17 @@
 
 .day-cell.rest-day .day-number {
   color: #e74c3c;
+}
+
+/* 法定节假日样式 */
+.day-cell.official {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  box-shadow: 0 2rpx 8rpx rgba(238, 90, 90, 0.3);
+}
+
+.day-cell.official .day-number,
+.day-cell.official .day-text {
+  color: #fff;
 }
 
 .day-number {
@@ -181,7 +192,7 @@
 .mark-dot {
   width: 8rpx;
   height: 8rpx;
-  background: #667eea;
+  background: #C67D58;
   border-radius: 50%;
 }
 
@@ -268,7 +279,7 @@
 
 .event-year {
   font-size: 26rpx;
-  color: #667eea;
+  color: #C67D58;
   font-weight: 500;
   margin-right: 15rpx;
   flex-shrink: 0;

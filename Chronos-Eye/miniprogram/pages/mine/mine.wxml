@@ -1,4 +1,7 @@
 <!--pages/mine/mine.wxml-->
+<!-- 全局背景 -->
+<view class="global-bg" wx:if="{{globalBgUrl}}" style="background-image: url('{{globalBgUrl}}');"></view>
+
 <view class="mine-container">
   <!-- 用户信息头部 -->
   <view class="user-header">
@@ -8,6 +11,10 @@
     <view class="user-info">
       <text class="nickname">{{nickname || '微信用户'}}</text>
       <text class="user-desc">时光记录者</text>
+    </view>
+    <!-- 主题切换按钮 -->
+    <view class="theme-switch-btn" bindtap="showThemeSelector">
+      <text class="theme-icon">🎨</text>
     </view>
   </view>
 
@@ -157,6 +164,19 @@
 
   <!-- 设置区域 -->
   <view class="menu-section">
+    <!-- 主题切换入口 -->
+    <view class="menu-item" bindtap="showThemeSelector">
+      <view class="menu-left">
+        <view class="menu-icon-wrapper" style="background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);">
+          <text class="menu-icon">🎨</text>
+        </view>
+        <text class="menu-title">切换背景</text>
+      </view>
+      <view class="menu-arrow">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
     <view class="menu-item" bindtap="showFeedback">
       <view class="menu-left">
         <view class="menu-icon-wrapper menu-icon-feedback">
