@@ -2,25 +2,55 @@ const { query } = require('../config/database')
 const dayjs = require('dayjs')
 
 /**
- * 获取指定日期的舔狗日记（每日一条）
- * 使用日期作为种子，确保同一天获取的是同一条
+ * 获取每日舔狗日记（缓存机制）
+ * 每天 24:00 随机选一条，当天固定不变
  */
 async function getDailyDiary(req, res) {
   try {
     const { date } = req.query
     const targetDate = date ? dayjs(date).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')
 
-    // 使用日期计算一个偏移量，作为 RAND() 的种子
-    const dateObj = dayjs(targetDate)
-    const seed = dateObj.year() * 10000 + dateObj.month() * 100 + dateObj.date()
+    // 先从缓存表查找当日是否已有精选
+    const cached = await query(
+      'SELECT tiangou_diary_id FROM daily_diary_cache WHERE date = ?',
+      [targetDate]
+    )
 
-    // 使用种子获取随机一条（同一天总是返回同一条）
-    const diary = await query(`
-      SELECT id, content, created_at
-      FROM tiangou_diary
-      ORDER BY RAND(${seed})
-      LIMIT 1
-    `)
+    let diary
+
+    if (cached && cached.length > 0 && cached[0].tiangou_diary_id) {
+      // 缓存命中，直接返回对应日记
+      const cachedDiary = await query(
+        'SELECT id, content, created_at FROM tiangou_diary WHERE id = ?',
+        [cached[0].tiangou_diary_id]
+      )
+      diary = cachedDiary
+    } else {
+      // 缓存未命中，随机选一条并写入缓存
+      const [randomDiary] = await query(`
+        SELECT id, content, created_at
+        FROM tiangou_diary
+        ORDER BY RAND()
+        LIMIT 1
+      `)
+
+      if (!randomDiary) {
+        return res.json({
+          success: true,
+          data: null,
+          message: '暂无数据'
+        })
+      }
+
+      // 写入或更新缓存
+      await query(`
+        INSERT INTO daily_diary_cache (date, tiangou_diary_id, created_at)
+        VALUES (?, ?, NOW())
+        ON DUPLICATE KEY UPDATE tiangou_diary_id = VALUES(tiangou_diary_id), updated_at = NOW()
+      `, [targetDate, randomDiary.id])
+
+      diary = [randomDiary]
+    }
 
     if (!diary || diary.length === 0) {
       return res.json({
