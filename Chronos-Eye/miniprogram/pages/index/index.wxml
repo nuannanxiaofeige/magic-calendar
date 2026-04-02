@@ -64,23 +64,18 @@
   </view>
 
   <!-- 每日心情轮播 -->
-  <view class="mood-section" wx:if="{{moodSwiper.length > 0}}" bindtap="goToMood">
+  <view class="mood-section" wx:if="{{moodSwiper.length > 0}}">
     <view class="section-title-bar">
       <view class="title-left">
         <view class="title-icon"></view>
         <text class="title-text">每日心情</text>
       </view>
-      <text class="more-link">点击查看 ></text>
     </view>
 
     <swiper class="mood-swiper" indicator-dots="{{moodSwiper.length > 1}}" autoplay circular interval="4000" indicator-active-color="#C67D58" bindchange="onMoodSwiperChange">
       <swiper-item wx:for="{{moodSwiper}}" wx:key="index" class="mood-swiper-item">
         <view class="mood-card mood-card-{{item.type}}">
-          <view class="mood-header">
-            <text class="mood-icon">{{item.icon}}</text>
-            <text class="mood-title">{{item.title}}</text>
-          </view>
-          <view class="mood-content">
+                    <view class="mood-content">
             <text class="mood-text">{{item.content}}</text>
           </view>
         </view>

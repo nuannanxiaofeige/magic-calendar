@@ -387,13 +387,6 @@ Page({
     })
   },
 
-  // 跳转到每日心情详情页
-  goToMood: function () {
-    wx.navigateTo({
-      url: '/pages/mood/mood'
-    })
-  },
-
   // 根据季节设置背景图
   setSeasonBackground: function () {
     const month = new Date().getMonth() + 1

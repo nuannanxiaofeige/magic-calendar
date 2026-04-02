@@ -14,8 +14,7 @@
     "pages/match/match",
     "pages/oil-price/oil-price",
     "pages/idiom-quiz/idiom-quiz",
-    "pages/weather-poetry/weather-poetry",
-    "pages/mood/mood"
+    "pages/weather-poetry/weather-poetry"
   ],
   "window": {
     "backgroundTextStyle": "light",
