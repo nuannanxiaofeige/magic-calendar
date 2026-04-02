@@ -5,7 +5,7 @@
 }
 
 .stats-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   margin: 30rpx;
   padding: 30rpx;
   border-radius: 16rpx;
@@ -59,7 +59,7 @@
   width: 60rpx;
   height: 60rpx;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   color: #fff;
   font-size: 40rpx;
   display: flex;
@@ -122,7 +122,7 @@
 
 .priority-normal {
   background: #eef2ff;
-  color: #667eea;
+  color: #C67D58;
 }
 
 .priority-low {

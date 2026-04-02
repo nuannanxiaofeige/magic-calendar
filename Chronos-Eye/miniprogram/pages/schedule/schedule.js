@@ -148,7 +148,7 @@ Page({
       success: function (res) {
         const priorities = [
           { priority: 'high', color: '#e74c3c' },
-          { priority: 'normal', color: '#667eea' },
+          { priority: 'normal', color: '#C67D58' },
           { priority: 'low', color: '#2ecc71' }
         ]
         callback && callback(priorities[res.tapIndex].priority, priorities[res.tapIndex].color)

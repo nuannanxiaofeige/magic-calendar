@@ -1,13 +1,27 @@
 /*pages/mine/mine.wxss*/
+
+/* 全局背景 */
+.global-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+}
+
 .mine-container {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #FDFBF7;
   padding-bottom: 40rpx;
 }
 
 /* 用户信息头部 */
 .user-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   padding: 80rpx 30rpx 60rpx;
   display: flex;
   align-items: center;
@@ -47,6 +61,22 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
+/* 主题切换按钮 */
+.theme-switch-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 32rpx;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20rpx;
+}
+
+.theme-icon {
+  font-size: 32rpx;
+}
+
 /* 统计卡片 */
 .stats-card {
   background: #fff;
@@ -68,7 +98,7 @@
 .stats-number {
   font-size: 40rpx;
   font-weight: bold;
-  color: #667eea;
+  color: #C67D58;
   margin-bottom: 8rpx;
 }
 
@@ -121,7 +151,7 @@
 }
 
 .menu-icon-schedule {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
 }
 
 .menu-icon-countdown {

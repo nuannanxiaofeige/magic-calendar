@@ -79,7 +79,7 @@
     </view>
     <view class="recommend-grid">
       <view class="recommend-item" bindtap="goToMonthFortune">
-        <view class="recommend-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">🔮</view>
+        <view class="recommend-icon" style="background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%)">🔮</view>
         <text class="recommend-text">3 月运程</text>
       </view>
       <view class="recommend-item" bindtap="goToLoveMatch">

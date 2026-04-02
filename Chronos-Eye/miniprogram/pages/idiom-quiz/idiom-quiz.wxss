@@ -2,7 +2,7 @@
 .container {
   padding: 30rpx;
   min-height: 100vh;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(180deg, #C67D58 0%, #F5F0E8 100%);
 }
 
 /* 题目区域 */
@@ -19,7 +19,7 @@
   display: inline-block;
   padding: 8rpx 24rpx;
   border-radius: 30rpx;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   margin-bottom: 20rpx;
 }
 
@@ -114,7 +114,7 @@
 .explanation-title {
   font-size: 32rpx;
   font-weight: bold;
-  color: #667eea;
+  color: #C67D58;
   margin-bottom: 16rpx;
   text-align: center;
 }
@@ -132,7 +132,7 @@
 }
 
 .next-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   color: #fff;
   border: none;
   border-radius: 50rpx;
@@ -173,7 +173,7 @@
 }
 
 .retry-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   color: #fff;
   border: none;
   border-radius: 50rpx;

@@ -72,7 +72,7 @@ getHolidayGradient: function (name, type) {
     return 'linear-gradient(180deg, #f39c12 0%, #f39c12 35%, #f5f5f5 35%)'
   }
 
-  return 'linear-gradient(180deg, #667eea 0%, #667eea 35%, #f5f5f5 35%)'
+  return 'linear-gradient(180deg, #FDFBF7 0%, #FDFBF7 35%, #F5F0E8 35%)'
 },
 
 loadHolidayDetail: async function (id) {

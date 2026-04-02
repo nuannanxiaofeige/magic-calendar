@@ -391,6 +391,6 @@ Page({
       return { icon: '🍃', gradient: 'linear-gradient(135deg, #27ae60 0%, #16a085 100%)' }
     }
 
-    return { icon: '📅', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }
+    return { icon: '📅', gradient: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%)' }
   }
 })
