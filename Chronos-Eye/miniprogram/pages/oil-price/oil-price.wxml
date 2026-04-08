@@ -29,6 +29,10 @@
         </view>
       </view>
     </view>
+    <!-- 油价更新时间 -->
+    <view class="price-update-time" wx:if="{{updateTime}}">
+      <text>更新时间：{{updateTime}}</text>
+    </view>
   </view>
 
   <!-- 国际油价 -->
@@ -56,7 +60,9 @@
     <view class="tips-icon">💡</view>
     <view class="tips-content">
       <text class="tips-title">下次调价窗口</text>
-      <text class="tips-desc">预计 10 个工作日后调整</text>
+      <text class="tips-desc" wx:if="{{nextAdjustInfo && nextAdjustInfo.next_date_text}}">{{nextAdjustInfo.next_date_text}}</text>
+      <text class="tips-desc" wx:elif="{{nextAdjustInfo && nextAdjustInfo.days_until}}">预计 {{nextAdjustInfo.days_until}} 个工作日后调整</text>
+      <text class="tips-desc" wx:else>预计 10 个工作日后调整</text>
     </view>
   </view>
 

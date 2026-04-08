@@ -46,6 +46,9 @@ Page({
     // 调价历史
     historyData: [],
 
+    // 下次调价信息
+    nextAdjustInfo: null,
+
     // UI 状态
     loading: false,
     loadingMore: false,
@@ -79,11 +82,12 @@ Page({
     this.setData({ loading: true })
 
     try {
-      // 并行加载省份油价、国际油价、调价历史
+      // 并行加载省份油价、国际油价、调价历史、下次调价信息
       await Promise.all([
         this.loadOilPrice(),
         this.loadInternationalCrude(),
-        this.loadAdjustmentHistory()
+        this.loadAdjustmentHistory(),
+        this.loadNextAdjustDate()
       ])
 
       this.setData({ lastRefresh: new Date() })
@@ -221,6 +225,31 @@ Page({
         fail: (err) => {
           console.error('请求调价历史失败:', err)
           reject(err)
+        }
+      })
+    })
+  },
+
+  // 加载下次调价窗口信息
+  loadNextAdjustDate: function () {
+    const app = getApp()
+
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${app.globalData.baseUrl}/oil-price/next-adjust`,
+        success: (res) => {
+          console.log('下次调价 API 响应:', res)
+          if (res.data.success && res.data.data) {
+            this.setData({
+              nextAdjustInfo: res.data.data
+            })
+            console.log('setData 后 nextAdjustInfo:', this.data.nextAdjustInfo)
+          }
+          resolve()
+        },
+        fail: (err) => {
+          console.error('请求下次调价日期失败:', err)
+          resolve()  // 不阻塞其他数据加载
         }
       })
     })

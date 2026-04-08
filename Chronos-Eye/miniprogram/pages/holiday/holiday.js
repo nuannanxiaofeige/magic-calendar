@@ -30,8 +30,15 @@ Page({
   },
 
   onShow: function () {
-    // 每次显示页面时刷新数据
-    this.loadAllHolidays()
+    // 每次显示页面时刷新数据，但保持当前 tab 的选择
+    const currentTab = this.data.currentTab
+    const selectedTab = this.data.tabList[currentTab]
+
+    if (selectedTab.type === 'term') {
+      this.loadSolarTerms()
+    } else if (selectedTab.category) {
+      this.loadHolidaysByCategory(selectedTab.category)
+    }
   },
 
   // 点击节日进入详情页

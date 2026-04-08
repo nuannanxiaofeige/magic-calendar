@@ -6,6 +6,9 @@
 const express = require('express')
 const router = express.Router()
 const { getLatestOilPrice, getLatestInternationalCrude, getAdjustmentHistory } = require('../services/oil-price-sync')
+const { exec } = require('child_process')
+const path = require('path')
+const dayjs = require('dayjs')
 
 // 省份代码映射
 const provinceMap = {
@@ -144,6 +147,109 @@ router.get('/history', async (req, res) => {
     })
   } catch (error) {
     console.error('查询调整历史失败:', error.message)
+    res.json({
+      success: false,
+      error: error.message
+    })
+  }
+})
+
+/**
+ * 获取下次调价窗口日期
+ * GET /api/oil-price/next-adjust
+ */
+router.get('/next-adjust', async (req, res) => {
+  try {
+    // 使用 Python 脚本获取调价窗口日期
+    const pythonCmd = path.join(__dirname, '../../venv/bin/python3')
+    const scriptPath = path.join(__dirname, '../../scripts/oil_price_crawler.py')
+
+    // 调用 Python 获取调价窗口日期
+    const { execSync } = require('child_process')
+    const script = `
+import sys
+sys.path.insert(0, '.')
+from oil_price_crawler import get_adjustment_window_dates, get_next_adjust_date
+import json
+
+# 尝试获取下一个调价日期
+next_date = get_next_adjust_date()
+# 尝试获取全年调价窗口
+year = ${new Date().getFullYear()}
+window_dates = get_adjustment_window_dates(year)
+
+result = {
+    'next_date_text': next_date,
+    'window_dates': window_dates[:10] if window_dates else [],  # 只返回前10个
+    'year': year
+}
+print(json.dumps(result))
+`
+
+    let result
+    try {
+      const stdout = execSync(`${pythonCmd} -c "${script.replace(/"/g, '\\"')}"`, {
+        cwd: path.join(__dirname, '../../scripts')
+      })
+      result = JSON.parse(stdout.trim())
+    } catch (pyErr) {
+      console.error('Python 脚本执行失败:', pyErr.message)
+      // 返回默认值
+      result = {
+        next_date_text: null,
+        window_dates: [],
+        year: new Date().getFullYear()
+      }
+    }
+
+    // 从调价窗口日期列表中找出下一个日期
+    let nextAdjustDate = null
+    let nextAdjustWeekday = null
+
+    if (result.window_dates && result.window_dates.length > 0) {
+      const today = dayjs().format('YYYY-MM-DD')
+      for (const dateStr of result.window_dates) {
+        if (dateStr >= today) {
+          nextAdjustDate = dateStr
+          // 计算星期几
+          const date = new Date(dateStr)
+          const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+          nextAdjustWeekday = weekdays[date.getDay()]
+          break
+        }
+      }
+    }
+
+    // 如果 Python 返回了文本信息，优先使用
+    if (result.next_date_text && !nextAdjustDate) {
+      res.json({
+        success: true,
+        data: {
+          next_date_text: result.next_date_text,
+          next_date: null,
+          next_weekday: null,
+          days_until: null
+        }
+      })
+    } else {
+      // 计算距离天数
+      let daysUntil = null
+      if (nextAdjustDate) {
+        daysUntil = dayjs(nextAdjustDate).diff(dayjs().startOf('day'), 'day')
+      }
+
+      res.json({
+        success: true,
+        data: {
+          next_date_text: nextAdjustDate ? `${nextAdjustDate} ${nextAdjustWeekday}` : null,
+          next_date: nextAdjustDate,
+          next_weekday: nextAdjustWeekday,
+          days_until: daysUntil
+        }
+      })
+    }
+  } catch (error) {
+    console.error('获取下次调价日期失败:', error.message)
     res.json({
       success: false,
       error: error.message

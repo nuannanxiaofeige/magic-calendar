@@ -101,6 +101,19 @@
   background: #f6ffed !important;
 }
 
+/* 油价更新时间 */
+.price-update-time {
+  padding: 16rpx 32rpx;
+  background: #f8f9fa;
+  border-top: 1rpx solid #f0f0f0;
+  text-align: right;
+}
+
+.price-update-time text {
+  font-size: 22rpx;
+  color: #999;
+}
+
 /* ==================== 通用区块卡片 ==================== */
 .section-card {
   background: rgba(255, 255, 255, 0.98);

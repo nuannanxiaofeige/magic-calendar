@@ -88,6 +88,24 @@ loadHolidayDetail: async function (id) {
           const wageDates = Array.isArray(holiday.wage_dates) ? holiday.wage_dates : []
           const vacationDates = Array.isArray(holiday.vacation_dates) ? holiday.vacation_dates : []
 
+          // 计算距离节日的天数
+          const today = new Date()
+          const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+          let itemDate
+          if (holiday.date_full) {
+            itemDate = new Date(holiday.date_full)
+          } else {
+            // 对于没有 date_full 的，用 date_month 和 date_day 构建今年的日期
+            const year = today.getFullYear()
+            itemDate = new Date(`${year}-${String(holiday.date_month).padStart(2, '0')}-${String(holiday.date_day).padStart(2, '0')}`)
+            // 如果今年的日期已经过了，用明年
+            if (itemDate < new Date(todayStr)) {
+              itemDate = new Date(`${year + 1}-${String(holiday.date_month).padStart(2, '0')}-${String(holiday.date_day).padStart(2, '0')}`)
+            }
+          }
+          const daysLeft = Math.ceil((itemDate - today) / (1000 * 60 * 60 * 24))
+          holiday.days_left = daysLeft >= 0 ? daysLeft : 0
+
           // 获取匹配的节日风格
           const gradient = that.getHolidayGradient(holiday.name, holiday.type)
 
