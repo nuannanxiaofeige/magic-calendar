@@ -46,6 +46,9 @@ Page({
     // 调价历史
     historyData: [],
 
+    // 下次调价信息
+    nextAdjustInfo: null,
+
     // UI 状态
     loading: false,
     loadingMore: false,
@@ -79,11 +82,12 @@ Page({
     this.setData({ loading: true })
 
     try {
-      // 并行加载省份油价、国际油价、调价历史
+      // 并行加载省份油价、国际油价、调价历史、下次调价信息
       await Promise.all([
         this.loadOilPrice(),
         this.loadInternationalCrude(),
-        this.loadAdjustmentHistory()
+        this.loadAdjustmentHistory(),
+        this.loadNextAdjustDate()
       ])
 
       this.setData({ lastRefresh: new Date() })
@@ -96,18 +100,6 @@ Page({
     } finally {
       this.setData({ loading: false })
     }
-  },
-
-  // 手动刷新
-  refreshData: function () {
-    wx.showLoading({ title: '刷新中...' })
-    this.loadData().then(() => {
-      wx.hideLoading()
-      wx.showToast({
-        title: '刷新成功',
-        icon: 'success'
-      })
-    })
   },
 
   // 省份切换
@@ -139,6 +131,7 @@ Page({
             // 解析价格和涨幅数据
             const priceData = {}
             const priceChange = {}
+            const priceTrend = {}  // 新增：涨速趋势 (up/down)
 
             // 处理 92/95/98/0 号油
             const types = ['89', '92', '95', '98', '0']
@@ -154,17 +147,22 @@ Page({
                 priceData[type] = String(data[priceKey2])
               }
 
-              if (data[changeKey]) {
+              if (data[changeKey] !== undefined && data[changeKey] !== null) {
+                const changeValue = parseFloat(data[changeKey])
                 priceChange[type] = String(data[changeKey])
+                // 根据数值的正负判断涨跌
+                priceTrend[type] = changeValue >= 0 ? 'up' : 'down'
               }
             }
 
             console.log('解析后的价格数据:', priceData)
             console.log('解析后的涨幅数据:', priceChange)
+            console.log('解析后的涨跌趋势:', priceTrend)
 
             this.setData({
               priceData,
               priceChange,
+              priceTrend,
               updateTime: data.update_time ? this.formatDate(new Date(data.update_time)) : this.formatDate(new Date())
             })
           }
@@ -227,6 +225,31 @@ Page({
         fail: (err) => {
           console.error('请求调价历史失败:', err)
           reject(err)
+        }
+      })
+    })
+  },
+
+  // 加载下次调价窗口信息
+  loadNextAdjustDate: function () {
+    const app = getApp()
+
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${app.globalData.baseUrl}/oil-price/next-adjust`,
+        success: (res) => {
+          console.log('下次调价 API 响应:', res)
+          if (res.data.success && res.data.data) {
+            this.setData({
+              nextAdjustInfo: res.data.data
+            })
+            console.log('setData 后 nextAdjustInfo:', this.data.nextAdjustInfo)
+          }
+          resolve()
+        },
+        fail: (err) => {
+          console.error('请求下次调价日期失败:', err)
+          resolve()  // 不阻塞其他数据加载
         }
       })
     })

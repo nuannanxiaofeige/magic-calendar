@@ -1,6 +1,6 @@
 .detail-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #667eea 0%, #667eea 35%, #f5f5f5 35%);
+  background: linear-gradient(180deg, #FDFBF7 0%, #FDFBF7 35%, #F5F0E8 35%);
 }
 
 .detail-loading,
@@ -89,7 +89,7 @@
   left: 0;
   width: 60rpx;
   height: 2rpx;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(90deg, #FDFBF7 0%, #F5F0E8 100%);
 }
 
 .detail-row {
@@ -157,7 +157,7 @@
 }
 
 .detail-tag-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
   color: #fff;
 }
 

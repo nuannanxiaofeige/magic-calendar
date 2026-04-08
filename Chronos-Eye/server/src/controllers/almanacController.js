@@ -137,17 +137,20 @@ async function getAlmanacByMonth(req, res) {
     const endDate = dayjs(`${year}-${month}-01`).endOf('month').format('YYYY-MM-DD')
 
     const almanacs = await query(`
-      SELECT DATE_FORMAT(CONVERT_TZ(date, '+00:00', '+08:00'), '%Y-%m-%d') as date,
-             lunar_year, lunar_month, lunar_day, term, solar_festival, lunar_festival,
-             ganzhi_year, ganzhi_month, ganzhi_day, ganzhi_hour, zodiac, yi, ji, yue_ji, shen_sha, rating,
-             wuxing, year_na_yin, month_na_yin, day_na_yin, hour_na_yin,
-             xingxiu, constellation, jieqi,
-             caishen, fushen, xishen, yanggui, yingui, taishen, jianchu,
-             jishen, xiongshen, pengzu, huangdi_year,
-             conflict_zodiac, conflict_sha
-      FROM almanac_data
-      WHERE DATE_FORMAT(CONVERT_TZ(date, '+00:00', '+08:00'), '%Y-%m-%d') BETWEEN ? AND ?
-      ORDER BY date ASC
+      SELECT DATE_FORMAT(CONVERT_TZ(a.date, '+00:00', '+08:00'), '%Y-%m-%d') as date,
+             a.lunar_year, a.lunar_month, a.lunar_day, a.term, a.solar_festival, a.lunar_festival,
+             a.ganzhi_year, a.ganzhi_month, a.ganzhi_day, a.ganzhi_hour, a.zodiac, a.yi, a.ji, a.yue_ji, a.shen_sha, a.rating,
+             a.wuxing, a.year_na_yin, a.month_na_yin, a.day_na_yin, a.hour_na_yin,
+             a.xingxiu, a.constellation, a.jieqi,
+             a.caishen, a.fushen, a.xishen, a.yanggui, a.yingui, a.taishen, a.jianchu,
+             a.jishen, a.xiongshen, a.pengzu, a.huangdi_year,
+             a.conflict_zodiac, a.conflict_sha,
+             CASE WHEN h.is_official = 1 AND h.is_work = 0 THEN 1 ELSE 0 END as is_official
+      FROM almanac_data a
+      LEFT JOIN holidays h ON DATE_FORMAT(CONVERT_TZ(a.date, '+00:00', '+08:00'), '%Y-%m-%d') = h.date_full
+        AND h.is_active = 1 AND h.category = 'festival'
+      WHERE DATE_FORMAT(CONVERT_TZ(a.date, '+00:00', '+08:00'), '%Y-%m-%d') BETWEEN ? AND ?
+      ORDER BY a.date ASC
     `, [startDate, endDate])
 
     res.json({

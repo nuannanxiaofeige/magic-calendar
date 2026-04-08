@@ -65,8 +65,9 @@ Page({
 
   loadAlmanac: function (date) {
     const that = this
+    const app = getApp()
     wx.request({
-      url: `http://localhost:3000/api/almanac/${date}`,
+      url: `${app.globalData.baseUrl}/almanac/${date}`,
       success: function (res) {
         if (res.data.success && res.data.data) {
           const data = res.data.data

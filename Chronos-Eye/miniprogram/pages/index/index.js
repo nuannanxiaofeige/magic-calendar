@@ -25,7 +25,11 @@ Page({
     festivals: [],
 
     // 当前季节背景
-    seasonBg: '/images/home-bg.png'
+    seasonBg: '/images/home-bg.png',
+
+    // 每日心情轮播
+    moodSwiper: [],
+    currentMoodIndex: 0
   },
 
   onLoad: function () {
@@ -33,7 +37,8 @@ Page({
     this.loadDate()
     this.loadAlmanac()
     this.loadRecentFestivals()
-    this.setSeasonBackground() // 设置季节背景
+    this.setSeasonBackground()
+    this.loadMoodDiary()
 
     // 每分钟更新时间
     setInterval(() => {
@@ -58,38 +63,15 @@ Page({
     const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
     const weekday = weekdays[now.getDay()]
 
-    const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊']
-    const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
-                      '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
-                      '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十']
-
-    const lunarMonth = lunarMonths[(month - 1) % 12]
-    const lunarDay = lunarDays[(day - 1) % 30]
-
-    // 农历年份（简化版）
-    const lunarYear = this.getLunarYear(year)
-
     this.setData({
       day: String(day),
       year: String(year),
       weekday: weekday,
-      currentDate: this.getChineseMonth(month),
-      lunarYear: lunarYear,
-      lunarMonth: lunarMonth,
-      lunarDay: lunarDay
+      currentDate: this.getChineseMonth(month)
     })
 
     // 从 API 加载详细农历
     this.loadLunarDetail()
-  },
-
-  getLunarYear: function (year) {
-    // 简化农历年份计算
-    const gan = ['庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁', '戊', '己']
-    const zhi = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未']
-    const ganIndex = (year - 1900) % 10
-    const zhiIndex = (year - 1900) % 12
-    return `二〇${year % 100}`
   },
 
   getChineseMonth: function (month) {
@@ -101,19 +83,25 @@ Page({
   loadLunarDetail: function () {
     const that = this
     const app = getApp()
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = now.getMonth() + 1
+    const day = now.getDate()
+    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+
     wx.request({
-      url: `${app.globalData.baseUrl}/calendar/today`,
+      url: `${app.globalData.baseUrl}/almanac/${dateStr}`,
       success: function (res) {
         if (res.data.success && res.data.data) {
-          const lunar = res.data.data.date.lunar
-          const ganzhi = res.data.data.ganzhi
+          const data = res.data.data
+          const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊']
+          const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
+                            '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+                            '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十']
           that.setData({
-            lunarYear: lunar.year,
-            lunarMonth: lunar.month,
-            lunarDay: lunar.day,
-            ganzhiYear: ganzhi.year + '年',
-            ganzhiMonth: ganzhi.month + '月',
-            ganzhiDay: ganzhi.day + '日'
+            lunarYear: data.lunar_year,
+            lunarMonth: lunarMonths[data.lunar_month - 1] || '正',
+            lunarDay: lunarDays[data.lunar_day - 1] || '初一'
           })
         }
       },
@@ -322,6 +310,80 @@ Page({
   goToWeatherPoetry: function () {
     wx.navigateTo({
       url: '/pages/weather-poetry/weather-poetry'
+    })
+  },
+
+  // 加载每日心情日记
+  loadMoodDiary: function () {
+    const that = this
+    const app = getApp()
+
+    // 并行加载舔狗日记和打工者日记
+    Promise.all([
+      that.requestDiary(`${app.globalData.baseUrl}/tiangou-diary/daily`),
+      that.requestDiary(`${app.globalData.baseUrl}/worker-diary/daily`)
+    ]).then(results => {
+      const [tiangouRes, workerRes] = results
+      const moodList = []
+
+      // 添加舔狗日记
+      if (tiangouRes.success && tiangouRes.data) {
+        moodList.push({
+          type: 'tiangou',
+          icon: '💔',
+          title: '舔狗日记',
+          content: tiangouRes.data.content || tiangouRes.data.diary?.content || '今天也要加油鸭~'
+        })
+      }
+
+      // 添加打工者日记
+      if (workerRes.success && workerRes.data) {
+        moodList.push({
+          type: 'worker',
+          icon: '💼',
+          title: '打工者日记',
+          content: workerRes.data.content || workerRes.data.diary?.content || '搬砖使我快乐~'
+        })
+      }
+
+      // 如果都没有数据，添加默认内容
+      if (moodList.length === 0) {
+        moodList.push({
+          type: 'default',
+          icon: '📝',
+          title: '每日心情',
+          content: '今天也要开心哦~'
+        })
+      }
+
+      that.setData({ moodSwiper: moodList })
+    }).catch(() => {
+      // 默认数据
+      that.setData({
+        moodSwiper: [{
+          type: 'default',
+          icon: '📝',
+          title: '每日心情',
+          content: '今天也要开心哦~'
+        }]
+      })
+    })
+  },
+
+  requestDiary: function (url) {
+    return new Promise((resolve) => {
+      wx.request({
+        url: url,
+        success: (res) => resolve(res.data),
+        fail: () => resolve({ success: false })
+      })
+    })
+  },
+
+  // 轮播切换
+  onMoodSwiperChange: function (e) {
+    this.setData({
+      currentMoodIndex: e.detail.current
     })
   },
 

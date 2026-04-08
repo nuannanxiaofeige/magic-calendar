@@ -30,7 +30,7 @@
   <!-- 节日列表 -->
   <view class="holiday-list-wrapper" wx:if="{{currentTab !== 2}}">
     <view class="holiday-list" wx:if="{{holidayList.length > 0}}">
-      <view class="holiday-item" wx:for="{{holidayList}}" wx:key="id">
+      <view class="holiday-item" wx:for="{{holidayList}}" wx:key="id" bindtap="onHolidayTap" data-id="{{item.id}}">
       <view class="holiday-main">
         <view class="holiday-icon" style="background: {{item.style.gradient}}">
           <text class="icon">{{item.style.icon}}</text>

@@ -2,7 +2,7 @@
   "appid": "wx9da231c9efe165d6",
   "compileType": "miniprogram",
   "projectname": "chronos-eye",
-  "description": "时光之眼 - 日期查询多功能小程序",
+  "description": "魔法日历 - 日期查询多功能小程序",
   "setting": {
     "es6": true,
     "minified": true,

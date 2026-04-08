@@ -21,7 +21,7 @@
   <!-- 日历网格 -->
   <view class="calendar">
     <view
-      class="day-cell {{item.isToday ? 'today' : ''}} {{item.isSelected ? 'selected' : ''}} {{item.isRestDay ? 'rest-day' : ''}} {{item.isNextMonth ? 'next-month' : ''}} {{item.isPrevMonth ? 'prev-month' : ''}}"
+      class="day-cell {{item.isToday ? 'today' : ''}} {{item.isSelected ? 'selected' : ''}} {{item.isRestDay ? 'rest-day' : ''}} {{item.isOfficial ? 'official' : ''}} {{item.isNextMonth ? 'next-month' : ''}} {{item.isPrevMonth ? 'prev-month' : ''}}"
       wx:for="{{days}}"
       wx:key="fullDate"
       bindtap="onDayTap"

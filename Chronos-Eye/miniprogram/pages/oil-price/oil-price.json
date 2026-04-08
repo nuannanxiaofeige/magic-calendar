@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "油价查询",
-  "navigationBarBackgroundColor": "#667eea",
+  "navigationBarBackgroundColor": "#FDFBF7",
   "navigationBarTextStyle": "white",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "light"
