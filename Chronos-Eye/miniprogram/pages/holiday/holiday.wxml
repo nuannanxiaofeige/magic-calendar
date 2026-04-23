@@ -1,3 +1,5 @@
+<global-bg src="{{globalBgUrl}}"></global-bg>
+
 <!--pages/holiday/holiday.wxml-->
 <view class="holiday-container">
   <!-- 固定顶部：分类 Tab + 搜索栏 -->

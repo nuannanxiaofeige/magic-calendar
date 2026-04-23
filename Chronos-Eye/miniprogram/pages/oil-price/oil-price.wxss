@@ -1,7 +1,9 @@
 /* ==================== 容器 ==================== */
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
+  background: transparent;
+  position: relative;
+  z-index: 1;
   padding: 16rpx 16rpx 40rpx;
 }
 

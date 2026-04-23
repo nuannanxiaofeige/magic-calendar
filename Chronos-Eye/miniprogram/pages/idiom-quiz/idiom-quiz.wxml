@@ -1,3 +1,5 @@
+<global-bg src="{{globalBgUrl}}"></global-bg>
+
 <view class="container">
   <!-- 题目区域 -->
   <view class="question-section">

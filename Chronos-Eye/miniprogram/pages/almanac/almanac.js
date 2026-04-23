@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     currentDate: '',
     selectedDate: '',
     lunarDateText: '',
@@ -47,6 +48,11 @@ Page({
       weekNum: this.getWeekNumber(now)
     })
     this.loadAlmanac(todayStr)
+  },
+
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
   },
 
   formatDate: function (date) {

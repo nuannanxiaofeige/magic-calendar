@@ -1,3 +1,5 @@
+<global-bg src="{{globalBgUrl}}"></global-bg>
+
 <view class="container">
   <!-- 顶部导航栏 -->
   <view class="nav-bar">

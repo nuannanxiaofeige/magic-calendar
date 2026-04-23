@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     currentDate: '',
     currentTab: 'today',
     showMore: false,
@@ -27,6 +28,10 @@ Page({
     this.loadDefaultSign()
   },
 
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
+  },
   loadCurrentDate: function () {
     const now = new Date()
     const year = now.getFullYear()

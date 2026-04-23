@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     holiday: null,
     loading: true
   },
@@ -8,6 +9,11 @@ Page({
     if (options.id) {
       this.loadHolidayDetail(options.id)
     }
+  },
+
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
   },
 
   // 根据节日名称获取匹配的渐变色

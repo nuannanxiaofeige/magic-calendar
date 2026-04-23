@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "global-bg": "/components/global-bg/global-bg"
+  },
   "navigationBarTitleText": "节日详情"
 }

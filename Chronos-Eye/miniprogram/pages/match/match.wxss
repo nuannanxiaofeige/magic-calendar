@@ -1,8 +1,10 @@
 /* 容器 */
 .container {
   padding: 20rpx 30rpx 60rpx;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
+  background: transparent;
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 /* 顶部标题 */

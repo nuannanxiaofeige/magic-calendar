@@ -1,5 +1,7 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "global-bg": "/components/global-bg/global-bg"
+  },
   "navigationBarTitleText": "日期计算",
   "navigationBarBackgroundColor": "#FDFBF7",
   "navigationBarTextStyle": "white"

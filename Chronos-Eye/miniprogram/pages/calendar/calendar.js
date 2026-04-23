@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     currentYear: 2026,
     currentMonth: 3,
     lunarYear: '',
@@ -30,6 +31,12 @@ Page({
         console.log('[onLoad] lunarCache[' + key + ']:', this.lunarCache[key])
       })
     }, 2000)
+  },
+
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
+    this.loadCachedData()
   },
 
   // 加载缓存数据

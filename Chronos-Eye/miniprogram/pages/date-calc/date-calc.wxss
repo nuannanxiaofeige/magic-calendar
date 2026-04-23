@@ -1,6 +1,8 @@
 .container {
   min-height: 100vh;
-  background: #f5f6fa;
+  background: transparent;
+  position: relative;
+  z-index: 1;
   padding: 20rpx;
 }
 

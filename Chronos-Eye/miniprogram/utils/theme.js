@@ -15,8 +15,11 @@ async function getCurrentTheme() {
       .limit(1)
       .get()
 
+    console.log('查询主题配置结果:', res.data)
     if (res.data && res.data.length > 0) {
-      return res.data[0]
+      const theme = res.data[0]
+      console.log('当前主题 background 字段:', theme.background)
+      return theme
     }
     return null
   } catch (e) {
@@ -30,23 +33,29 @@ async function getCurrentTheme() {
  * @param {string} fileId - 云存储文件ID
  */
 async function getBackgroundUrl(fileId) {
-  if (!fileId) return null
+  if (!fileId) {
+    console.log("getBackgroundUrl: fileId 为空")
+    return null
+  }
 
+  // 去除可能的空格
+  fileId = String(fileId).trim()
+  console.log("getBackgroundUrl: 请求 fileId =", fileId)
   try {
     const res = await wx.cloud.getTempFileURL({
       fileList: [fileId]
     })
+    console.log("getBackgroundUrl: 云存储返回结果 =", res)
 
     if (res.fileList[0].tempFileURL) {
       return res.fileList[0].tempFileURL
     }
     return null
   } catch (e) {
-    console.error('获取背景URL失败', e)
+    console.error("获取背景 URL 失败", e)
     return null
   }
 }
-
 /**
  * 初始化主题 - 小程序启动时调用
  */

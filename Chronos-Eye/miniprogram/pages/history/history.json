@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "历史上的今天"
+  "navigationBarTitleText": "历史上的今天",
+  "usingComponents": {
+    "global-bg": "/components/global-bg/global-bg"
+  }
 }

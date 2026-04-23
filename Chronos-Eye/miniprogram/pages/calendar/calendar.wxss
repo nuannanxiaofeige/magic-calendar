@@ -1,8 +1,10 @@
 /* 容器 */
 .container {
   padding: 20rpx;
-  background: #f5f6fa;
+  background: transparent;
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 /* 头部 */

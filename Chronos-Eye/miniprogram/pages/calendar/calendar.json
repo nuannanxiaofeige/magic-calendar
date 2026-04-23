@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "日历",
-  "usingComponents": {}
+  "usingComponents": {
+    "global-bg": "/components/global-bg/global-bg"
+  }
 }

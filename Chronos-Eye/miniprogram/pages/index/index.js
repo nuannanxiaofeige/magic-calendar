@@ -24,8 +24,8 @@ Page({
     // 节日信息
     festivals: [],
 
-    // 当前季节背景
-    seasonBg: '/images/home-bg.png',
+    // 全局背景
+    globalBgUrl: '',
 
     // 每日心情轮播
     moodSwiper: [],
@@ -37,7 +37,7 @@ Page({
     this.loadDate()
     this.loadAlmanac()
     this.loadRecentFestivals()
-    this.setSeasonBackground()
+    this.loadThemeBackground()
     this.loadMoodDiary()
 
     // 每分钟更新时间
@@ -387,28 +387,57 @@ Page({
     })
   },
 
-  // 根据季节设置背景图
+  // 加载主题背景（优先使用云开发主题）
+  loadThemeBackground: function () {
+    const that = this
+    const app = getApp()
+
+    wx.showLoading({ title: '加载中...' })
+
+    // 先获取本地缓存的主题
+    const cachedBg = wx.getStorageSync('globalBgUrl')
+
+    if (cachedBg) {
+      that.setData({ globalBgUrl: cachedBg })
+      wx.hideLoading()
+      return
+    }
+
+    // 如果没有缓存，等待 app.js 初始化完成后再获取
+    setTimeout(() => {
+      const bgUrl = app.globalData.bgImageUrl || wx.getStorageSync('globalBgUrl')
+      if (bgUrl) {
+        that.setData({ globalBgUrl: bgUrl })
+      } else {
+        // 如果云开发没有主题，使用本地季节背景
+        that.setSeasonBackground()
+      }
+      wx.hideLoading()
+    }, 500)
+  },
+
+  // 根据季节设置背景图（本地默认 - 使用渐变色）
   setSeasonBackground: function () {
     const month = new Date().getMonth() + 1
     let seasonBg = ''
 
     // 春季：3-5 月
     if (month >= 3 && month <= 5) {
-      seasonBg = '/images/bg-spring.png'
+      seasonBg = 'linear-gradient(135deg, #A8E6CF 0%, #88D8B0 100%)'
     }
     // 夏季：6-8 月
     else if (month >= 6 && month <= 8) {
-      seasonBg = '/images/bg-summer.png'
+      seasonBg = 'linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%)'
     }
     // 秋季：9-11 月
     else if (month >= 9 && month <= 11) {
-      seasonBg = '/images/bg-autumn.png'
+      seasonBg = 'linear-gradient(135deg, #FFB347 0%, #FFCC33 100%)'
     }
     // 冬季：12-2 月
     else {
-      seasonBg = '/images/bg-winter.png'
+      seasonBg = 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)'
     }
 
-    this.setData({ seasonBg })
+    this.setData({ globalBgUrl: seasonBg })
   }
 })

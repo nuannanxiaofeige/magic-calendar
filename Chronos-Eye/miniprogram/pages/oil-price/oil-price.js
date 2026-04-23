@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     provinces: [
       { name: '北京', code: 'beijing' },
       { name: '天津', code: 'tianjin' },
@@ -69,6 +70,11 @@ Page({
       }
     }
     this.loadData()
+  },
+
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
   },
 
   onPullDownRefresh: function () {

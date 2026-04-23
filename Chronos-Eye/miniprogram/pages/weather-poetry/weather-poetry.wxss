@@ -1,7 +1,9 @@
 .container {
   padding: 30rpx;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E8 100%);
+  background: transparent;
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 /* 天气选择器 */

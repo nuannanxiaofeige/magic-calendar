@@ -1,3 +1,5 @@
+<global-bg src="{{globalBgUrl}}"></global-bg>
+
 <view class="container">
   <!-- 选项卡切换 -->
   <view class="tabs">

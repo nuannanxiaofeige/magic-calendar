@@ -1,7 +1,9 @@
 /*pages/holiday/holiday.wxss*/
 .holiday-container {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: transparent;
+  position: relative;
+  z-index: 1;
 }
 
 /* 固定顶部：分类 Tab + 搜索栏 */

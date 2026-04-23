@@ -2,7 +2,9 @@
 .container {
   padding: 30rpx;
   min-height: 100vh;
-  background: linear-gradient(180deg, #C67D58 0%, #F5F0E8 100%);
+  background: transparent;
+  position: relative;
+  z-index: 1;
 }
 
 /* 题目区域 */

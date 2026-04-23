@@ -1,6 +1,7 @@
 //pages/holiday/holiday.js
 Page({
   data: {
+    globalBgUrl: '',
     tabList: [
       { key: 'festival', name: '法定节假日', category: 'festival' },
       { key: 'public', name: '公众节日', category: 'public' },
@@ -30,6 +31,8 @@ Page({
   },
 
   onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
     // 每次显示页面时刷新数据，但保持当前 tab 的选择
     const currentTab = this.data.currentTab
     const selectedTab = this.data.tabList[currentTab]

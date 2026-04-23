@@ -6,7 +6,8 @@
   <!-- 用户信息头部 -->
   <view class="user-header">
     <view class="avatar-wrapper">
-      <image class="avatar" src="{{avatarUrl || '/images/avatar-default.png'}}" mode="aspectFill"></image>
+      <image class="avatar" src="{{avatarUrl}}" mode="aspectFill" wx:if="{{avatarUrl}}"></image>
+      <view class="avatar-placeholder" wx:else>👤</view>
     </view>
     <view class="user-info">
       <text class="nickname">{{nickname || '微信用户'}}</text>

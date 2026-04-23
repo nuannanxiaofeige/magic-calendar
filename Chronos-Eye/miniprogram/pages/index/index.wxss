@@ -1,11 +1,12 @@
 /* 整体背景 - 动态季节背景 */
 .container {
   min-height: 100vh;
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: transparent;
+  position: relative;
+  z-index: 1;
   padding: 20rpx 30rpx;
+  position: relative;
+  z-index: 1;
 }
 
 /* 顶部日历卡片 - 半透明 */

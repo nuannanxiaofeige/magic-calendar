@@ -1,3 +1,5 @@
+<global-bg src="{{globalBgUrl}}"></global-bg>
+
 <view class="container">
   <!-- 头部月份选择 -->
   <view class="header">

@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     countdowns: []
   },
 
@@ -8,6 +9,8 @@ Page({
   },
 
   onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
     this.loadCountdowns()
   },
 
@@ -59,6 +62,7 @@ Page({
               method: 'POST',
               header: { 'content-type': 'application/json' },
               data: {
+    globalBgUrl: '',
                 user_id: 1,
                 custom_name: res.content,
                 custom_date: selectedDate,
@@ -130,6 +134,7 @@ Page({
                 method: 'POST',
                 header: { 'content-type': 'application/json' },
                 data: {
+    globalBgUrl: '',
                   user_id: 1,
                   custom_name: selected.name,
                   custom_date: selected.date_full || `${year}-${selected.date_month}-${selected.date_day}`,

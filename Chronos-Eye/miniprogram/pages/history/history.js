@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     currentDate: '',
     lunarDate: '',
     events: [], // 改为数组
@@ -13,6 +14,8 @@ Page({
   },
 
   onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
     // 每次显示时刷新数据
     this.loadHistoryEvents()
   },

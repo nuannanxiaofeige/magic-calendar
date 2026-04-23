@@ -1,5 +1,8 @@
 {
   "navigationBarTitleText": "成语填词",
   "enablePullDownRefresh": true,
-  "backgroundTextStyle": "dark"
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "global-bg": "/components/global-bg/global-bg"
+  }
 }

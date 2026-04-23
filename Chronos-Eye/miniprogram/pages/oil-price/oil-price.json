@@ -3,5 +3,8 @@
   "navigationBarBackgroundColor": "#FDFBF7",
   "navigationBarTextStyle": "white",
   "enablePullDownRefresh": true,
-  "backgroundTextStyle": "light"
+  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "global-bg": "/components/global-bg/global-bg"
+  }
 }

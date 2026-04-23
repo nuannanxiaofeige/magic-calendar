@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "黄历"
+  "navigationBarTitleText": "黄历",
+  "usingComponents": {
+    "global-bg": "/components/global-bg/global-bg"
+  }
 }

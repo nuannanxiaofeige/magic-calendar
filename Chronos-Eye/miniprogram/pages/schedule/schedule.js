@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     stats: {
       total: 0,
       completed: 0,
@@ -16,6 +17,8 @@ Page({
   },
 
   onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
     this.loadSchedules()
   },
 
@@ -75,7 +78,8 @@ Page({
         url: `${this.data.baseUrl}/schedules/${id}`,
         method: 'PUT',
         header: { 'content-type': 'application/json' },
-        data: { status: newStatus },
+        data: {
+    globalBgUrl: '', status: newStatus },
         success: function () {
           schedules[index].completed = !schedules[index].completed
           that.setData({ schedules })
@@ -120,6 +124,7 @@ Page({
                 method: 'POST',
                 header: { 'content-type': 'application/json' },
                 data: {
+    globalBgUrl: '',
                   user_id: 1,
                   title: res.content,
                   start_time: selectedDate,

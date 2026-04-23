@@ -2,6 +2,7 @@ const app = getApp()
 
 Page({
   data: {
+    globalBgUrl: '',
     currentQuestion: null,
     optionStatus: ['', '', '', ''], // 每个选项的状态：correct, wrong, disabled
     loading: false,
@@ -18,6 +19,10 @@ Page({
     this.loadQuestion()
   },
 
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
+  },
   onPullDownRefresh: function () {
     this.loadQuestion().then(() => {
       wx.stopPullDownRefresh()

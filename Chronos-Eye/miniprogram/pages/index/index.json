@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "首页",
-  "disableScroll": false
+  "disableScroll": false,
+  "usingComponents": {
+    "global-bg": "/components/global-bg/global-bg"
+  }
 }

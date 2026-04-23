@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     weatherTypes: [
       { type: 1, name: '风', icon: '🌬️' },
       { type: 2, name: '云', icon: '☁️' },
@@ -28,6 +29,11 @@ Page({
 
     // 默认选中当前天气类型（如果有）
     this.initWeatherType()
+  },
+
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
   },
 
   // 初始化天气类型（根据实际天气）
@@ -66,6 +72,7 @@ Page({
     wx.request({
       url: `${app.globalData.baseUrl}/weather-poetry`,
       data: {
+    globalBgUrl: '',
         type: this.data.selectedType || '' // 空则随机
       },
       success: function (res) {

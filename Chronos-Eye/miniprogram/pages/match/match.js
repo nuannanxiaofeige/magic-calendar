@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     mode: 'double', // 'double' 或 'single'
     showSelector: false,
     selectorTarget: 1, // 1 或 2
@@ -29,6 +30,11 @@ Page({
       sign1Data: this.data.constellations[0],
       sign2Data: this.data.constellations[1]
     })
+  },
+
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
   },
 
   // 切换模式

@@ -1,5 +1,6 @@
 Page({
   data: {
+    globalBgUrl: '',
     currentTab: 0,
     startDate: '',
     endDate: '',
@@ -8,6 +9,11 @@ Page({
     calcDays: '',
     dateResult: '',
     Math: Math
+  },
+
+  onShow: function () {
+    const app = getApp()
+    app.applyGlobalBackground(this)
   },
 
   switchTab: function(e) {
