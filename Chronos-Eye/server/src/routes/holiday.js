@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const holidayController = require('../controllers/holidayController')
+const authMiddleware = require('../middleware/auth')
 
 // 获取下一个节假日 (放在 /:id 之前，避免被拦截)
 router.get('/next', holidayController.getNextHoliday)
@@ -26,17 +27,17 @@ router.get('/:id', holidayController.getHolidayById)
 // 获取倒计时列表
 router.get('/countdown/list', holidayController.getCountdownList)
 
-// 添加倒计时
-router.post('/countdown/add', holidayController.addCountdown)
+// 添加倒计时（需要认证）
+router.post('/countdown/add', authMiddleware, holidayController.addCountdown)
 
-// 更新倒计时
-router.put('/countdown/:id', holidayController.updateCountdown)
+// 更新倒计时（需要认证）
+router.put('/countdown/:id', authMiddleware, holidayController.updateCountdown)
 
-// 删除倒计时
-router.delete('/countdown/:id', holidayController.deleteCountdown)
+// 删除倒计时（需要认证）
+router.delete('/countdown/:id', authMiddleware, holidayController.deleteCountdown)
 
-// 更新倒计时排序
-router.put('/countdown/sort', holidayController.sortCountdowns)
+// 更新倒计时排序（需要认证）
+router.put('/countdown/sort', authMiddleware, holidayController.sortCountdowns)
 
 // 获取指定日期的节假日
 router.get('/date/:date', holidayController.getHolidaysByDate)

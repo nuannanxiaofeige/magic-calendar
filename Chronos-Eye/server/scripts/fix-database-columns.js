@@ -14,10 +14,10 @@ async function fixDatabaseColumns() {
     // 连接数据库
     console.log('正在连接数据库...')
     connection = await mysql.createConnection({
-      host: process.env.DB_HOST || '47.102.152.82',
+      host: process.env.DB_HOST || 'localhost',
       port: process.env.DB_PORT || 3306,
       user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '_kIjZ9iVb@nt',
+      password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'chronos_eye',
       multipleStatements: true // 允许执行多条 SQL 语句
     })

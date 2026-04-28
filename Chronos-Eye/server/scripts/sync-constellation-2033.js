@@ -5,6 +5,7 @@
 
 require('dotenv').config()
 const mysql = require('mysql2/promise')
+const dbConfig = require('./db-config')
 const https = require('https')
 
 const signs = [
@@ -18,7 +19,7 @@ const signMap = {
   'sagittarius': '射手座', 'capricorn': '摩羯座', 'aquarius': '水瓶座', 'pisces': '双鱼座'
 }
 
-const TIANAPI_KEY = process.env.TIANAPI_KEY || '30b92001a007855fe7ea7328e8754e2a'
+const TIANAPI_KEY = process.env.TIANAPI_KEY || ''
 
 async function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -150,13 +151,7 @@ async function saveConstellationFortune(connection, fortune, dateStr) {
 async function main() {
   console.log('========== 同步 2033 年星座运势数据 ==========')
 
-  const connection = await mysql.createConnection({
-    host: '47.102.152.82',
-    port: 3306,
-    user: 'root',
-    password: '_kIjZ9iVb@nt',
-    database: 'chronos_eye'
-  })
+  const connection = await mysql.createConnection(dbConfig)
 
   console.log('数据库连接成功!')
 

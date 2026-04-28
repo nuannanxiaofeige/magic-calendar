@@ -1,6 +1,7 @@
 require('dotenv').config()
 const mysql = require('mysql2')
 const path = require('path')
+const logger = require('../utils/logger')
 
 // MySQL 配置
 const mysqlConfig = {
@@ -395,7 +396,7 @@ async function initMySQL() {
 
     // 测试连接
     const connection = await mysqlPool.promise().getConnection()
-    console.log('MySQL 数据库连接成功')
+    logger.log('MySQL 数据库连接成功')
 
     // 创建表
     await connection.query(createTablesSQL)
@@ -416,7 +417,7 @@ async function initMySQL() {
     await connection.query(createTiangouDiarySQL)
     await connection.query(createWorkerDiarySQL)
 
-    console.log('MySQL 数据表创建完成')
+    logger.log('MySQL 数据表创建完成')
 
     // 检查是否需要初始化示例数据
     const [rows] = await connection.query('SELECT COUNT(*) as count FROM holidays')
@@ -427,7 +428,7 @@ async function initMySQL() {
     // 检查打工者日记表是否有数据
     const [workerRows] = await connection.query('SELECT COUNT(*) as count FROM worker_diary')
     if (!workerRows[0] || workerRows[0].count === 0) {
-      console.log('正在初始化打工者日记数据...')
+      logger.log('正在初始化打工者日记数据...')
       await connection.query(`INSERT INTO worker_diary (content) VALUES
         ('早安，打工人！今天也要加油搬砖哦～'),
         ('上班就是喜欢摸鱼，工资就是精神损失费。'),
@@ -450,11 +451,11 @@ async function initMySQL() {
         ('上班就是为了证明自己不上班会饿死。'),
         ('打工人的日常：一边抱怨上班累，一边努力上班。')
       `)
-      console.log('打工者日记数据初始化完成')
+      logger.log('打工者日记数据初始化完成')
     }
 
     connection.release()
-    console.log('MySQL 数据库初始化完成')
+    logger.log('MySQL 数据库初始化完成')
   } catch (error) {
     console.error('MySQL 数据库初始化失败:', error.message)
     throw error
@@ -463,7 +464,7 @@ async function initMySQL() {
 
 // 初始化示例数据
 async function initSampleData(connection) {
-  console.log('正在初始化 MySQL 示例数据...')
+  logger.log('正在初始化 MySQL 示例数据...')
 
   // 法定节假日
   await connection.query(`INSERT INTO holidays (name, type, date_full, is_official, official_days, description, customs) VALUES
@@ -569,7 +570,7 @@ async function initSampleData(connection) {
     ('大寒', 24, 12, 20, '大寒是一年中最冷的时节，严寒酷冷，风雪交加。大寒后冬季即将结束，春天即将来临。', '一候鸡乳，二候征鸟厉疾，三候水泽腹坚。母鸡开始孵蛋；猛禽捕食更加凶猛；水域完全冻结。', '蒸酿糯米饭：食用温热糯米饭，御寒保暖。除尘：大扫除，迎接新年。赶集：采购年货，准备过年。', '大寒时节阴寒极盛，宜温阳补阳。可食用温热食物，如羊肉、狗肉、辣椒等。注意全身保暖，保持心情舒畅。', '蜡树银山炫皎光，朔风独啸静三江。老农犹喜高天雪，况有来年麦果香。')
   `)
 
-  console.log('MySQL 示例数据初始化完成')
+  logger.log('MySQL 示例数据初始化完成')
 }
 
 // 主初始化函数

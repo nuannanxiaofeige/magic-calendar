@@ -106,7 +106,7 @@ router.get('/list/all', async (req, res) => {
     console.error('批量查询油价失败:', error.message)
     res.json({
       success: false,
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 })
@@ -127,7 +127,7 @@ router.get('/international', async (req, res) => {
     console.error('查询国际原油失败:', error.message)
     res.json({
       success: false,
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 })
@@ -149,7 +149,7 @@ router.get('/history', async (req, res) => {
     console.error('查询调整历史失败:', error.message)
     res.json({
       success: false,
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 })
@@ -252,7 +252,7 @@ print(json.dumps(result))
     console.error('获取下次调价日期失败:', error.message)
     res.json({
       success: false,
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 })

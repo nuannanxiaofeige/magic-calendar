@@ -1,98 +1,122 @@
-// Jenkinsfile for Chronos-Eye 项目
-// 自动化部署 Pipeline
+// Jenkinsfile for Chronos-Eye Docker 自动化部署
+//
+// 前置要求：在 Jenkins 凭证管理中配置以下凭据
+//   - server-deploy-key: SSH 部署密钥
+//   - server-ip: 服务器 IP 地址
+//   - docker-registry-user: 镜像仓库用户名（可选，用本地镜像可不配）
+//   - docker-registry-pass: 镜像仓库密码（可选）
+//
+// 服务器需预装：Docker + Docker Compose
+//
+// 部署流程：
+//   1. 拉取最新代码
+//   2. 构建 Docker 镜像
+//   3. 推送镜像（或本地构建）
+//   4. SSH 到服务器，拉取镜像 + 启动容器
+//   5. .env 文件在服务器上独立维护，不进 Git
 
 pipeline {
     agent any
 
-    tools {
-        nodejs 'NodeJS-18'
-    }
-
     environment {
-        SERVER_IP = '47.102.152.82'
+        SERVER_IP  = credentials('server-ip')
         SERVER_USER = 'root'
-        SERVER_DIR = '/root/chronos-eye/server'
+        SERVER_DIR = '/opt/chronos-eye'
+        IMAGE_NAME = 'chronos-eye-server'
+        IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
     stages {
-        stage('Checkout') {
+        stage('📦 拉取代码') {
             steps {
-                echo '📦 检出代码...'
                 checkout scm
             }
         }
 
-        stage('Install Dependencies') {
+        stage('🔨 构建 Docker 镜像') {
             steps {
-                echo '📥 安装依赖...'
                 dir('server') {
-                    sh 'npm install --production'
+                    sh """
+                        docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                        docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
+                    """
                 }
             }
         }
 
-        stage('Deploy to Server') {
+        stage('🚀 部署到服务器') {
             steps {
-                echo '🚀 部署到服务器...'
-                sshagent(['server-deploy-key']) {
-                    sh '''
-                        echo "上传代码到服务器 ${SERVER_IP}..."
+                sh """
+                    # 导出 Docker 镜像为 tar（免 registry 方案）
+                    docker save ${IMAGE_NAME}:${IMAGE_TAG} | gzip > /tmp/${IMAGE_NAME}-${IMAGE_TAG}.tar.gz
 
-                        # 上传代码
-                        scp -r server/* ${SERVER_USER}@${SERVER_IP}:${SERVER_DIR}/
+                    # 上传镜像 + docker-compose 到服务器
+                    scp /tmp/${IMAGE_NAME}-${IMAGE_TAG}.tar.gz ${SERVER_USER}@${SERVER_IP}:/tmp/
 
-                        # 执行远程部署命令
-                        ssh ${SERVER_USER}@${SERVER_IP} << 'ENDSSH'
-                        cd /root/chronos-eye/server
+                    # 上传 docker-compose.yml 和 .env.prod 模板
+                    scp docker-compose.yml ${SERVER_USER}@${SERVER_IP}:${SERVER_DIR}/
+                    scp server/.env.prod ${SERVER_USER}@${SERVER_IP}:${SERVER_DIR}/.env.prod 2>/dev/null || true
 
-                        # 创建 .env 文件
-                        cat > .env << 'EOF'
-PORT=3000
-DB_TYPE=mysql
-DB_HOST=47.102.152.82
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=_kIjZ9iVb@nt
-DB_NAME=chronos_eye
-JWT_SECRET=chronos-eye-jwt-secret-2026
-JWT_EXPIRES_IN=7d
-NODE_ENV=production
-TIANAPI_KEY=30b92001a007855fe7ea7328e8754e2a
-EOF
+                    # SSH 到服务器执行部署（.env 由服务器维护，不覆盖）
+                    ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} << 'ENDSSH'
+                    set -e
 
-                        # 安装依赖
-                        npm install --production
+                    cd ${SERVER_DIR}
 
-                        # 重启服务
-                        pm2 restart chronos-eye 2>/dev/null || pm2 start src/index.js --name chronos-eye
-                        pm2 save
+                    # 创建目录
+                    mkdir -p server
 
-                        echo "部署完成！"
-                        pm2 status
-                        ENDSSH
-                    '''
-                }
-            }
-        }
+                    # 加载镜像
+                    docker load < /tmp/${IMAGE_NAME}-${IMAGE_TAG}.tar.gz
 
-        stage('Verify') {
-            steps {
-                echo '✅ 验证部署...'
-                sh '''
-                    if curl -s --connect-timeout 5 http://47.102.152.82:3000/api/ > /dev/null; then
-                        echo "API 验证成功！"
-                    else
-                        echo "API 验证失败，但部署已完成"
+                    # 检查 .env 是否存在，不存在则复制模板
+                    if [ ! -f .env ]; then
+                        if [ -f .env.prod ]; then
+                            echo "⚠️  .env 不存在，使用 .env.prod 模板"
+                            echo "⚠️  请编辑 .env 填入真实密钥后重新部署"
+                            cp .env.prod .env
+                        fi
                     fi
-                '''
+
+                    # 导入环境变量并启动
+                    docker compose up -d
+
+                    # 清理旧镜像
+                    docker image prune -f
+
+                    # 清理临时文件
+                    rm -f /tmp/${IMAGE_NAME}-${IMAGE_TAG}.tar.gz
+
+                    echo "✅ 部署完成"
+                    docker compose ps
+                    ENDSSH
+
+                    # 清理本地临时文件
+                    rm -f /tmp/${IMAGE_NAME}-${IMAGE_TAG}.tar.gz
+                """
+            }
+        }
+
+        stage('✅ 验证部署') {
+            steps {
+                sh """
+                    echo "等待服务启动..."
+                    sleep 10
+                    STATUS=\$(curl -s -o /dev/null -w "%{http_code}" http://${SERVER_IP}:3000/health 2>/dev/null || echo "000")
+                    if [ "\$STATUS" = "200" ]; then
+                        echo "✅ 健康检查通过"
+                    else
+                        echo "⚠️ 健康检查未通过 (HTTP \$STATUS)，请手动检查"
+                    fi
+                """
             }
         }
     }
 
     post {
         always {
-            echo '📊 构建完成'
             cleanWs()
+            sh 'rm -f /tmp/${IMAGE_NAME}-*.tar.gz 2>/dev/null || true'
         }
         success {
             echo '✅ 部署成功！'

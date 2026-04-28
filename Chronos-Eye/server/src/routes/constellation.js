@@ -24,6 +24,11 @@ const ALL_SIGNS = [
   'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'
 ]
 
+// 星座名校验
+function isValidSign(sign) {
+  return ALL_SIGNS.includes(sign?.toLowerCase())
+}
+
 /**
  * 获取指定星座的完整运势（包含今日、本周、本月、年度）
  * GET /api/constellation/:sign/full
@@ -31,6 +36,11 @@ const ALL_SIGNS = [
 router.get('/:sign/full', async (req, res) => {
   try {
     const { sign } = req.params
+
+    if (!isValidSign(sign)) {
+      return res.json({ success: false, message: '无效的星座参数' })
+    }
+
     const dateStr = new Date().toISOString().split('T')[0]
 
     // 从数据库获取数据
@@ -74,6 +84,11 @@ router.get('/:sign/full', async (req, res) => {
 router.get('/:sign/:dateType', async (req, res) => {
   try {
     const { sign, dateType } = req.params
+
+    if (!isValidSign(sign)) {
+      return res.json({ success: false, message: '无效的星座参数' })
+    }
+
     const daysOffset = dateTypeMap[dateType] || 0
 
     // 计算目标日期
@@ -175,7 +190,7 @@ router.get('/all/today', async (req, res) => {
     }
   } catch (error) {
     console.error('批量获取星座运势失败:', error.message)
-    res.json({ success: false, error: error.message })
+    res.json({ success: false, error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误' })
   }
 })
 
@@ -686,7 +701,7 @@ router.get('/match', async (req, res) => {
     }
   } catch (error) {
     console.error('获取星座配对失败:', error.message)
-    res.json({ success: false, error: error.message })
+    res.json({ success: false, error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误' })
   }
 })
 
@@ -721,7 +736,7 @@ router.get('/match/:sign/all', async (req, res) => {
     }
   } catch (error) {
     console.error('批量获取星座配对失败:', error.message)
-    res.json({ success: false, error: error.message })
+    res.json({ success: false, error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误' })
   }
 })
 
@@ -752,7 +767,7 @@ router.get('/match/all', async (req, res) => {
     }
   } catch (error) {
     console.error('获取全部星座配对失败:', error.message)
-    res.json({ success: false, error: error.message })
+    res.json({ success: false, error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误' })
   }
 })
 

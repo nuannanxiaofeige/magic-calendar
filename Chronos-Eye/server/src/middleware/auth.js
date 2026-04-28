@@ -14,33 +14,14 @@ function authMiddleware(req, res, next) {
   }
 
   try {
-    // 验证 Token（简化版，实际应使用 jwt.verify）
-    // 格式：mock_token_{userId}_{timestamp}
-    if (token.startsWith('mock_token_')) {
-      const parts = token.split('_')
-      if (parts.length >= 3) {
-        const userId = parseInt(parts[2])
-        if (!isNaN(userId)) {
-          req.userId = userId
-          return next()
-        }
-      }
-    }
-
-    // 如果使用真实 JWT，解注释下面代码：
-    // const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    // req.userId = decoded.userId
-    // next()
-
-    return res.status(401).json({
-      success: false,
-      message: '无效的认证令牌'
-    })
+    // 验证 JWT Token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    req.userId = decoded.userId
+    next()
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: '认证令牌已过期',
-      error: error.message
+      message: '认证令牌无效或已过期'
     })
   }
 }

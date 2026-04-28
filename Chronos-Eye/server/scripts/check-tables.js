@@ -1,12 +1,6 @@
 const mysql = require('mysql2/promise');
 
-const dbConfig = {
-  host: '47.102.152.82',
-  port: 3306,
-  user: 'root',
-  password: '_kIjZ9iVb@nt',
-  database: 'chronos_eye'
-};
+const dbConfig = require('./db-config')
 
 async function checkAllTables() {
   let connection;

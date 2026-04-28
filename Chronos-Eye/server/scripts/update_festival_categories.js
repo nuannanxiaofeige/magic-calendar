@@ -1,14 +1,9 @@
 // 更新节日分类数据
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise')
+const dbConfig = require('./db-config');
 
 async function updateFestivalCategories() {
-  const connection = await mysql.createConnection({
-    host: '47.102.152.82',
-    port: 3306,
-    user: 'root',
-    password: '_kIjZ9iVb@nt',
-    database: 'chronos_eye'
-  });
+  const connection = await mysql.createConnection(dbConfig);
 
   // 添加 category 字段
   try {

@@ -5,6 +5,7 @@
 
 require('dotenv').config()
 const mysql = require('mysql2/promise')
+const dbConfig = require('./db-config')
 const tianapi = require('../src/services/tianapi')
 
 const signs = [
@@ -21,13 +22,7 @@ async function delay(ms) {
 async function main() {
   console.log('========== 同步 2032 年星座运势数据 ==========')
 
-  const connection = await mysql.createConnection({
-    host: '47.102.152.82',
-    port: 3306,
-    user: 'root',
-    password: '_kIjZ9iVb@nt',
-    database: 'chronos_eye'
-  })
+  const connection = await mysql.createConnection(dbConfig)
 
   console.log('数据库连接成功!')
 

@@ -117,7 +117,7 @@ async function getWorkerDiary(req, res) {
     res.status(500).json({
       success: false,
       message: '获取打工者日记失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -147,7 +147,7 @@ async function checkWorkday(req, res) {
     res.status(500).json({
       success: false,
       message: '检查工作日失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }

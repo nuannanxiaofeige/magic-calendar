@@ -33,7 +33,7 @@ async function getHistoryTodayList(req, res) {
     res.status(500).json({
       success: false,
       message: '获取历史上的今天列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -75,7 +75,7 @@ async function getHistoryToday(req, res) {
     res.status(500).json({
       success: false,
       message: '获取历史上的今天失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -150,7 +150,7 @@ async function getHistoryEventById(req, res) {
     res.status(500).json({
       success: false,
       message: '获取历史事件详情失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -199,7 +199,7 @@ async function getHistoryByCategory(req, res) {
     res.status(500).json({
       success: false,
       message: '按分类获取历史事件失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -284,7 +284,7 @@ async function searchHistoryEvents(req, res) {
     res.status(500).json({
       success: false,
       message: '搜索历史事件失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -313,7 +313,7 @@ async function getFeaturedHistory(req, res) {
     res.status(500).json({
       success: false,
       message: '获取热门历史事件失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -346,7 +346,7 @@ async function addHistoryEvent(req, res) {
     res.status(500).json({
       success: false,
       message: '添加历史事件失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }

@@ -115,7 +115,7 @@ async function getAllHolidays(req, res) {
     res.status(500).json({
       success: false,
       message: '获取节日大全列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -148,7 +148,7 @@ async function getHolidays(req, res) {
     res.status(500).json({
       success: false,
       message: '获取节假日列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -189,7 +189,7 @@ async function getHolidayById(req, res) {
     res.status(500).json({
       success: false,
       message: '获取节假日详情失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -252,7 +252,7 @@ async function getCountdownList(req, res) {
     res.status(500).json({
       success: false,
       message: '获取倒计时列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -287,7 +287,7 @@ async function addCountdown(req, res) {
     res.status(500).json({
       success: false,
       message: '添加倒计时失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -313,7 +313,7 @@ async function updateCountdown(req, res) {
     res.status(500).json({
       success: false,
       message: '更新倒计时失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -333,7 +333,7 @@ async function deleteCountdown(req, res) {
     res.status(500).json({
       success: false,
       message: '删除倒计时失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -356,7 +356,7 @@ async function sortCountdowns(req, res) {
     res.status(500).json({
       success: false,
       message: '排序倒计时失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -385,7 +385,7 @@ async function getHolidaysByDate(req, res) {
     res.status(500).json({
       success: false,
       message: '获取指定日期节假日失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -414,7 +414,7 @@ async function getHolidaysByMonth(req, res) {
     res.status(500).json({
       success: false,
       message: '获取本月节假日失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -456,7 +456,7 @@ async function getRecentFestivals(req, res) {
     res.status(500).json({
       success: false,
       message: '获取最近节日列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -577,7 +577,7 @@ async function getNextHoliday(req, res) {
     res.status(500).json({
       success: false,
       message: '获取下一个节假日失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -635,7 +635,7 @@ async function getTodayLunarFestival(req, res) {
     res.status(500).json({
       success: false,
       message: '获取今日农历节日失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -660,7 +660,7 @@ async function getLunarFestivals(req, res) {
     res.status(500).json({
       success: false,
       message: '获取农历节日列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }

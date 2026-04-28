@@ -15,10 +15,8 @@ async function getCurrentTheme() {
       .limit(1)
       .get()
 
-    console.log('查询主题配置结果:', res.data)
     if (res.data && res.data.length > 0) {
       const theme = res.data[0]
-      console.log('当前主题 background 字段:', theme.background)
       return theme
     }
     return null
@@ -34,18 +32,15 @@ async function getCurrentTheme() {
  */
 async function getBackgroundUrl(fileId) {
   if (!fileId) {
-    console.log("getBackgroundUrl: fileId 为空")
     return null
   }
 
   // 去除可能的空格
   fileId = String(fileId).trim()
-  console.log("getBackgroundUrl: 请求 fileId =", fileId)
   try {
     const res = await wx.cloud.getTempFileURL({
       fileList: [fileId]
     })
-    console.log("getBackgroundUrl: 云存储返回结果 =", res)
 
     if (res.fileList[0].tempFileURL) {
       return res.fileList[0].tempFileURL
@@ -98,7 +93,7 @@ async function switchTheme(themeId) {
   try {
     const db = wx.cloud.database()
 
-    // 先关闭所有主题
+    // 关闭所有主题
     await db.collection('theme_config').where({ isActive: true }).update({
       data: { isActive: false }
     })
@@ -108,17 +103,17 @@ async function switchTheme(themeId) {
       data: { isActive: true }
     })
 
-    // 返回新的背景URL
+    // 获取新的主题配置
     const config = await getCurrentTheme()
     if (config && config.background) {
       const bgUrl = await getBackgroundUrl(config.background)
       return { success: true, bgUrl: bgUrl || '', config }
+    } else {
+      return { success: true, bgUrl: '', config: null }
     }
-
-    return { success: true, bgUrl: '', config: null }
   } catch (e) {
     console.error('切换主题失败', e)
-    return { success: false, error: e }
+    return { success: false, error: e.message }
   }
 }
 
@@ -152,34 +147,32 @@ async function getThemeByDate(type, value) {
 }
 
 /**
- * 上传背景图片到云存储
+ * 上传背景图片到云存储并添加主题配置
  * @param {string} tempFilePath - 临时文件路径
  * @param {object} themeData - 主题配置数据
  */
 async function uploadBackground(tempFilePath, themeData) {
   try {
-    // 1. 上传到云存储
+    const cloudPath = `backgrounds/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.png`
     const uploadResult = await wx.cloud.uploadFile({
-      cloudPath: `backgrounds/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.png`,
+      cloudPath: cloudPath,
       filePath: tempFilePath
     })
 
-    const fileId = uploadResult.fileID
-
-    // 2. 添加主题配置到数据库
+    // 添加到主题配置集合
     const db = wx.cloud.database()
     await db.collection('theme_config').add({
       data: {
         ...themeData,
-        background: fileId,
+        background: uploadResult.fileID,
         createTime: db.serverDate()
       }
     })
 
-    return { success: true, fileId }
+    return { success: true, fileId: uploadResult.fileID }
   } catch (e) {
     console.error('上传背景失败', e)
-    return { success: false, error: e }
+    return { success: false, error: e.message }
   }
 }
 

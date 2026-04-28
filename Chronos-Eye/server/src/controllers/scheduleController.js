@@ -46,7 +46,7 @@ async function getSchedules(req, res) {
     res.status(500).json({
       success: false,
       message: '获取日程列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -73,7 +73,7 @@ async function getScheduleById(req, res) {
     res.status(500).json({
       success: false,
       message: '获取日程详情失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -118,7 +118,7 @@ async function createSchedule(req, res) {
     res.status(500).json({
       success: false,
       message: '创建日程失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -156,7 +156,7 @@ async function updateSchedule(req, res) {
     res.status(500).json({
       success: false,
       message: '更新日程失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -176,7 +176,7 @@ async function deleteSchedule(req, res) {
     res.status(500).json({
       success: false,
       message: '删除日程失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -208,7 +208,7 @@ async function batchUpdateStatus(req, res) {
     res.status(500).json({
       success: false,
       message: '批量更新日程状态失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -257,7 +257,7 @@ async function getMonthStats(req, res) {
     res.status(500).json({
       success: false,
       message: '获取月度统计失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }

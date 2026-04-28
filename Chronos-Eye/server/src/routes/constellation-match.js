@@ -6,6 +6,7 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../config/database')
+const authMiddleware = require('../middleware/auth')
 const { getConstellationMatch, getAllConstellationMatches, constellationMap, generateLocalConstellationMatch } = require('../services/tianapi')
 
 // 12 星座列表
@@ -13,6 +14,11 @@ const ALL_SIGNS = [
   'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
   'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'
 ]
+
+// 星座名校验
+function isValidSign(sign) {
+  return ALL_SIGNS.includes(sign?.toLowerCase())
+}
 
 /**
  * 星座配对查询
@@ -24,6 +30,14 @@ router.get('/match', async (req, res) => {
 
     if (!sign1) {
       return res.json({ success: false, message: '请提供 sign1 参数' })
+    }
+
+    if (!isValidSign(sign1)) {
+      return res.json({ success: false, message: '无效的星座参数' })
+    }
+
+    if (sign2 && !isValidSign(sign2)) {
+      return res.json({ success: false, message: '无效的星座参数' })
     }
 
     // 将英文星座名转换为中文
@@ -87,7 +101,7 @@ router.get('/match', async (req, res) => {
     }
   } catch (error) {
     console.error('获取星座配对失败:', error.message)
-    res.json({ success: false, message: error.message })
+    res.json({ success: false, message: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误' })
   }
 })
 
@@ -124,7 +138,7 @@ async function saveMatchToDB(match) {
  * GET /api/constellation-match/cache-all
  * 注意：此操作会调用大量 API，建议仅在后台任务中使用
  */
-router.get('/cache-all', async (req, res) => {
+router.get('/cache-all', authMiddleware, async (req, res) => {
   try {
     const results = []
 
@@ -138,7 +152,7 @@ router.get('/cache-all', async (req, res) => {
     res.json({ success: true, data: results })
   } catch (error) {
     console.error('批量缓存星座配对失败:', error.message)
-    res.json({ success: false, message: error.message })
+    res.json({ success: false, message: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误' })
   }
 })
 
@@ -192,7 +206,8 @@ router.get('/list', async (req, res) => {
       }))
     res.json({ success: true, data })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error('获取星座列表失败:', error.message)
+    res.json({ success: false, message: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误' })
   }
 })
 

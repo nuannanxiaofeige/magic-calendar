@@ -6,6 +6,7 @@
 const { query } = require('../config/database')
 const tianapi = require('./tianapi')
 const dayjs = require('dayjs')
+const logger = require('../utils/logger')
 
 /**
  * 同步指定年份的全年节假日和节气数据到数据库
@@ -17,19 +18,19 @@ async function syncYearData(year) {
       year = dayjs().add(1, 'year').year()
     }
 
-    console.log(`[定时任务] 开始同步 ${year}年 全年数据...`)
+    logger.log(`[定时任务] 开始同步 ${year}年 全年数据...`)
 
     let totalHolidays = 0
     let totalTerms = 0
 
     // 1. 获取全年节假日数据（一次 API 调用）
-    console.log(`[定时任务] 获取 ${year}年 节假日数据...`)
+    logger.log(`[定时任务] 获取 ${year}年 节假日数据...`)
     try {
       const holidayData = await tianapi.getHolidayInfo(year)
       if (holidayData && holidayData.length > 0) {
         await saveHolidayData(holidayData)
         totalHolidays = holidayData.length
-        console.log(`  节假日：${holidayData.length} 条`)
+        logger.log(`  节假日：${holidayData.length} 条`)
       }
     } catch (error) {
       console.error(`  ${year}年节假日获取失败:`, error.message)
@@ -39,19 +40,19 @@ async function syncYearData(year) {
     await new Promise(resolve => setTimeout(resolve, 2000))
 
     // 2. 获取全年节气数据（24 次 API 调用）
-    console.log(`[定时任务] 获取 ${year}年 节气数据...`)
+    logger.log(`[定时任务] 获取 ${year}年 节气数据...`)
     try {
       const termData = await tianapi.getTermInfo(year)
       if (termData && termData.length > 0) {
         await saveTermData(termData, year)
         totalTerms = termData.length
-        console.log(`  节气：${termData.length} 条`)
+        logger.log(`  节气：${termData.length} 条`)
       }
     } catch (error) {
       console.error(`  ${year}年节气获取失败:`, error.message)
     }
 
-    console.log(`[定时任务] ${year}年 数据同步完成，共 ${totalHolidays} 条节假日，${totalTerms} 条节气`)
+    logger.log(`[定时任务] ${year}年 数据同步完成，共 ${totalHolidays} 条节假日，${totalTerms} 条节气`)
     return true
   } catch (error) {
     console.error('[定时任务] 同步数据失败:', error)
@@ -73,7 +74,7 @@ async function saveHolidayData(holidayData, year) {
     [year, 'festival']
   )
   deleteCount = deleteResult.affectedRows || 0
-  console.log(`  已删除 ${deleteCount} 条 ${year} 年的旧节假日数据`)
+  logger.log(`  已删除 ${deleteCount} 条 ${year} 年的旧节假日数据`)
 
   for (const holiday of holidayData) {
     // 验证日期格式
@@ -163,7 +164,7 @@ async function saveHolidayData(holidayData, year) {
     }
   }
 
-  console.log(`[保存节假日] 新增 ${insertCount} 条，更新 ${updateCount} 条`)
+  logger.log(`[保存节假日] 新增 ${insertCount} 条，更新 ${updateCount} 条`)
 }
 
 /**
@@ -233,7 +234,7 @@ function startScheduler() {
   tomorrow2am.setHours(2, 0, 0, 0)
   const firstDelay = tomorrow2am.getTime() - now
 
-  console.log(`[定时任务] 将在 ${Math.floor(firstDelay / 1000 / 60)} 分钟后开始检查`)
+  logger.log(`[定时任务] 将在 ${Math.floor(firstDelay / 1000 / 60)} 分钟后开始检查`)
 
   // 首次检查
   setTimeout(() => {
@@ -248,16 +249,16 @@ function startScheduler() {
  */
 async function checkAndSync() {
   const today = dayjs()
-  console.log(`[定时任务] 检查是否执行同步，当前日期：${today.format('YYYY-MM-DD')}`)
+  logger.log(`[定时任务] 检查是否执行同步，当前日期：${today.format('YYYY-MM-DD')}`)
 
   // 如果是每月 25 日及以后，执行同步
   if (isEndOfMonth()) {
-    console.log('[定时任务] 检测到月底，开始执行数据同步')
+    logger.log('[定时任务] 检测到月底，开始执行数据同步')
     // 每月底同步下一年全年数据
     const nextYear = dayjs().add(1, 'year').year()
     await syncYearData(nextYear)
   } else {
-    console.log('[定时任务] 非月底，跳过同步')
+    logger.log('[定时任务] 非月底，跳过同步')
   }
 }
 
@@ -275,12 +276,12 @@ async function manualSync(year) {
       targetYear = parseInt(year)
     }
 
-    console.log(`[手动同步] 开始同步 ${targetYear}年 全年数据...`)
+    logger.log(`[手动同步] 开始同步 ${targetYear}年 全年数据...`)
 
     // 调用全年同步函数
     await syncYearData(targetYear)
 
-    console.log(`[手动同步] ${targetYear}年 数据同步完成`)
+    logger.log(`[手动同步] ${targetYear}年 数据同步完成`)
     return true
   } catch (error) {
     console.error('[手动同步] 同步数据失败:', error)
@@ -306,7 +307,7 @@ async function syncMonthlyConstellation(year, month, startDay = 1, maxApiCalls =
     }
 
     const monthStr = `${year}-${String(month).padStart(2, '0')}`
-    console.log(`[定时任务] 开始同步 ${monthStr} 星座运势数据...`)
+    logger.log(`[定时任务] 开始同步 ${monthStr} 星座运势数据...`)
 
     // 获取该月的所有日期
     const daysInMonth = dayjs(`${year}-${month}-01`).daysInMonth()
@@ -354,20 +355,20 @@ async function syncMonthlyConstellation(year, month, startDay = 1, maxApiCalls =
 
           // 检查是否达到 API 调用上限
           if (maxApiCalls > 0 && apiCallCount >= maxApiCalls) {
-            console.log(`  ${dateStr} ${sign}: 已达到 API 调用上限 (${apiCallCount} 次)，停止同步`)
+            logger.log(`  ${dateStr} ${sign}: 已达到 API 调用上限 (${apiCallCount} 次)，停止同步`)
             // 返回当前结果
             const totalNeeded = dates.length * signs.length
             const cachedCount = totalNeeded - apiCallCount
-            console.log(`[定时任务] ${monthStr} 星座运势同步完成（达到 API 上限）`)
-            console.log(`  总数据量：${totalNeeded} 条`)
-            console.log(`  新增：${successCount} 条`)
-            console.log(`  缓存命中：${cachedCount} 条`)
-            console.log(`  API 调用：${apiCallCount} 次`)
-            console.log(`  失败：${failCount} 条`)
+            logger.log(`[定时任务] ${monthStr} 星座运势同步完成（达到 API 上限）`)
+            logger.log(`  总数据量：${totalNeeded} 条`)
+            logger.log(`  新增：${successCount} 条`)
+            logger.log(`  缓存命中：${cachedCount} 条`)
+            logger.log(`  API 调用：${apiCallCount} 次`)
+            logger.log(`  失败：${failCount} 条`)
             return { success: successCount, fail: failCount, cached: cachedCount, apiCalls: apiCallCount, limitReached: true }
           }
 
-          console.log(`  ${dateStr} ${sign}: ${fortune ? '成功' : '失败'} (API 调用：${apiCallCount})`)
+          logger.log(`  ${dateStr} ${sign}: ${fortune ? '成功' : '失败'} (API 调用：${apiCallCount})`)
 
           // 每次 API 调用后延迟 200ms，避免频率超限
           await new Promise(resolve => setTimeout(resolve, 200))
@@ -381,12 +382,12 @@ async function syncMonthlyConstellation(year, month, startDay = 1, maxApiCalls =
     const totalNeeded = dates.length * signs.length
     const cachedCount = totalNeeded - apiCallCount
 
-    console.log(`[定时任务] ${monthStr} 星座运势同步完成`)
-    console.log(`  总数据量：${totalNeeded} 条`)
-    console.log(`  新增：${successCount} 条`)
-    console.log(`  缓存命中：${cachedCount} 条`)
-    console.log(`  API 调用：${apiCallCount} 次`)
-    console.log(`  失败：${failCount} 条`)
+    logger.log(`[定时任务] ${monthStr} 星座运势同步完成`)
+    logger.log(`  总数据量：${totalNeeded} 条`)
+    logger.log(`  新增：${successCount} 条`)
+    logger.log(`  缓存命中：${cachedCount} 条`)
+    logger.log(`  API 调用：${apiCallCount} 次`)
+    logger.log(`  失败：${failCount} 条`)
 
     return { success: successCount, fail: failCount, cached: cachedCount, apiCalls: apiCallCount, limitReached: false }
   } catch (error) {
@@ -516,7 +517,7 @@ function startScheduler() {
   tomorrow2am.setHours(2, 0, 0, 0)
   const firstDelay = tomorrow2am.getTime() - now
 
-  console.log(`[定时任务] 将在 ${Math.floor(firstDelay / 1000 / 60)} 分钟后开始检查`)
+  logger.log(`[定时任务] 将在 ${Math.floor(firstDelay / 1000 / 60)} 分钟后开始检查`)
 
   // 首次检查
   setTimeout(() => {
@@ -527,7 +528,7 @@ function startScheduler() {
 
   // 每月初凌晨 3 点同步星座运势
   const constellationDelay = tomorrow2am.getTime() - now + 60 * 60 * 1000 // 2 点 +1 小时 = 3 点
-  console.log(`[定时任务] 星座运势同步将在 ${Math.floor(constellationDelay / 1000 / 60)} 分钟后开始`)
+  logger.log(`[定时任务] 星座运势同步将在 ${Math.floor(constellationDelay / 1000 / 60)} 分钟后开始`)
 
   setTimeout(async () => {
     await checkAndSyncConstellation()
@@ -545,15 +546,15 @@ function startScheduler() {
 async function checkAndSyncConstellation() {
   const today = dayjs()
   const dateStr = today.format('YYYY-MM-DD')
-  console.log(`[定时任务] 检查星座运势同步，当前日期：${dateStr}`)
+  logger.log(`[定时任务] 检查星座运势同步，当前日期：${dateStr}`)
 
   if (isStartOfMonth()) {
-    console.log('[定时任务] 检测到月初，开始同步当月星座运势')
+    logger.log('[定时任务] 检测到月初，开始同步当月星座运势')
     const year = today.year()
     const month = today.month() + 1
     await syncMonthlyConstellation(year, month)
   } else {
-    console.log('[定时任务] 非月初，跳过星座运势同步')
+    logger.log('[定时任务] 非月初，跳过星座运势同步')
   }
 }
 
@@ -564,9 +565,9 @@ async function checkAndSyncConstellation() {
 async function syncOilPriceData() {
   try {
     const oilPriceSync = require('./oil-price-sync')
-    console.log(`[定时任务] 开始执行油价数据同步，当前日期：${new Date().toISOString()}`)
+    logger.log(`[定时任务] 开始执行油价数据同步，当前日期：${new Date().toISOString()}`)
     const result = await oilPriceSync.syncAllOilData()
-    console.log(`[定时任务] 油价数据同步完成：`, result)
+    logger.log(`[定时任务] 油价数据同步完成：`, result)
     return result
   } catch (error) {
     console.error('[定时任务] 油价数据同步失败:', error)
@@ -581,14 +582,14 @@ async function syncOilPriceData() {
 async function cleanupOldOilPriceData(keepDays = 90) {
   try {
     const { query } = require('../config/database')
-    console.log(`[清理任务] 开始清理 ${keepDays} 天前的油价历史数据...`)
+    logger.log(`[清理任务] 开始清理 ${keepDays} 天前的油价历史数据...`)
 
     const result = await query(`
       DELETE FROM oil_province_price
       WHERE price_date < DATE_SUB(CURDATE(), INTERVAL ? DAY)
     `, [keepDays])
 
-    console.log(`[清理任务] 已删除 ${result.affectedRows} 条历史记录`)
+    logger.log(`[清理任务] 已删除 ${result.affectedRows} 条历史记录`)
     return { success: true, deleted: result.affectedRows }
   } catch (error) {
     console.error('[清理任务] 清理历史数据失败:', error)
@@ -621,9 +622,9 @@ function startOilPriceScheduler() {
 
   const firstDelay = nextSync.getTime() - now.getTime()
 
-  console.log(`[定时任务] 油价同步将在 ${Math.floor(firstDelay / 1000 / 60)} 分钟后首次执行`)
-  console.log(`[定时任务] 下次执行时间：${nextSync.toLocaleString('zh-CN')}`)
-  console.log(`[定时任务] 之后每 6 小时执行一次（00:00, 06:00, 12:00, 18:00）`)
+  logger.log(`[定时任务] 油价同步将在 ${Math.floor(firstDelay / 1000 / 60)} 分钟后首次执行`)
+  logger.log(`[定时任务] 下次执行时间：${nextSync.toLocaleString('zh-CN')}`)
+  logger.log(`[定时任务] 之后每 6 小时执行一次（00:00, 06:00, 12:00, 18:00）`)
 
   // 首次执行
   setTimeout(() => {
@@ -642,14 +643,14 @@ function startOilPriceScheduler() {
 async function cleanupOldDiaryCache(keepDays = 30) {
   try {
     const { query } = require('../config/database')
-    console.log(`[清理任务] 开始清理 ${keepDays} 天前的每日日记缓存...`)
+    logger.log(`[清理任务] 开始清理 ${keepDays} 天前的每日日记缓存...`)
 
     const result = await query(`
       DELETE FROM daily_diary_cache
       WHERE date < DATE_SUB(CURDATE(), INTERVAL ? DAY)
     `, [keepDays])
 
-    console.log(`[清理任务] 已删除 ${result.affectedRows} 条每日日记缓存`)
+    logger.log(`[清理任务] 已删除 ${result.affectedRows} 条每日日记缓存`)
     return { success: true, deleted: result.affectedRows }
   } catch (error) {
     console.error('[清理任务] 清理每日日记缓存失败:', error)

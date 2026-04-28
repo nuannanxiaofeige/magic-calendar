@@ -1,14 +1,9 @@
 // 插入农历节日数据
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise')
+const dbConfig = require('./db-config');
 
 async function insertLunarFestivals() {
-  const connection = await mysql.createConnection({
-    host: '47.102.152.82',
-    port: 3306,
-    user: 'root',
-    password: '_kIjZ9iVb@nt',
-    database: 'chronos_eye'
-  });
+  const connection = await mysql.createConnection(dbConfig);
 
   // 删除现有的 lunar 类型数据
   await connection.execute("DELETE FROM holidays WHERE type = 'lunar'");

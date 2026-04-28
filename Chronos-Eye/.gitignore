@@ -1,0 +1,30 @@
+# Environment variables（排除所有真实 env 文件，但保留模板）
+.env
+.env.local
+.env.local.*
+!.env.example
+!.env.dev
+!.env.prod
+
+# IDE settings
+.claude/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+
+# Python
+venv/
+__pycache__/
+*.pyc

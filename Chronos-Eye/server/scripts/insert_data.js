@@ -1,15 +1,10 @@
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise')
+const dbConfig = require('./db-config');
 const fs = require('fs');
 const path = require('path');
 
 async function insertData() {
-  const connection = await mysql.createConnection({
-    host: '47.102.152.82',
-    port: 3306,
-    user: 'root',
-    password: '_kIjZ9iVb@nt',
-    database: 'chronos_eye'
-  });
+  const connection = await mysql.createConnection(dbConfig);
 
   const sqlPath = path.join(__dirname, 'insert_solar_festivals.sql');
   const sql = fs.readFileSync(sqlPath, 'utf8');

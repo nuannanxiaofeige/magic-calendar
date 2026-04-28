@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const historyController = require('../controllers/historyController')
+const authMiddleware = require('../middleware/auth')
 
 // 获取历史上的今天（列表）
 router.get('/today/list', historyController.getHistoryTodayList)
@@ -20,7 +21,7 @@ router.get('/search', historyController.searchHistoryEvents)
 // 获取历史事件详情
 router.get('/event/:id', historyController.getHistoryEventById)
 
-// 添加历史事件（管理员）
-router.post('/event', historyController.addHistoryEvent)
+// 添加历史事件（管理员，需要认证）
+router.post('/event', authMiddleware, historyController.addHistoryEvent)
 
 module.exports = router

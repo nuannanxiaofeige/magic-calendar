@@ -5,6 +5,7 @@ const express = require('express')
 const router = express.Router()
 const calendarController = require('../controllers/calendarController')
 const scheduler = require('../services/scheduler')
+const authMiddleware = require('../middleware/auth')
 
 // 获取指定日期信息
 router.get('/date', calendarController.getDateInfo)
@@ -25,7 +26,7 @@ router.get('/terms', calendarController.getSolarTerms)
 router.get('/nlp-query', calendarController.parseNLPDate)
 
 // 管理接口：手动触发同步全年数据
-router.post('/sync', async (req, res) => {
+router.post('/sync', authMiddleware, async (req, res) => {
   try {
     const { year } = req.body
     await scheduler.manualSync(year)
@@ -34,10 +35,10 @@ router.post('/sync', async (req, res) => {
       message: '数据同步完成'
     })
   } catch (error) {
+    console.error('数据同步失败:', error.message)
     res.status(500).json({
       success: false,
-      message: '同步失败',
-      error: error.message
+      message: process.env.NODE_ENV === 'development' ? error.message : '同步失败'
     })
   }
 })

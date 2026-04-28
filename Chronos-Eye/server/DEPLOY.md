@@ -70,20 +70,22 @@ git clone <你的仓库地址> .
 vi .env
 ```
 
-修改以下配置：
+修改以下配置（请将占位符替换为你的实际值）：
 ```
 PORT=3000
 DB_TYPE=mysql
-DB_HOST=47.102.152.82
+DB_HOST=your_server_ip
 DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=_kIjZ9iVb@nt
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
 DB_NAME=chronos_eye
-JWT_SECRET=chronos-eye-jwt-secret-2026
+JWT_SECRET=your_jwt_secret_key
 JWT_EXPIRES_IN=7d
 NODE_ENV=production
-TIANAPI_KEY=30b92001a007855fe7ea7328e8754e2a
+TIANAPI_KEY=your_tianapi_key
 ```
+
+> ⚠️ **安全提示**：不要将包含真实密码的 `.env` 文件提交到版本控制系统。
 
 ### 步骤 5：安装依赖并启动
 
@@ -253,7 +255,7 @@ firewall-cmd --list-ports  # CentOS
 ### 数据库连接失败
 ```bash
 # 测试数据库连接
-mysql -h 47.102.152.82 -u root -p
+mysql -h your_server_ip -u root -p
 ```
 
 ### 查看日志

@@ -1,0 +1,14 @@
+node_modules
+.env
+.env.*
+!.env.dev
+!.env.prod
+.env.dev.local
+.env.prod.local
+.git
+.gitignore
+*.md
+.DS_Store
+scripts
+venv
+__pycache__

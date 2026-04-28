@@ -1,8 +1,16 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const rateLimit = require('express-rate-limit')
 const { initDatabase, DB_TYPE } = require('./config/database')
 const scheduler = require('./services/scheduler')
+const authMiddleware = require('./middleware/auth')
+
+// JWT 密钥强度检查
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 16) {
+  console.error('错误：JWT_SECRET 未设置或长度不足 16 位，请设置强密钥后重启服务')
+  process.exit(1)
+}
 
 // 初始化数据库
 initDatabase().then(() => {
@@ -19,10 +27,45 @@ initDatabase().then(() => {
 
 const app = express()
 
-// 中间件
-app.use(cors())
+// 中间件 - CORS 限制允许的来源
+app.use(cors({
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:10080'],
+  methods: ['GET', 'POST'],
+  credentials: false
+}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+// 安全响应头
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff')
+  res.setHeader('X-Frame-Options', 'DENY')
+  res.setHeader('X-XSS-Protection', '1; mode=block')
+  res.setHeader('Referrer-Policy', 'no-referrer')
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+  }
+  next()
+})
+
+// 通用限流：所有 API 端点
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  message: { success: false, message: '请求过于频繁，请稍后重试' }
+})
+
+// 严格限流：认证相关端点
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  message: { success: false, message: '请求过于频繁，请稍后重试' }
+})
+
+app.use('/api/', apiLimiter)
+app.use('/api/users/login', authLimiter)
 
 // 导入路由
 const holidayRoutes = require('./routes/holiday')

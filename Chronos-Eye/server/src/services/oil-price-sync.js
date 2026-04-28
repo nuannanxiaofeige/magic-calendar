@@ -5,6 +5,7 @@
 const { exec } = require('child_process')
 const { query, initDatabase } = require('../config/database')
 const path = require('path')
+const logger = require('../utils/logger')
 
 // 确保数据库已初始化
 initDatabase().catch(err => console.error('[油价同步] 数据库初始化失败:', err))
@@ -28,7 +29,7 @@ function runPythonScript(scriptCode) {
         const result = JSON.parse(stdout.trim())
         resolve(result)
       } catch (e) {
-        console.log('Python 输出:', stdout)
+        logger.log('Python 输出:', stdout)
         reject(new Error(`JSON 解析失败：${stdout.trim()}`))
       }
     })
@@ -53,7 +54,7 @@ print(json.dumps(data) if data else 'null')
     const data = await runPythonScript(script)
 
     if (!data) {
-      console.log(`[油价同步] ${provinceName} 获取失败，跳过`)
+      logger.log(`[油价同步] ${provinceName} 获取失败，跳过`)
       return { success: false, province: provinceName, reason: '获取失败' }
     }
 
@@ -93,11 +94,11 @@ print(json.dumps(data) if data else 'null')
       priceDate
     ])
 
-    console.log(`[油价同步] ${provinceName}: 92#${data['price_92'] || '--'} (涨跌:${data['change_92'] || '--'})`)
+    logger.log(`[油价同步] ${provinceName}: 92#${data['price_92'] || '--'} (涨跌:${data['change_92'] || '--'})`)
     return { success: true, province: provinceName, data }
   } catch (error) {
     console.error(`[油价同步] ${provinceName} 失败：`, error.message)
-    return { success: false, province: provinceName, reason: error.message }
+    return { success: false, province: provinceName, reason: '同步失败' }
   }
 }
 
@@ -106,7 +107,7 @@ print(json.dumps(data) if data else 'null')
  */
 async function syncAllProvincesOilPrice(priceDate = null) {
   const startDate = priceDate || new Date().toISOString().split('T')[0]
-  console.log(`[油价同步] 开始同步 ${startDate} 油价数据...`)
+  logger.log(`[油价同步] 开始同步 ${startDate} 油价数据...`)
 
   const provinceMap = {
     'beijing': '北京', 'shanghai': '上海', 'tianjin': '天津', 'chongqing': '重庆',
@@ -139,7 +140,7 @@ async function syncAllProvincesOilPrice(priceDate = null) {
     await new Promise(resolve => setTimeout(resolve, 300))
   }
 
-  console.log(`[油价同步] 省份油价完成：成功 ${results.success}/${results.total}，失败 ${results.fail}`)
+  logger.log(`[油价同步] 省份油价完成：成功 ${results.success}/${results.total}，失败 ${results.fail}`)
   return results
 }
 
@@ -148,7 +149,7 @@ async function syncAllProvincesOilPrice(priceDate = null) {
  */
 async function syncInternationalCrude(priceDate = null) {
   const dataDate = priceDate || new Date().toISOString().split('T')[0]
-  console.log(`[油价同步] 开始同步国际原油价格...`)
+  logger.log(`[油价同步] 开始同步国际原油价格...`)
 
   try {
     const script = `
@@ -164,7 +165,7 @@ print(json.dumps(data) if data else 'null')
     const data = await runPythonScript(script)
 
     if (!data || data.length === 0) {
-      console.log('[油价同步] 国际原油获取失败')
+      logger.log('[油价同步] 国际原油获取失败')
       return { success: false, count: 0 }
     }
 
@@ -197,17 +198,17 @@ print(json.dumps(data) if data else 'null')
           dataDate
         ])
         insertCount++
-        console.log(`  - ${item.name}: ${item.price}`)
+        logger.log(`  - ${item.name}: ${item.price}`)
       } catch (error) {
         console.error(`  插入失败 ${item.name}:`, error.message)
       }
     }
 
-    console.log(`[油价同步] 国际原油完成：成功 ${insertCount}/${data.length}`)
+    logger.log(`[油价同步] 国际原油完成：成功 ${insertCount}/${data.length}`)
     return { success: true, count: insertCount }
   } catch (error) {
     console.error('[油价同步] 国际原油失败:', error.message)
-    return { success: false, reason: error.message, count: 0 }
+    return { success: false, reason: '同步失败', count: 0 }
   }
 }
 
@@ -215,7 +216,7 @@ print(json.dumps(data) if data else 'null')
  * 同步油价调整历史到数据库
  */
 async function syncAdjustmentHistory() {
-  console.log(`[油价同步] 开始同步油价调整历史...`)
+  logger.log(`[油价同步] 开始同步油价调整历史...`)
 
   try {
     const script = `
@@ -231,7 +232,7 @@ print(json.dumps(data) if data else 'null')
     const data = await runPythonScript(script)
 
     if (!data || data.length === 0) {
-      console.log('[油价同步] 调整历史获取失败')
+      logger.log('[油价同步] 调整历史获取失败')
       return { success: false, count: 0 }
     }
 
@@ -274,17 +275,17 @@ print(json.dumps(data) if data else 'null')
           ])
           updateCount++
         }
-        console.log(`  - ${item.date}: 汽油${item.gasoline_price} (${item.gasoline_change > 0 ? '+' : ''}${item.gasoline_change})`)
+        logger.log(`  - ${item.date}: 汽油${item.gasoline_price} (${item.gasoline_change > 0 ? '+' : ''}${item.gasoline_change})`)
       } catch (error) {
         console.error(`  插入失败 ${item.date}:`, error.message)
       }
     }
 
-    console.log(`[油价同步] 调整历史完成：新增 ${insertCount} 条，更新 ${updateCount} 条`)
+    logger.log(`[油价同步] 调整历史完成：新增 ${insertCount} 条，更新 ${updateCount} 条`)
     return { success: true, insert: insertCount, update: updateCount }
   } catch (error) {
     console.error('[油价同步] 调整历史失败:', error.message)
-    return { success: false, reason: error.message, count: 0 }
+    return { success: false, reason: '同步失败', count: 0 }
   }
 }
 
@@ -292,9 +293,9 @@ print(json.dumps(data) if data else 'null')
  * 执行完整同步（所有数据）
  */
 async function syncAllOilData() {
-  console.log('\n' + '='.repeat(60))
-  console.log('[油价同步] 开始执行完整同步任务')
-  console.log('='.repeat(60))
+  logger.log('\n' + '='.repeat(60))
+  logger.log('[油价同步] 开始执行完整同步任务')
+  logger.log('='.repeat(60))
 
   const startDate = new Date().toISOString().split('T')[0]
 
@@ -310,13 +311,13 @@ async function syncAllOilData() {
   // 4. 刷新最新油价表
   const latestResult = await refreshLatestOilTable()
 
-  console.log('\n' + '='.repeat(60))
-  console.log('[油价同步] 完整同步任务完成')
-  console.log('='.repeat(60))
-  console.log(`  省份油价：成功 ${provinceResult.success}/${provinceResult.total}`)
-  console.log(`  国际原油：成功 ${internationalResult.count} 条`)
-  console.log(`  调整历史：新增 ${historyResult.insert} 条，更新 ${historyResult.update} 条`)
-  console.log(`  最新油价表：成功 ${latestResult.success}/${latestResult.total} 条`)
+  logger.log('\n' + '='.repeat(60))
+  logger.log('[油价同步] 完整同步任务完成')
+  logger.log('='.repeat(60))
+  logger.log(`  省份油价：成功 ${provinceResult.success}/${provinceResult.total}`)
+  logger.log(`  国际原油：成功 ${internationalResult.count} 条`)
+  logger.log(`  调整历史：新增 ${historyResult.insert} 条，更新 ${historyResult.update} 条`)
+  logger.log(`  最新油价表：成功 ${latestResult.success}/${latestResult.total} 条`)
 
   return {
     province: provinceResult,
@@ -330,7 +331,7 @@ async function syncAllOilData() {
  * 刷新最新油价表（从历史表中同步每个省份的最新数据）
  */
 async function refreshLatestOilTable() {
-  console.log('[油价同步] 开始刷新最新油价表...')
+  logger.log('[油价同步] 开始刷新最新油价表...')
 
   try {
     // 使用 INSERT ... ON DUPLICATE KEY UPDATE
@@ -369,11 +370,11 @@ async function refreshLatestOilTable() {
         updated_at = NOW()
     `)
 
-    console.log(`[油价同步] 最新油价表刷新完成：影响 ${result.affectedRows || 0} 条记录`)
+    logger.log(`[油价同步] 最新油价表刷新完成：影响 ${result.affectedRows || 0} 条记录`)
     return { success: result.affectedRows || 0, total: 31 }
   } catch (error) {
     console.error('[油价同步] 刷新最新油价表失败:', error.message)
-    return { success: 0, total: 31, error: error.message }
+    return { success: 0, total: 31, error: '同步失败' }
   }
 }
 

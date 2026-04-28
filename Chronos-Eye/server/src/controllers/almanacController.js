@@ -93,7 +93,7 @@ async function getTodayAlmanac(req, res) {
     res.status(500).json({
       success: false,
       message: '获取今日黄历失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -124,7 +124,7 @@ async function getAlmanacByDate(req, res) {
     res.status(500).json({
       success: false,
       message: '获取指定日期黄历失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -162,7 +162,7 @@ async function getAlmanacByMonth(req, res) {
     res.status(500).json({
       success: false,
       message: '获取本月黄历失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -200,7 +200,7 @@ async function getAuspiciousDays(req, res) {
     res.status(500).json({
       success: false,
       message: '获取吉日失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -239,7 +239,7 @@ async function getSolarTermsByYear(req, res) {
     res.status(500).json({
       success: false,
       message: '获取节气数据失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -285,7 +285,7 @@ async function getSolarLongitude(req, res) {
     res.status(500).json({
       success: false,
       message: '获取太阳黄经失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }

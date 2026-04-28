@@ -23,7 +23,7 @@ async function getTermList(req, res) {
     res.status(500).json({
       success: false,
       message: '获取节气列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -54,7 +54,7 @@ async function getTermDetail(req, res) {
     res.status(500).json({
       success: false,
       message: '获取节气详情失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -83,7 +83,7 @@ async function getCurrentTerm(req, res) {
     res.status(500).json({
       success: false,
       message: '获取当前节气失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -118,7 +118,7 @@ async function getTodayTermEncyclopedia(req, res) {
     res.status(500).json({
       success: false,
       message: '获取今日节气百科失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -141,7 +141,7 @@ async function getTermDates(req, res) {
     res.status(500).json({
       success: false,
       message: '获取节气时间失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -174,7 +174,7 @@ async function searchTerms(req, res) {
     res.status(500).json({
       success: false,
       message: '搜索节气失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }

@@ -8,13 +8,13 @@
 
 ```bash
 # 在本地执行（需要 SSH 密钥或密码）
-scp -r server/ root@47.102.152.82:/root/chronos-eye/server/
+scp -r server/ root@your_server_ip:/root/chronos-eye/server/
 ```
 
 ### 2. 登录服务器并执行部署
 
 ```bash
-ssh root@47.102.152.82
+ssh root@your_server_ip
 cd /root/chronos-eye/server
 chmod +x deploy.sh
 ./deploy.sh
@@ -48,7 +48,7 @@ curl http://localhost:3000/health
 
 在本地电脑测试：
 ```bash
-curl http://47.102.152.82:3000/api/history/today
+curl http://your_server_ip:3000/api/history/today
 ```
 
 ## 常用 PM2 命令
@@ -76,6 +76,7 @@ pm2 save
 1. **数据库已配置**：`.env` 文件中已设置 MySQL 连接，服务器上的 MySQL 应该已经在运行
 2. **端口 3000**：确保没有其他服务占用 3000 端口
 3. **HTTPS**：微信小程序正式环境需要 HTTPS，开发测试阶段可以用 HTTP
+4. **安全提示**：不要将包含真实密码的 `.env` 文件提交到版本控制系统
 
 ## 故障排查
 

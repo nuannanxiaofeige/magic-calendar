@@ -2,14 +2,7 @@ const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
 
-// 数据库配置
-const dbConfig = {
-  host: '47.102.152.82',
-  port: 3306,
-  user: 'root',
-  password: '_kIjZ9iVb@nt',
-  database: 'chronos_eye'
-};
+const dbConfig = require('./db-config');
 
 async function importHistoryEvents() {
   let connection;

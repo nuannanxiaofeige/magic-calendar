@@ -70,7 +70,7 @@ async function getDateInfo(req, res) {
     res.status(500).json({
       success: false,
       message: '获取日期信息失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -167,7 +167,7 @@ async function getTodayInfo(req, res) {
     res.status(500).json({
       success: false,
       message: '获取今日信息失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -235,7 +235,7 @@ async function getCalendarInfo(req, res) {
     res.status(500).json({
       success: false,
       message: '获取历法信息失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -333,7 +333,7 @@ async function getHolidayTermLink(req, res) {
     res.status(500).json({
       success: false,
       message: '获取联动信息失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -364,7 +364,7 @@ async function getSolarTerms(req, res) {
     res.status(500).json({
       success: false,
       message: '获取节气列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }

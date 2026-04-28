@@ -72,7 +72,7 @@ async function getDailyDiary(req, res) {
     res.status(500).json({
       success: false,
       message: '获取每日舔狗日记失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -106,7 +106,7 @@ async function getRandomDiary(req, res) {
     res.status(500).json({
       success: false,
       message: '获取舔狗日记失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -145,7 +145,7 @@ async function getDiaryList(req, res) {
     res.status(500).json({
       success: false,
       message: '获取舔狗日记列表失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -173,7 +173,7 @@ async function getRandomDiaries(req, res) {
     res.status(500).json({
       success: false,
       message: '获取随机舔狗日记失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }

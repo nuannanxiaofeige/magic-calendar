@@ -1,4 +1,44 @@
+const jwt = require('jsonwebtoken')
 const { query, run } = require('../config/database')
+
+// 允许更新的字段白名单 + 长度限制
+const ALLOWED_UPDATE_FIELDS = {
+  nickname: { type: 'string', max: 50 },
+  phone: { type: 'string', max: 20 },
+  gender: { type: 'number', min: 0, max: 2 },
+  birthday: { type: 'string', max: 10 }
+}
+
+/**
+ * 校验并过滤用户输入字段
+ * @returns {{ fields: object, values: array }} 或 null（校验失败）
+ */
+function validateAndFilterFields(body) {
+  const fields = {}
+  const values = []
+
+  for (const [key, rule] of Object.entries(ALLOWED_UPDATE_FIELDS)) {
+    if (body[key] === undefined || body[key] === null) continue
+
+    if (rule.type === 'string') {
+      const str = String(body[key])
+      if (str.length > rule.max) {
+        return { error: `${key} 长度超过限制` }
+      }
+      fields[key] = str
+      values.push(str)
+    } else if (rule.type === 'number') {
+      const num = Number(body[key])
+      if (isNaN(num) || num < rule.min || num > rule.max) {
+        return { error: `${key} 值不在有效范围` }
+      }
+      fields[key] = num
+      values.push(num)
+    }
+  }
+
+  return { fields, values }
+}
 
 // 微信登录（简化版，实际需对接微信 API）
 async function wechatLogin(req, res) {
@@ -23,7 +63,12 @@ async function wechatLogin(req, res) {
       user = await query('SELECT * FROM users WHERE openid = ?', [openid])
     }
 
-    const token = `mock_token_${user[0].id}_${Date.now()}`
+    // 生成真实 JWT token
+    const token = jwt.sign(
+      { userId: user[0].id },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    )
 
     res.json({
       success: true,
@@ -37,7 +82,7 @@ async function wechatLogin(req, res) {
     res.status(500).json({
       success: false,
       message: '微信登录失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -68,7 +113,7 @@ async function getUserProfile(req, res) {
     res.status(500).json({
       success: false,
       message: '获取用户信息失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -78,13 +123,40 @@ async function updateUserProfile(req, res) {
   try {
     // 从认证中间件获取 user_id
     const userId = req.userId
-    const { nickname, phone, gender, birthday } = req.body
 
-    await run(`
-      UPDATE users
-      SET nickname = ?, phone = ?, gender = ?, birthday = ?
-      WHERE id = ?
-    `, [nickname, phone, gender, birthday, userId])
+    // 校验并过滤输入字段
+    const result = validateAndFilterFields(req.body)
+    if (!result) {
+      return res.status(400).json({
+        success: false,
+        message: '参数校验失败'
+      })
+    }
+    if (result.error) {
+      return res.status(400).json({
+        success: false,
+        message: result.error
+      })
+    }
+
+    const { fields, values } = result
+
+    // 无有效字段则直接返回
+    if (Object.keys(fields).length === 0) {
+      return res.json({
+        success: true,
+        message: '更新成功'
+      })
+    }
+
+    // 动态构建 SET 子句（白名单字段，安全）
+    const setClauses = Object.keys(fields).map(key => `${key} = ?`).join(', ')
+    const setValues = Object.values(fields)
+
+    await run(
+      `UPDATE users SET ${setClauses} WHERE id = ?`,
+      [...setValues, userId]
+    )
 
     res.json({
       success: true,
@@ -95,7 +167,7 @@ async function updateUserProfile(req, res) {
     res.status(500).json({
       success: false,
       message: '更新用户信息失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
@@ -131,7 +203,7 @@ async function getUserStats(req, res) {
     res.status(500).json({
       success: false,
       message: '获取用户统计失败',
-      error: error.message
+      error: process.env.NODE_ENV === 'development' ? error.message : '服务器内部错误'
     })
   }
 }
