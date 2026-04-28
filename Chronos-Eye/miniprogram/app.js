@@ -70,7 +70,7 @@ App({
 
   globalData: {
     userInfo: null,
-    baseUrl: 'http://47.102.152.82:3000/api',  // 测试环境（HTTP）
+    baseUrl: 'https://magic-calendar.com/api',
     bgImageUrl: '',     // 全局背景图片URL
     themeConfig: null   // 当前主题配置
   }
